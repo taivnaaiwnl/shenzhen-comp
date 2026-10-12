@@ -1,0 +1,33 @@
+[profile.default]
+src = "contracts/src"
+test = "contracts/test"
+script = "contracts/script"
+out = "contracts/out"
+cache_path = "contracts/cache"
+libs = ["contracts/lib"]
+solc_version = "0.8.30"
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 200
+# via_ir: the legacy pipeline fails with "Stack too deep" for TierVault (spec 3.0).
+via_ir = true
+# No metadata hash: runtime code (and so the vault code hash) does not depend on source bytes or paths.
+bytecode_hash = "none"
+remappings = ["forge-std/=contracts/lib/forge-std/src/"]
+
+[profile.default.fuzz]
+runs = 512
+failure_persist_dir = "contracts/cache/fuzz"
+
+[profile.default.invariant]
+runs = 512
+depth = 64
+fail_on_revert = false
+failure_persist_dir = "contracts/cache/invariant"
+
+[lint]
+lint_on_build = false
+
+[rpc_endpoints]
+local = "http://127.0.0.1:8545"
+base_sepolia = "${BASE_SEPOLIA_RPC_URL}"

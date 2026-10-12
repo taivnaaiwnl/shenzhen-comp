@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="910" viewBox="0 0 1500 910"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3E4C59"/></marker></defs><rect width="1500" height="910" fill="#FFFFFF"/><rect x="1060" y="20" width="420" height="870" rx="12" fill="#F1F8F1" stroke="#3C8D40" stroke-width="1.5"/>
+<text x="1270" y="46" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="bold" fill="#2E7D32" text-anchor="middle">Base Sepolia (chain id 84532)</text>
+<rect x="1090" y="70" width="240" height="260" rx="8" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2.4"/>
+<text x="1104" y="94" font-family="Arial, Helvetica, sans-serif" font-size="14.5" font-weight="bold" fill="#1F2933" text-anchor="start">TierVault (our wallet)</text>
+<text x="1104" y="118" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">Holds the wallet's USDC</text>
+<text x="1104" y="135" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">Owner mandates with pinned</text>
+<text x="1104" y="152" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">  payout wallets and budgets</text>
+<text x="1104" y="169" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">Tier caps, grade masks,</text>
+<text x="1104" y="186" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">  reserve floor, rolling window</text>
+<text x="1104" y="203" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">Escrow and delivery claims</text>
+<text x="1104" y="220" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">Decision and violation records</text>
+<text x="1104" y="237" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">Earned Autonomy tier, freeze</text>
+<rect x="1090" y="370" width="240" height="52" rx="8" fill="#FFFFFF" stroke="#7FA382" stroke-width="1.5" stroke-dasharray="5 3"/>
+<text x="1104" y="393" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" fill="#1F2933" text-anchor="start">USDC</text>
+<text x="1104" y="411" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="start">Circle test token (third party)</text>
+<rect x="1090" y="460" width="240" height="60" rx="8" fill="#FFFFFF" stroke="#7FA382" stroke-width="1.5" stroke-dasharray="5 3"/>
+<text x="1104" y="484" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" fill="#1F2933" text-anchor="start">ERC-8004 Identity</text>
+<text x="1104" y="503" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="start">official registry (Draft standard)</text>
+<rect x="1090" y="560" width="240" height="92" rx="8" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2.4"/>
+<text x="1104" y="584" font-family="Arial, Helvetica, sans-serif" font-size="14.5" font-weight="bold" fill="#1F2933" text-anchor="start">AgentCreditBureau</text>
+<text x="1104" y="606" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">Grades with model id, config</text>
+<text x="1104" y="622" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">  hash and evidence hash</text>
+<text x="1104" y="638" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">Registered vaults, appeals</text>
+<rect x="1090" y="690" width="240" height="60" rx="8" fill="#FFFFFF" stroke="#7FA382" stroke-width="1.5" stroke-dasharray="5 3"/>
+<text x="1104" y="714" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" fill="#1F2933" text-anchor="start">ERC-8004 Reputation</text>
+<text x="1104" y="733" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="start">official registry (Draft standard)</text>
+<rect x="1090" y="790" width="240" height="60" rx="8" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2.4"/>
+<text x="1104" y="814" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" fill="#1F2933" text-anchor="start">TierVault (Beacon)</text>
+<text x="1104" y="833" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="start">same code; simulated anchor buyer</text>
+<path d="M1330,250 L1356,250 L1356,396 L1330,396" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<path d="M1330,278 L1398,278 L1398,490 L1330,490" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<path d="M1330,306 L1440,306 L1440,606 L1330,606" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="1361" y="300" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="start" transform="rotate(90 1361 300)">transfers</text>
+<text x="1403" y="330" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="start" transform="rotate(90 1403 330)">live wallet = pinned?</text>
+<text x="1445" y="360" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="start" transform="rotate(90 1445 360)">effectiveGrade(payee)</text>
+<rect x="20" y="50" width="150" height="110" rx="8" fill="#FFFFFF" stroke="#3E4C59" stroke-width="1.5"/>
+<text x="95" y="95" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="bold" fill="#1F2933" text-anchor="middle">Owner</text>
+<text x="95" y="116" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="middle">(human, browser)</text>
+<rect x="230" y="40" width="340" height="130" rx="8" fill="#EAF2FB" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="244" y="64" font-family="Arial, Helvetica, sans-serif" font-size="14.5" font-weight="bold" fill="#1F2933" text-anchor="start">P1 Owner console</text>
+<rect x="479.2" y="49" width="80.8" height="20" rx="10" fill="#FFF4D6" stroke="#B7791F" stroke-width="1"/>
+<text x="519.6" y="63" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="bold" fill="#7A4F0B" text-anchor="middle">OWNER key</text>
+<text x="244" y="86" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">Chat, mandate and approval cards,</text>
+<text x="244" y="102" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">five live panels; every confirmation</text>
+<text x="244" y="118" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">rebuilt from chain reads</text>
+<path d="M170,105 L230,105" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<path d="M570,105 L1090,105" fill="none" stroke="#3E4C59" stroke-width="2" marker-end="url(#ah)"/>
+<text x="830" y="88" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle">registerMandate, revokeMandate, ownerApprove,</text>
+<text x="830" y="128" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle">freeze, unfreeze with key rotation (owner only)</text>
+<rect x="20" y="245" width="150" height="150" rx="8" fill="#F4F5F7" stroke="#7B8794" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="95" y="275" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="bold" fill="#1F2933" text-anchor="middle">LLM</text>
+<text x="95" y="298" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="middle">OpenAI-compatible,</text>
+<text x="95" y="314" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="middle">MockLLM or</text>
+<text x="95" y="330" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="middle">rule-based fallback</text>
+<rect x="80.8" y="362" width="59.2" height="20" rx="10" fill="#FDECEC" stroke="#B42318" stroke-width="1"/>
+<text x="110.4" y="376" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="bold" fill="#B42318" text-anchor="middle">no key</text>
+<rect x="260" y="240" width="330" height="160" rx="8" fill="#EAF2FB" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="274" y="264" font-family="Arial, Helvetica, sans-serif" font-size="14.5" font-weight="bold" fill="#1F2933" text-anchor="start">P2 Wallet agent</text>
+<rect x="513.6" y="249" width="66.4" height="20" rx="10" fill="#FDECEC" stroke="#B42318" stroke-width="1"/>
+<text x="546.8" y="263" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="bold" fill="#B42318" text-anchor="middle">NO KEYS</text>
+<text x="274" y="286" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">Owner dialogue, mandate drafts</text>
+<text x="274" y="302" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">Invoice validation V01-V09,</text>
+<text x="274" y="318" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">detector, quarantine</text>
+<text x="274" y="334" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">Policy pass 1, delivery checks</text>
+<path d="M170,300 L260,300" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<path d="M260,340 L170,340" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="215" y="293" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="normal" fill="#52606D" text-anchor="middle">DATA + tools</text>
+<text x="215" y="356" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="normal" fill="#52606D" text-anchor="middle">1 tool call</text>
+<path d="M400,170 L400,240" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="410" y="210" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="start">owner messages</text>
+<rect x="680" y="240" width="320" height="160" rx="8" fill="#EAF2FB" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="694" y="264" font-family="Arial, Helvetica, sans-serif" font-size="14.5" font-weight="bold" fill="#1F2933" text-anchor="start">P3 Signer</text>
+<rect x="909.2" y="249" width="80.8" height="20" rx="10" fill="#FFF4D6" stroke="#B7791F" stroke-width="1"/>
+<text x="949.6" y="263" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="bold" fill="#7A4F0B" text-anchor="middle">AGENT key</text>
+<text x="694" y="286" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">Re-validates the invoice and re-runs</text>
+<text x="694" y="302" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">the policy on fresh chain state</text>
+<text x="694" y="318" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">Classifies violations, logs the</text>
+<text x="694" y="334" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">decision, simulates, then signs</text>
+<path d="M590,320 L680,320" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="635" y="306" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="middle">execute</text>
+<text x="635" y="340" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="middle">request</text>
+<path d="M1000,290 L1090,290" fill="none" stroke="#3E4C59" stroke-width="2" marker-end="url(#ah)"/>
+<text x="1030" y="262" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="normal" fill="#52606D" text-anchor="middle">whitelisted</text>
+<text x="1030" y="278" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="normal" fill="#52606D" text-anchor="middle">vault calls</text>
+<rect x="260" y="470" width="330" height="140" rx="8" fill="#EAF2FB" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="274" y="494" font-family="Arial, Helvetica, sans-serif" font-size="14.5" font-weight="bold" fill="#1F2933" text-anchor="start">P4 Bureau</text>
+<rect x="492.0" y="479" width="88.0" height="20" rx="10" fill="#FFF4D6" stroke="#B7791F" stroke-width="1"/>
+<text x="536.0" y="493" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="bold" fill="#7A4F0B" text-anchor="middle">BUREAU key</text>
+<text x="274" y="516" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">Indexes vault and registry events</text>
+<text x="274" y="532" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">Scorecard acb-sc-1.0.0,</text>
+<text x="274" y="548" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">evidence bundles, grade posting</text>
+<rect x="680" y="470" width="300" height="140" rx="8" fill="#EAF2FB" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="694" y="494" font-family="Arial, Helvetica, sans-serif" font-size="14.5" font-weight="bold" fill="#1F2933" text-anchor="start">P5 Autonomy operator</text>
+<rect x="867.6" y="479" width="102.4" height="20" rx="10" fill="#FFF4D6" stroke="#B7791F" stroke-width="1"/>
+<text x="918.8" y="493" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="bold" fill="#7A4F0B" text-anchor="middle">AUTONOMY key</text>
+<text x="694" y="516" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">Promotes one step when earned;</text>
+<text x="694" y="532" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">demotes; freezes on an outflow</text>
+<text x="694" y="548" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">with no signer decision</text>
+<path d="M980,520 L1030,520 L1030,318 L1090,318" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="1022" y="470" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="start" transform="rotate(-90 1022 470)">setTier, freeze</text>
+<path d="M810,470 L810,400" fill="none" stroke="#3E4C59" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="820" y="440" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="start">reads decision log</text>
+<path d="M500,610 L500,640 L1090,640" fill="none" stroke="#3E4C59" stroke-width="2" marker-end="url(#ah)"/>
+<text x="800" y="633" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">postGrade (score, reasons, model id, config and evidence hash)</text>
+<path d="M400,610 L400,720 L1090,720" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="760" y="713" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">mirror each grade as ERC-8004 feedback (tag acb-grade)</text>
+<text x="425" y="600" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="normal" fill="#52606D" text-anchor="start" font-style="italic">reads all logs</text>
+<rect x="20" y="770" width="560" height="110" rx="8" fill="#FFF1E6" stroke="#C2621C" stroke-width="1.5"/>
+<text x="34" y="794" font-family="Arial, Helvetica, sans-serif" font-size="14.5" font-weight="bold" fill="#1F2933" text-anchor="start">P6 Simulated counterparties</text>
+<rect x="496.4" y="779" width="73.6" height="20" rx="10" fill="#FFF4D6" stroke="#B7791F" stroke-width="1"/>
+<text x="533.2" y="793" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="bold" fill="#7A4F0B" text-anchor="middle">own keys</text>
+<text x="34" y="816" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">Providers Atlas, Slowpoke, Ghost, Orion, Nova, Blaster; Beacon (buyer),</text>
+<text x="34" y="832" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#52606D" text-anchor="start">Echo sybils, attacker. Own keys and ERC-8004 identities, labelled simulated</text>
+<path d="M200,770 L200,440 L300,440 L300,400" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="192" y="560" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="end">signed invoices</text>
+<text x="192" y="576" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="end">answering quote</text>
+<text x="192" y="592" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="end">requests;</text>
+<text x="192" y="608" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="end">deliveries</text>
+<path d="M580,862 L1060,862" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="820" y="855" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">claimDelivered on escrows; Beacon buys through its own vault</text>
+<text x="640" y="760" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" fill="#1F2933" text-anchor="start">Legend</text>
+<rect x="640" y="770" width="22" height="14" rx="3" fill="#EAF2FB" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="670" y="782" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="start">off-chain process (127.0.0.1), one key each</text>
+<rect x="640" y="792" width="22" height="14" rx="3" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1.5"/>
+<text x="670" y="804" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="start">our contract</text>
+<rect x="640" y="814" width="22" height="14" rx="3" fill="#FFFFFF" stroke="#7FA382" stroke-width="1.5" stroke-dasharray="5 3"/>
+<text x="670" y="826" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="start">third-party contract</text>
+<text x="20" y="905" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="start" font-style="italic">P7, the scenario runner, drives every role for the recorded run and is not shown. The ACB admin key is held by no running service.</text></svg>

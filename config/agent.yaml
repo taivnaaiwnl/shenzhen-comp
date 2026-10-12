@@ -1,0 +1,33 @@
+# Wallet agent configuration (spec 8 and 13.3; package WP6).
+# The agent (process P2) holds no private keys. Amounts are not configured here: the policy reads
+# caps from the vault and config/policy.yaml; the agent only shapes the LLM's view and its inputs.
+prompt_version: acb-prompt-1.0.0
+
+# Counterparty text that reaches the LLM (8.5): R8 characters stripped, NFKC, truncated, detector hit
+# spans masked, then wrapped in a DATA block with a random per-message boundary.
+quarantine: {mask_flagged_spans: true, max_chars: 500, description_max_chars: 80}
+
+# Defaults the code fills in a mandate draft (8.6); max_per_tx defaults to the current tier's perTx.
+defaults: {valid_hours: 24}
+
+# Dialogue turns (owner messages and agent replies) given to the LLM as context (8.4).
+history_turns: 6
+
+# Public inbox (8.8): per verified issuer agentId, global, and the body size cap.
+inbox: {per_issuer_per_minute: 10, global_per_minute: 60, max_bytes: 16384}
+
+# Output redactor (8.6): exact secret values (keccak compare), BIP-39 word runs, provider key prefixes.
+redactor: {bip39_min_words: 12, key_prefixes: ["sk-", "sk-ant-", "AKIA"]}
+
+# Directory lookalike warning (8.3): names within this edit distance of another known name.
+lookalike: {max_edit_distance: 2}
+
+# ---- additions of WP6 (not in spec 13.3; documented in the package report) ----
+# HTTP clients: provider endpoints (WP8, 127.0.0.1:<SIM_PORT>/p/<key>) and the signer (P3).
+http: {provider_timeout_s: 10, signer_timeout_s: 150}
+# Background delivery watcher of the agent service (seconds between passes; 0 disables it).
+delivery_watch_s: 2
+# Signed unsolicited invoices from one issuer before code files a SPAM report (spec 9.5).
+spam_report_min: 3
+# Owner messages panel: signed counterparty messages kept in the agent state.
+messages_kept: 200

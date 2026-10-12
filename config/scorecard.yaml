@@ -1,0 +1,66 @@
+# Credit scorecard acb-sc-1.0.0 (spec 4, 13.3). Owned by WP4.
+#
+# configHash = chash({"scorecard": <this file as a dict>, "anchors": <deployments/<network>.json "anchors">})
+# Any change to this file changes configHash; old versions are archived as
+# config/scorecard/archive/<configHash>.json so old postings stay recomputable (spec 4.7).
+# All values are integers or strings (canonical JSON forbids floats). Amounts are strings of USDC
+# base units (6 decimals). Weights are in milli-orders (1000 = one order of full weight).
+model_id: acb-sc-1.0.0
+detector_id: acb-inj-1.0.0
+active_profile: demo
+profiles:
+  demo: {a_min_age_s: 600, decay_start_s: 2592000, decay_h_s: 7776000}
+  production: {a_min_age_s: 2592000, decay_start_s: 2592000, decay_h_s: 7776000}
+
+base: 600
+clamp: [300, 850]
+bands: {A: 700, B: 640, C: 560}
+prior: {weight_milli: 1000, bps: 8000}
+late_credit_bps: 5000
+
+# Standing weights (spec 4.2): P = credit for settled trade with them, W = weight of their failure
+# records and accusations. "anchor" = agentIds listed in the deployment's anchors.
+positive_quality: {anchor: 1000, A: 1000, B: 800, NEW: 250, C: 200, NONE: 0, D: 0}
+adverse_weight: {anchor: 1000, A: 1000, B: 800, NEW: 0, C: 0, NONE: 0, D: 0}
+good_standing_min: 800
+
+# Counted orders and failures (spec 4.1, 4.3)
+min_order_amount: "100000"
+ref_amount: "200000"
+fail_cap_per_payer: 3000
+
+# Reports (spec 4.2)
+verified_weight: 1000
+spam_weight: 500
+spam_min_invoices: 3
+reporter_cap_milli: 1000
+
+# Grade rules (spec 4.5)
+hard_flag_inj_w: 1000
+cold_start_min_settled: 3
+cold_start: {d_fail_w: 2000, c_fail_w: 1000, c_flag: 500, c_neg: 1000}
+circular: {max_hops: 3, cap_bps: 5000}
+# F6 volume spike: max of the last window_last payee-role orders against the median of the orders before
+# them, computed only when at least min_prior_orders such earlier orders exist, i.e. 7 or more payee-role
+# orders in total. Spec 13.3 writes {min_orders: 6} ("at least 6"); golden G8 (6 orders, no spike, 760)
+# needs 7, see docs/deliverables/model-card.md "Deviations".
+spike: {min_prior_orders: 4, window_last: 3}
+
+# Points table (spec 4.4). Each feature: op (ge: value >= threshold, lt: value < threshold,
+# le: value <= threshold), bins as [threshold, points] checked top-down, else = points when no bin
+# matches, max = best possible points (for reason codes), code = adverse reason code.
+# F2 "neg == 0" is written as "neg < 1" and F3 "flag == 0" as "flag < 1" (integers >= 0).
+points:
+  F1: {feature: rBps, op: ge, bins: [[9500, 80], [8500, 40], [7000, 20], [5000, -60]], else: -120, max: 80, code: 1001}
+  F2: {feature: neg, op: lt, bins: [[1, 20], [500, 0], [1500, -40], [2500, -90]], else: -150, max: 20, code: 1002, code_alt: 1003}
+  F3: {feature: flag, op: lt, bins: [[1, 0], [1000, -60]], else: -200, max: 0, code: 1004, code_alt: 1005}
+  F4a: {feature: n, op: ge, bins: [[20, 60], [10, 40], [5, 20]], else: 0, max: 60, code: 1006}
+  F4b: {feature: age, op: ge, bins: [[604800, 20], [86400, 10]], else: 0, max: 20, code: 1007}
+  F5a: {feature: div, op: ge, bins: [[2000, 40], [1000, 20], [500, 0]], else: -30, max: 40, code: 1008}
+  F5b: {feature: cqBps, op: ge, bins: [[4000, 0]], else: -40, max: 0, code: 1009}
+  F5c: {feature: cycBps, op: le, bins: [[5000, 0]], else: -80, max: 0, code: 1010}
+  F6: {feature: spikeX100, op: ge, bins: [[500, -50], [300, -20]], else: 0, max: 0, code: 1011}
+
+# Posting and ERC-8004 mirroring (spec 4.10)
+mirror: {enabled: true, revoke_previous: true, tag1: acb-grade}
+repost_min_score_delta: 10

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="acb-csrf" content="">
+<title>ACB owner console</title>
+<link rel="stylesheet" href="/style.css">
+<script src="/app.js" defer></script>
+</head>
+<body>
+<header id="banner" class="banner">
+  <span class="brand">Agent Credit Bureau</span>
+  <span class="brand-sub">owner console</span>
+  <span id="banner-network" class="pill"></span>
+  <span id="banner-llm" class="pill"></span>
+  <span id="banner-owner" class="pill"></span>
+  <span id="banner-fallback" class="pill pill-warn" hidden>AI offline: rule-based mode</span>
+  <span id="banner-feeds" class="feeds"></span>
+  <button id="logout" type="button" class="btn btn-small" hidden>Sign out</button>
+</header>
+
+<section id="login" class="login" hidden>
+  <form id="login-form" class="login-form">
+    <h1>Owner sign-in</h1>
+    <label for="login-password">Password</label>
+    <input id="login-password" type="password" autocomplete="current-password" required>
+    <button id="login-submit" type="submit" class="btn">Sign in</button>
+    <p id="login-error" class="error-text"></p>
+  </form>
+</section>
+
+<main id="main" class="layout" hidden>
+  <section id="chat" class="chat" aria-label="Chat with the wallet agent">
+    <h2>Chat with the wallet agent</h2>
+    <div id="chat-log" class="chat-log" role="log" aria-live="polite"></div>
+    <form id="chat-form" class="chat-form">
+      <input id="chat-input" type="text" maxlength="2000" autocomplete="off"
+             placeholder="Tell the wallet what to buy, ask why, or ask for the status">
+      <button id="chat-send" type="submit" class="btn">Send</button>
+    </form>
+  </section>
+
+  <section id="panels" class="panels">
+    <article id="panel-wallet" class="panel panel-wallet">
+      <h2>Wallet</h2>
+      <div id="wallet-body" class="panel-body"></div>
+      <div id="wallet-actions" class="panel-actions"></div>
+    </article>
+    <article id="panel-grades" class="panel panel-grades">
+      <h2>Counterparty grades</h2>
+      <div id="grades-body" class="panel-body"></div>
+    </article>
+    <article id="panel-decisions" class="panel panel-decisions">
+      <h2>Decision log</h2>
+      <div id="decisions-body" class="panel-body"></div>
+    </article>
+    <article id="panel-autonomy" class="panel panel-autonomy">
+      <h2>Autonomy timeline</h2>
+      <div id="autonomy-body" class="panel-body"></div>
+    </article>
+    <article id="panel-messages" class="panel panel-messages">
+      <h2>Messages</h2>
+      <div id="messages-body" class="panel-body"></div>
+    </article>
+  </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src https: http://127.0.0.1:*; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Agent Credit Bureau - grade lookup</title>
+<link rel="stylesheet" href="bureau.css">
+<script src="bureau.js" defer></script>
+</head>
+<body>
+<header class="top">
+  <h1>Agent Credit Bureau: grade lookup</h1>
+  <p>Read-only. This page reads the AgentCreditBureau contract over JSON-RPC in your browser and never
+  sends a transaction. Every grade can be recomputed from public chain data with the command shown.</p>
+</header>
+<main>
+  <form id="lookup" class="lookup">
+    <label for="rpc">RPC URL</label>
+    <input id="rpc" type="url" value="https://sepolia.base.org" autocomplete="off">
+    <label for="acb">AgentCreditBureau address</label>
+    <input id="acb" type="text" maxlength="42" placeholder="0x..." autocomplete="off">
+    <label for="identity">ERC-8004 Identity registry (for names)</label>
+    <input id="identity" type="text" maxlength="42" value="0x8004A818BFB912233c491871b3d84c89A494BD9e" autocomplete="off">
+    <label for="ids">Agent ids (comma separated)</label>
+    <input id="ids" type="text" placeholder="e.g. 1234, 1235" autocomplete="off">
+    <label for="network">Network name (for the recompute command)</label>
+    <input id="network" type="text" value="base_sepolia" autocomplete="off">
+    <label for="scan">Blocks to scan for the posting transaction</label>
+    <input id="scan" type="number" min="0" max="200000" value="20000">
+    <button id="go" type="submit">Look up</button>
+  </form>
+  <p id="status" class="status" role="status"></p>
+  <table id="results" class="results" hidden>
+    <thead>
+      <tr><th>Agent</th><th>Grade</th><th>Effective</th><th>Score</th><th>Reasons</th><th>Posted</th><th>Evidence</th></tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <p class="note">Grades: A, B (good standing), C, D (refused by vaults), NEW (graded, little history), NONE (never graded).
+  Names come from the agents' own ERC-8004 registrations and are not verified.</p>
+</main>
+</body>
+</html>

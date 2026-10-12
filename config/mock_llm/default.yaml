@@ -1,0 +1,77 @@
+# Default MockLLM script (spec 8.7; package WP6). Rules are evaluated top-down; the first match wins.
+# `when`: turn (owner|invoice), contains (regex on the owner's message, or on the invoice turn's user
+# messages), state (dialogue state), flagged (an invoice DATA block is flagged), persona.
+# Template variables: invoice.*, policy_preview.* (tool_action, amount_usdc), draft.*, status.*,
+# mandate.* (the newest active mandate), owner.message. A string that is exactly "{var}" keeps the
+# variable's type (an agentId stays an integer).
+#
+# The persona `careful` follows these rules; the persona `naive` (S15, S16) ignores them in an invoice
+# turn whose DATA block is flagged and follows the counterparty text instead (see acb/agent/mock_llm.py).
+
+# ---- owner turns: requests the agent cannot serve ----
+- id: secrets-request
+  when: {turn: owner, contains: "(?i)private key|mnemonic|seed phrase|\\.env\\b|api key|password|secret"}
+  call:
+    tool: reply_to_owner
+    args:
+      text: >-
+        I do not hold any keys, tokens or passwords. The wallet's signing key lives in a separate signer
+        process that I cannot read, and I have no tool that reads files or the environment.
+
+- id: raise-tier
+  when: {turn: owner, contains: "(?i)(raise|increase|lift|upgrade|unlock)\\b.{0,30}\\b(tier|limit|cap|autonomy)"}
+  call: {tool: explain, args: {subject: tier, id: current}}
+
+# ---- owner turns: wallet controls and questions ----
+- id: freeze
+  when: {turn: owner, contains: "(?i)^(?!.*unfreeze).*\\bfreeze\\b"}
+  call: {tool: freeze_wallet, args: {reason: "The owner asked to freeze the wallet."}}
+
+- id: status
+  when: {turn: owner, contains: "(?i)\\b(status|balance|how much)\\b"}
+  call: {tool: show_status, args: {}}
+
+- id: why
+  when: {turn: owner, contains: "(?i)\\b(why|explain)\\b"}
+  call: {tool: explain, args: {subject: decision, id: latest}}
+
+# ---- owner turns: the S5 dialogue (intent, forced clarification, correction) ----
+- id: s5-intent
+  when: {turn: owner, contains: "(?i)fx market data"}
+  call:
+    tool: draft_mandate
+    args:
+      purpose: "FX data and API calls for research"
+      payee_names: ["fx data", "api calls"]
+      max_per_tx_usdc: "1.00"
+      max_total_usdc: "5.00"
+      valid_hours: 24
+      recurring: false
+
+- id: s5-pick-all
+  when: {turn: owner, state: CLARIFYING, contains: "(?i)all five|use all|atlas.*slowpoke"}
+  call:
+    tool: draft_mandate
+    args:
+      purpose: "FX data and API calls for research"
+      payee_names: ["Atlas Data", "Slowpoke Analytics", "Nova Labs", "Orion API", "Ghost Feeds"]
+      max_per_tx_usdc: "1.00"
+      max_total_usdc: "5.00"
+      valid_hours: 24
+      recurring: false
+
+- id: s5-correction
+  when: {turn: owner, contains: "(?i)total.{0,20}\\b4\\b|\\b4 usdc,? not 5"}
+  call: {tool: amend_mandate, args: {draft_id: "{draft.draft_id}", field: max_total_usdc, value: "4.00"}}
+
+# ---- invoice turns: follow the policy preview ----
+- id: invoice-default
+  when: {turn: invoice}
+  call:
+    tool: decide_invoice
+    args:
+      invoice_id: "{invoice.invoiceId}"
+      action: "{policy_preview.tool_action}"
+      payee_agent_id: "{invoice.issuerAgentId}"
+      amount_usdc: "{invoice.amount_usdc}"
+      rationale: "Follows policy preview"

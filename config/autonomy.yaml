@@ -1,0 +1,18 @@
+# Autonomy operator (process P5, spec 5.4 and 13.3). Owned by WP4.
+# loss_limit: unsecured losses (USDC base units) tolerated per tier 0-3 before a demotion (rule 5).
+loss_limit: ["0", "500000", "1000000", "2000000"]
+# Own grades that allow a promotion (rule 6).
+own_grade_promote: [A, B, NEW]
+# Clean settlements since the last tier change must involve at least this many distinct payees.
+min_distinct_payees: 2
+# Seconds between evaluations when the service runs on its own (0 disables the loop).
+poll_s: 30
+# The scenario runner calls POST /evaluate after every bureau rescore.
+evaluate_after_rescore: true
+# Consecutive checks with the signer unreachable before an owner alert (the operator never freezes on
+# unreachability alone, and never promotes while it cannot check the decision log).
+signer_unreachable_alert_after: 3
+# Rule 2 matches an outflow only to a signer decision for the same orderId whose logged txHash is the
+# outflow's transaction. The signer attaches the txHash right after the receipt; until then the outflow
+# is pending (no freeze, no promotion) for at most this many seconds, then it counts as unmatched.
+decision_tx_grace_s: 300

@@ -1,0 +1,49 @@
+[project]
+name = "agent-credit-bureau"
+version = "0.1.0"
+description = "Agent Credit Bureau: a credit bureau for AI agents and an AI wallet that earns its autonomy (FinTechathon 2026, Topic F Agent Wallet)"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Taivanbat Bayarsaikhan" },
+    { name = "Tuguldur Munkhbat" },
+]
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "web3>=7.16,<8",
+    "eth-account>=0.13",
+    "pydantic>=2.8",
+    "httpx>=0.27",
+    "openai>=1.50",
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "rich>=13.7",
+    "python-dotenv>=1.0",
+    "pyyaml>=6.0",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.3", "ruff>=0.6"]
+
+[project.scripts]
+acb = "acb.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/acb"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = [
+    "chain: needs a running local Anvil node (started by the fixture)",
+    "llm: calls a real LLM provider (skipped unless LLM_API_KEY is set)",
+    "slow: scenario, attack and benign suites (deselect with -m \"not slow\")",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"

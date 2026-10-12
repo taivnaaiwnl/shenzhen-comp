@@ -1,0 +1,23 @@
+/* Read-only bureau lookup page (spec 11.4). Light theme, colour-blind-safe grade colours with letters. */
+html { font-size: 18px; }
+body { margin: 0; font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; color: #1d232b; background: #f6f7f9; }
+.top { background: #11335f; color: #ffffff; padding: 0.8rem 1.2rem; }
+.top h1 { margin: 0 0 0.3rem; font-size: 1.4rem; }
+.top p { margin: 0; color: #dbe4f2; font-size: 0.9rem; }
+main { padding: 1rem 1.2rem; }
+.lookup { display: grid; grid-template-columns: max-content minmax(10rem, 36rem); gap: 0.4rem 0.8rem; align-items: center; }
+.lookup button { grid-column: 2; justify-self: start; font: inherit; padding: 0.3rem 1rem; }
+input { font: inherit; font-size: 0.9rem; padding: 0.25rem 0.4rem; }
+.status { min-height: 1.2rem; color: #5b6573; }
+.results { border-collapse: collapse; width: 100%; background: #ffffff; font-size: 0.85rem; }
+.results th, .results td { text-align: left; border-bottom: 1px solid #d8dde4; padding: 0.3rem; vertical-align: top; }
+.mono { font-family: Consolas, "Courier New", monospace; font-size: 0.8rem; overflow-wrap: anywhere; }
+.grade { display: inline-block; min-width: 2.6rem; text-align: center; color: #ffffff; font-weight: 700; border-radius: 0.3rem; padding: 0 0.3rem; }
+.grade-A { background: #1b5e20; }
+.grade-B { background: #00796b; }
+.grade-C { background: #b26a00; }
+.grade-D { background: #c62828; }
+.grade-NEW, .grade-NONE { background: #616161; }
+.muted { color: #5b6573; }
+.note { color: #5b6573; font-size: 0.8rem; }
+.error { color: #9b1c1c; }

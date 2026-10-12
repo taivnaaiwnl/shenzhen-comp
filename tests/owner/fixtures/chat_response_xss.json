@@ -1,0 +1,53 @@
+{
+  "reply": "<script>window.__pwned=1</script> Here is your draft <img src=x onerror=\"window.__pwned=2\">",
+  "cards": [
+    {
+      "type": "clarification",
+      "question": "<script>window.__pwned=1</script>",
+      "field": "payee",
+      "options": [
+        "<img src=x onerror=\"window.__pwned=2\">",
+        "Atlas Data"
+      ],
+      "candidates": [
+        {
+          "agentId": "5",
+          "name": "<script>window.__pwned=1</script>",
+          "grade": 5,
+          "score": 742,
+          "liveWallet": "0x4fd5fe541728c2b32f0de264be24494f79bb7ab6",
+          "registeredAt": 1,
+          "lookalikeOf": "<img src=x onerror=\"window.__pwned=2\">"
+        }
+      ]
+    },
+    {
+      "type": "decision",
+      "orderId": "0xa0a8f5e561a8750afb2d202b233838f7c59c2f83809b596a63af497c05b72037",
+      "payee": {
+        "agentId": "5",
+        "name": "<img src=x onerror=\"window.__pwned=2\">",
+        "grade": 5,
+        "score": null,
+        "liveWallet": null,
+        "registeredAt": null,
+        "lookalikeOf": null
+      },
+      "amount": "800000",
+      "outcome": 1,
+      "reasons": [
+        2000
+      ],
+      "reasonTexts": [
+        "<script>window.__pwned=1</script>"
+      ],
+      "txHash": "0x636a204f044d87f05434792df020af4a55a7abc03b96438c82e1664d16927565",
+      "offchain": false
+    }
+  ],
+  "llm": {
+    "mode": "<script>window.__pwned=1</script>",
+    "model": "<img src=x onerror=\"window.__pwned=2\">",
+    "fallback": true
+  }
+}

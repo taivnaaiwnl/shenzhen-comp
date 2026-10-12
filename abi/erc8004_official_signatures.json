@@ -1,0 +1,359 @@
+{
+  "IdentityRegistry": {
+    "errors": [
+      "ERC721NonexistentToken(uint256)",
+      "ERC721InvalidOwner(address)",
+      "ERC721IncorrectOwner(address,uint256,address)",
+      "ERC721InvalidSender(address)",
+      "ERC721InvalidReceiver(address)",
+      "ERC721InsufficientApproval(address,uint256)",
+      "ERC721InvalidApprover(address)",
+      "ERC721InvalidOperator(address)"
+    ],
+    "events": [
+      {
+        "indexed": [
+          true,
+          false,
+          true
+        ],
+        "signature": "Registered(uint256,string,address)"
+      },
+      {
+        "indexed": [
+          true,
+          true,
+          false,
+          false
+        ],
+        "signature": "MetadataSet(uint256,string,string,bytes)"
+      },
+      {
+        "indexed": [
+          true,
+          false,
+          true
+        ],
+        "signature": "URIUpdated(uint256,string,address)"
+      },
+      {
+        "indexed": [
+          true,
+          true,
+          true
+        ],
+        "signature": "Transfer(address,address,uint256)"
+      },
+      {
+        "indexed": [
+          true,
+          true,
+          true
+        ],
+        "signature": "Approval(address,address,uint256)"
+      },
+      {
+        "indexed": [
+          true,
+          true,
+          false
+        ],
+        "signature": "ApprovalForAll(address,address,bool)"
+      }
+    ],
+    "functions": [
+      {
+        "outputs": [
+          "uint256"
+        ],
+        "signature": "register()",
+        "stateMutability": "nonpayable"
+      },
+      {
+        "outputs": [
+          "uint256"
+        ],
+        "signature": "register(string)",
+        "stateMutability": "nonpayable"
+      },
+      {
+        "outputs": [
+          "uint256"
+        ],
+        "signature": "register(string,(string,bytes)[])",
+        "stateMutability": "nonpayable"
+      },
+      {
+        "outputs": [
+          "bytes"
+        ],
+        "signature": "getMetadata(uint256,string)",
+        "stateMutability": "view"
+      },
+      {
+        "outputs": [],
+        "signature": "setMetadata(uint256,string,bytes)",
+        "stateMutability": "nonpayable"
+      },
+      {
+        "outputs": [],
+        "signature": "setAgentURI(uint256,string)",
+        "stateMutability": "nonpayable"
+      },
+      {
+        "outputs": [
+          "address"
+        ],
+        "signature": "getAgentWallet(uint256)",
+        "stateMutability": "view"
+      },
+      {
+        "outputs": [],
+        "signature": "setAgentWallet(uint256,address,uint256,bytes)",
+        "stateMutability": "nonpayable"
+      },
+      {
+        "outputs": [],
+        "signature": "unsetAgentWallet(uint256)",
+        "stateMutability": "nonpayable"
+      },
+      {
+        "outputs": [
+          "bool"
+        ],
+        "signature": "isAuthorizedOrOwner(address,uint256)",
+        "stateMutability": "view"
+      },
+      {
+        "outputs": [
+          "string"
+        ],
+        "signature": "getVersion()",
+        "stateMutability": "pure"
+      },
+      {
+        "outputs": [
+          "string"
+        ],
+        "signature": "name()",
+        "stateMutability": "view"
+      },
+      {
+        "outputs": [
+          "string"
+        ],
+        "signature": "symbol()",
+        "stateMutability": "view"
+      },
+      {
+        "outputs": [
+          "uint256"
+        ],
+        "signature": "balanceOf(address)",
+        "stateMutability": "view"
+      },
+      {
+        "outputs": [
+          "address"
+        ],
+        "signature": "ownerOf(uint256)",
+        "stateMutability": "view"
+      },
+      {
+        "outputs": [
+          "string"
+        ],
+        "signature": "tokenURI(uint256)",
+        "stateMutability": "view"
+      },
+      {
+        "outputs": [],
+        "signature": "approve(address,uint256)",
+        "stateMutability": "nonpayable"
+      },
+      {
+        "outputs": [
+          "address"
+        ],
+        "signature": "getApproved(uint256)",
+        "stateMutability": "view"
+      },
+      {
+        "outputs": [],
+        "signature": "setApprovalForAll(address,bool)",
+        "stateMutability": "nonpayable"
+      },
+      {
+        "outputs": [
+          "bool"
+        ],
+        "signature": "isApprovedForAll(address,address)",
+        "stateMutability": "view"
+      },
+      {
+        "outputs": [],
+        "signature": "transferFrom(address,address,uint256)",
+        "stateMutability": "nonpayable"
+      },
+      {
+        "outputs": [],
+        "signature": "safeTransferFrom(address,address,uint256)",
+        "stateMutability": "nonpayable"
+      },
+      {
+        "outputs": [],
+        "signature": "safeTransferFrom(address,address,uint256,bytes)",
+        "stateMutability": "nonpayable"
+      },
+      {
+        "outputs": [
+          "bool"
+        ],
+        "signature": "supportsInterface(bytes4)",
+        "stateMutability": "view"
+      },
+      {
+        "outputs": [
+          "bytes1",
+          "string",
+          "string",
+          "uint256",
+          "address",
+          "bytes32",
+          "uint256[]"
+        ],
+        "signature": "eip712Domain()",
+        "stateMutability": "view"
+      }
+    ]
+  },
+  "ReputationRegistry": {
+    "errors": [],
+    "events": [
+      {
+        "indexed": [
+          true,
+          true,
+          false,
+          false,
+          false,
+          true,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "signature": "NewFeedback(uint256,address,uint64,int128,uint8,string,string,string,string,string,bytes32)"
+      },
+      {
+        "indexed": [
+          true,
+          true,
+          true
+        ],
+        "signature": "FeedbackRevoked(uint256,address,uint64)"
+      },
+      {
+        "indexed": [
+          true,
+          true,
+          false,
+          true,
+          false,
+          false
+        ],
+        "signature": "ResponseAppended(uint256,address,uint64,address,string,bytes32)"
+      }
+    ],
+    "functions": [
+      {
+        "outputs": [
+          "address"
+        ],
+        "signature": "getIdentityRegistry()",
+        "stateMutability": "view"
+      },
+      {
+        "outputs": [],
+        "signature": "giveFeedback(uint256,int128,uint8,string,string,string,string,bytes32)",
+        "stateMutability": "nonpayable"
+      },
+      {
+        "outputs": [],
+        "signature": "revokeFeedback(uint256,uint64)",
+        "stateMutability": "nonpayable"
+      },
+      {
+        "outputs": [],
+        "signature": "appendResponse(uint256,address,uint64,string,bytes32)",
+        "stateMutability": "nonpayable"
+      },
+      {
+        "outputs": [
+          "uint64"
+        ],
+        "signature": "getLastIndex(uint256,address)",
+        "stateMutability": "view"
+      },
+      {
+        "outputs": [
+          "int128",
+          "uint8",
+          "string",
+          "string",
+          "bool"
+        ],
+        "signature": "readFeedback(uint256,address,uint64)",
+        "stateMutability": "view"
+      },
+      {
+        "outputs": [
+          "uint64",
+          "int128",
+          "uint8"
+        ],
+        "signature": "getSummary(uint256,address[],string,string)",
+        "stateMutability": "view"
+      },
+      {
+        "outputs": [
+          "address[]",
+          "uint64[]",
+          "int128[]",
+          "uint8[]",
+          "string[]",
+          "string[]",
+          "bool[]"
+        ],
+        "signature": "readAllFeedback(uint256,address[],string,string,bool)",
+        "stateMutability": "view"
+      },
+      {
+        "outputs": [
+          "uint64"
+        ],
+        "signature": "getResponseCount(uint256,address,uint64,address[])",
+        "stateMutability": "view"
+      },
+      {
+        "outputs": [
+          "address[]"
+        ],
+        "signature": "getClients(uint256)",
+        "stateMutability": "view"
+      },
+      {
+        "outputs": [
+          "string"
+        ],
+        "signature": "getVersion()",
+        "stateMutability": "pure"
+      }
+    ]
+  },
+  "note": "Pinned official signatures of every function and event our code uses. stateMutability view and pure are treated as equivalent read-only calls.",
+  "schema": "acb-erc8004-signatures/1",
+  "source": "https://github.com/erc-8004/erc-8004-contracts (master, v2.0.0; IdentityRegistryUpgradeable.sol, ReputationRegistryUpgradeable.sol; MIT). Checked 2026-10-11, spec 0.4.",
+  "versionOfficial": "2.0.0"
+}
