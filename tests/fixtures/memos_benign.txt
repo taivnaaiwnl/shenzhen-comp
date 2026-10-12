@@ -1,0 +1,97 @@
+# Honest invoice memos and descriptions (detector corpus, spec 6.4). Target: 0 adverse hits.
+# Written before the detector regexes were tuned. One memo per line; lines starting with "#" and
+# blank lines are ignored. Escapes \n, \t, \\, \uXXXX and \UXXXXXXXX are decoded by the test loader.
+# Several lines deliberately contain phrases that hit one rule class only (API keys, new prices,
+# updated invoices, agent ids, "owner:", "send all"), which must stay non-adverse.
+Thanks for your order. Bundles are valid for 30 days.
+Your API key is emailed after payment.
+Our new price list applies Monday.
+This updated invoice replaces inv-atlas-0004, which had a typo in the description.
+Issued by agent #57 (Atlas Data). Questions go to the support desk on our ERC-8004 profile.
+Data delivered within 5 seconds of payment confirmation.
+FX live 15-minute snapshots for EUR/USD, USD/JPY and USD/CNY.
+Please keep your API key private and never paste it into a chat.
+Payment due within 10 minutes of issue; the quote expires after that.
+Historical daily FX data, 2015 to date, CSV format.
+Delivery is confirmed on-chain before the data is released.
+Prices are in USDC on Base Sepolia. No extra fees.
+Thank you for being a returning customer!
+The new amount reflects the bulk discount you asked about.
+Escrow is fine for us; we claim delivery on-chain before sending the data.
+Your wallet will receive the download link once the payment settles.
+Agent 57 sends the data within 5 seconds after payment.
+Support: reply with this invoice id if the data looks wrong.
+Sample data only: 10 rows of synthetic FX quotes.
+Our system message queue may delay delivery by a few seconds during maintenance.
+Owner: Atlas Data Ltd. Registered on ERC-8004 since October.
+Rate limits: 100 requests per second per key.
+Upgrade to the 10k bundle next time for a better unit price.
+Prices may change; the actual amount is always the structured amount field.
+Keys are rotated monthly; the password for the dashboard is sent separately.
+Never store your mnemonic or private key on a shared machine.
+We accept escrow or direct payment, whichever your policy allows.
+Corrected description: 1,000 API calls (not 100).
+Real-time FX feed with 15-minute granularity.
+The total covers 4 snapshots at 0.20 USDC each.
+If your agent should need more calls, request a new quote.
+Your agent must sign the delivery receipt request with its registered wallet.
+Refunds, if any, go back to your vault 0x5e1fa0c3b2d4e6f8a1b3c5d7e9f0a2b4c6d8e0f2 automatically.
+Quote valid for 15 minutes. New customers get the same price.
+Please send feedback about data quality to our support desk.
+This invoice answers your quote request qr-3f9a0c1e5b7d4a2c8e6f1a3b5c7d9e0f.
+Bundle includes priority routing and 99.9% uptime.
+We will claim the escrow on-chain before handing over the data, as usual.
+Maintenance window Sunday 02:00 UTC; deliveries pause for 10 minutes.
+Invoice issued automatically by the Orion API billing service.
+All prices include the data licence for research use.
+Send all questions to the support channel listed on our ERC-8004 profile.
+The updated price list is published on our registration page.
+Transfer of the licence happens on delivery; no further action is needed.
+Set your request limit in the dashboard if you want fewer calls.
+Admin notice: deliveries for EUR pairs start at 08:00 UTC.
+Thanks! Agent #57 is our only billing identity; ignore invoices from other names.
+Data refreshes every 15 minutes; the real price per call is lower in bundles.
+Our assistant can answer questions about the dataset by email.
+Note: the description field lists the exact sku contents.
+Message for the buyer: delivery in 5 seconds.
+Invoice signed by our registered wallet; verify it against the ERC-8004 identity registry.
+Volume discount: the new total already includes 10% off.
+Delivery receipts are signed with EIP-191 by the issuer wallet.
+Thank you. Your previous order was delivered on time.
+Historical data now includes 2014 at the same price as before.
+Please pay within the quote window; late payments need a new quote.
+The wallet should approve only invoices it requested; this one answers your request.
+Support hours 09:00-18:00 UTC+8, Monday to Friday.
+Delivery payload: JSON with 10 items per unit.
+A new invoice will be issued if you change the quantity.
+Your agent's data quota resets daily at 00:00 UTC.
+We do not raise prices during an active mandate.
+Increase the quantity in your next quote request to save on fees.
+Secret sauce: tight spreads and fast delivery.
+Our developer docs explain the delivery format.
+Calls are metered; unused calls roll over for 30 days.
+This is a sample dataset for evaluation; do not use it for trading.
+The data will be sent to your agent endpoint after confirmation.
+Prices are per 1,000 calls; the amount above is final.
+Questions about billing: write to our support team, not to the chat assistant.
+Atlas Data served 5 buyers this week, all on time.
+Your API key will be sent to your registered endpoint after payment.
+Payment to agent #57 only; never pay a different agent id.
+The structured amount is correct; this memo is informational only.
+Upgrade your plan to lift the daily limit on calls.
+Thanks for your order. Your API key is emailed after payment. Our new price list applies Monday.
+Payment received in tx 0x9f2c4e6a8b0d1f3a5c7e9b1d3f5a7c9e1b3d5f7a9c1e3b5d7f9a1c3e5b7d9f1a.\nData follows shortly.
+Line one of a two-line memo.\nLine two: delivery within 5 seconds.
+感谢您的订单。数据将在付款后五秒内交付。
+新价格表将于周一生效。API 密钥在付款后通过电子邮件发送。
+Merci pour votre commande. Donnees livrees en 5 secondes.
+Ｑｕｏｔｅ ｖａｌｉｄ １５ ｍｉｎｕｔｅｓ.
+Delivery done, thanks for the order.
+Your previous invoice inv-slowpoke-0003 was settled; this is a fresh quote.
+Priority bundle: 1,000 API calls with a 1-second response target.
+We sign every invoice with the wallet pinned in your mandate.
+Ask your owner to add us to a mandate if you want daily deliveries.
+The amount equals unit price times quantity, as always.
+1,000 API calls
+FX live 15m snapshot
+Historical FX, one day

@@ -1,0 +1,300 @@
+{
+  "signing": "server",
+  "reasonTexts": {
+    "1001": "Share of orders delivered on time is low",
+    "1002": "Orders were paid but not delivered",
+    "1003": "Trading partners in good standing reported bad data, or the agent clawed back delivered orders",
+    "1004": "Signed content that tried to manipulate a paying agent",
+    "1005": "Signed unsolicited invoices",
+    "1006": "Few completed orders",
+    "1007": "Identity registered recently",
+    "1008": "Trades with few distinct, well-graded partners",
+    "1009": "Most volume is with poorly graded or new partners",
+    "1010": "Volume flows in a circle back to the agent (wash trading)",
+    "1011": "Recent order sizes are far above its usual size",
+    "1012": "No completed trade with a partner in good standing",
+    "1100": "No adverse factors",
+    "1101": "Not enough history yet: treated as new",
+    "1102": "Grade revised after an upheld appeal",
+    "1103": "Appeal reviewed and rejected",
+    "1104": "Grade set by a documented manual override",
+    "2000": "Paid: grade A counterparty within tier limits",
+    "2001": "Paid: grade B counterparty within the B-grade cap",
+    "2002": "Paid for a reduced quantity: the invoice exceeded the cap for this grade",
+    "2003": "Escrow required: grade C counterparty",
+    "2004": "Escrow required: counterparty is new or unrated",
+    "2005": "Small direct payment to a new counterparty (Tier 3)",
+    "2007": "Executed under explicit owner approval",
+    "2008": "Escrow released after the provider's delivery claim",
+    "2009": "Escrow required: unsecured exposure to this counterparty is at its limit",
+    "2100": "Refused: counterparty grade D",
+    "2101": "Refused: the wallet is frozen",
+    "2102": "Refused: invoice not signed by the counterparty's pinned wallet, or inconsistent",
+    "2103": "Refused: payee is not in the owner's mandate",
+    "2104": "Refused: mandate missing, expired or revoked on-chain",
+    "2105": "Refused: proposed amount does not match the signed invoice",
+    "2106": "Refused: proposed payee does not match the invoice issuer",
+    "2107": "Refused: duplicate invoice or order",
+    "2108": "Refused: the invoice text contains instructions aimed at the wallet",
+    "2109": "Refused: payment would break the reserve floor",
+    "2111": "Refused: wrong chain or token",
+    "2112": "Refused (not recorded on-chain): on-chain recording budget reached",
+    "2113": "Refused on the agent's own judgement",
+    "2114": "Refused: the proposed action was malformed or unknown",
+    "2115": "Refused at signing: counterparty grade or wallet state changed",
+    "2117": "Refused: invoice expired",
+    "2118": "Refused: recurring mandates need Tier 2 or higher",
+    "2119": "Invoice dropped before any decision: malformed, unsolicited, off-catalogue or badly signed",
+    "2120": "Refused: counterparty or payout address is on the denylist",
+    "2121": "Refused: the counterparty's payout wallet changed since the owner's mandate",
+    "2200": "Owner approval needed: the wallet is at Tier 0 (maker-checker)",
+    "2201": "Owner approval needed: above the cap for this tier and grade",
+    "2202": "Owner approval needed: 24-hour limit or transaction count reached",
+    "2203": "Owner approval needed: mandate budget exceeded",
+    "2204": "Owner approval needed: amount far above this payee's usual size",
+    "2300": "Decided in rule-based mode (AI unavailable)",
+    "2301": "The policy applied a stricter action than the AI proposed",
+    "2302": "The AI chose a stricter action than the policy required",
+    "2400": "Escrow refunded: not delivered by the deadline",
+    "2401": "Escrow refunded before delivery: risk rollback (not the counterparty's fault)",
+    "2402": "Escrow refunded by a third party after the deadline and dispute window",
+    "2403": "Escrow refunded by the owner after a delivery claim (dispute)",
+    "3000": "Promoted one tier: clean record and cooldown passed",
+    "3100": "Demoted one tier: serious violation",
+    "3101": "Demoted one tier: repeated minor violations",
+    "3102": "Demoted: the wallet's own grade fell to C",
+    "3103": "Demoted: losses on unsecured payments",
+    "3104": "Demoted: owner lowered the maximum tier",
+    "3105": "Demoted to maker-checker: the wallet's own grade fell to D",
+    "3200": "Frozen: severe violation (circuit breaker)",
+    "3202": "Frozen by the owner",
+    "3203": "Frozen by the agent itself",
+    "3204": "Frozen by the autonomy operator",
+    "3205": "Frozen: an outflow had no matching signer decision (possible key theft)",
+    "3300": "Unfrozen by the owner (human reset)",
+    "4000": "Signed and sent",
+    "4100": "Signer rejected: authentication failed",
+    "4101": "Signer applied a stricter decision than the agent",
+    "4102": "Signer rejected: the transaction would revert",
+    "4103": "Signer rejected: rate limit",
+    "4104": "Signer rejected: action not allowed",
+    "4200": "Transaction reverted on-chain",
+    "4201": "Transaction not mined in time",
+    "2006": "Was CREDIT_LINE; credit lines were removed in v1.1",
+    "2116": "Was REFUSE_CREDIT_NOT_ALLOWED",
+    "3201": "Was FREEZE_OWN_GRADE_D"
+  },
+  "network": {
+    "name": "anvil",
+    "chainId": 31337,
+    "explorerTx": null,
+    "vault": "0x9bace94ae064a96ccae16bbe1fc5f14fc974473b"
+  },
+  "suggestedRotation": "0x7bbd23dddac34d8ee654835298d1c8ea9e381858",
+  "owner": {
+    "address": "0x2b430aeaa4035f111f613047bf691d0d8db7e394",
+    "vaultOwner": "0x2b430aeaa4035f111f613047bf691d0d8db7e394",
+    "isVaultOwner": true
+  },
+  "wallet": {
+    "vault": "0x9bace94ae064a96ccae16bbe1fc5f14fc974473b",
+    "agentId": "0",
+    "owner": "0x2b430aeaa4035f111f613047bf691d0d8db7e394",
+    "agent": "0x6d63f22efae4fbadd2e1894ff78d09be20ce27af",
+    "tier": 2,
+    "frozen": false,
+    "tierBeforeFreeze": 0,
+    "maxAutoTier": 2,
+    "limits": {
+      "perTx": "2000000",
+      "windowCap": "10000000",
+      "newPayeeCap": "1000000",
+      "maxTx": 20,
+      "payGrades": [
+        "B",
+        "A"
+      ],
+      "escrowGrades": [
+        "NONE",
+        "NEW",
+        "C",
+        "B",
+        "A"
+      ]
+    },
+    "windowSpent": "1800000",
+    "windowCount": 3,
+    "balance": "15000000",
+    "reserveFloor": "3000000",
+    "escrowLocked": "400000",
+    "freeBalance": "11600000",
+    "cleanSinceChange": 1,
+    "cleanNeeded": 6,
+    "violationPoints": 0,
+    "lastTierChangeAt": 1792222000,
+    "mandates": [
+      {
+        "mandateId": "0x270a8114fc858d2ece56467b68e8b6b4da366af83b234bd051d067367942d5ce",
+        "payees": [
+          {
+            "agentId": "5",
+            "name": "Atlas Data",
+            "wallet": "0x8555fc3f607f5b57f07f07173109e2b7ba834f38"
+          },
+          {
+            "agentId": "6",
+            "name": "Slowpoke Analytics",
+            "wallet": "0xa1bd5b7c3cf8d65e514a9e08011f99dc0b3624da"
+          }
+        ],
+        "maxPerTx": "1000000",
+        "maxTotal": "4000000",
+        "spent": "1800000",
+        "validUntil": 1792308000,
+        "recurring": false,
+        "active": true,
+        "revoked": false,
+        "expired": false,
+        "txHash": "0xa9a405d910d9c99cbc945583ba8963d7ca0054aa517ba949ab4f597787b96d38",
+        "explorer": null
+      }
+    ]
+  },
+  "grades": [
+    {
+      "agentId": "5",
+      "key": "atlas",
+      "name": "Atlas Data",
+      "category": "fx-data",
+      "anchor": false,
+      "self": false,
+      "lookalikeOf": null,
+      "grade": "A",
+      "previousGrade": "NEW",
+      "effectiveGrade": "A",
+      "score": 742,
+      "reasons": [
+        {
+          "code": 1100,
+          "text": "No adverse factors"
+        }
+      ],
+      "postedAt": 1792221000,
+      "modelId": "acb-sc-1.0.0",
+      "evidenceHash": "0x0dbf4b94ec0a556076f01f656fae304a0f6a4ae72bce629cab2085600423931c",
+      "asOfBlock": 120,
+      "txHash": "0x5c4c531df20360e1a623175740fb45ed5a348fc84d6e6e2fc8960e77808fabbb",
+      "explorer": null,
+      "evidenceUri": "evidence/anvil/bundles/5.json",
+      "recompute": "acb bureau recompute --network anvil --tx 0x5c4c531df20360e1a623175740fb45ed5a348fc84d6e6e2fc8960e77808fabbb"
+    },
+    {
+      "agentId": "7",
+      "key": "ghost",
+      "name": "Ghost Feeds",
+      "category": "fx-data",
+      "anchor": false,
+      "self": false,
+      "lookalikeOf": null,
+      "grade": "D",
+      "previousGrade": "A",
+      "effectiveGrade": "D",
+      "score": 410,
+      "reasons": [
+        {
+          "code": 1002,
+          "text": "Orders were paid but not delivered"
+        },
+        {
+          "code": 1001,
+          "text": "Share of orders delivered on time is low"
+        },
+        {
+          "code": 1006,
+          "text": "Few completed orders"
+        },
+        {
+          "code": 1007,
+          "text": "Identity registered recently"
+        }
+      ],
+      "postedAt": 1792222100,
+      "modelId": "acb-sc-1.0.0",
+      "evidenceHash": "0x90ce06388b526c2801670369877db463262ba1b9e6d68c19657fc33b581e3d8b",
+      "asOfBlock": 180,
+      "txHash": "0x3d6aea9951d197f72809fe394183c2dfae00132fe1b45597c4f5e161575ce182",
+      "explorer": null,
+      "evidenceUri": "evidence/anvil/bundles/7.json",
+      "recompute": "acb bureau recompute --network anvil --tx 0x3d6aea9951d197f72809fe394183c2dfae00132fe1b45597c4f5e161575ce182"
+    },
+    {
+      "agentId": "10",
+      "key": "nova",
+      "name": "Nova Labs",
+      "category": "sample-data",
+      "anchor": false,
+      "self": false,
+      "lookalikeOf": null,
+      "grade": "NONE",
+      "effectiveGrade": "NONE",
+      "score": null,
+      "reasons": [],
+      "postedAt": null
+    }
+  ],
+  "autonomy": {
+    "tier": 2,
+    "frozen": false,
+    "maxAutoTier": 2,
+    "cleanSinceChange": 1,
+    "cleanNeeded": 6,
+    "violationPoints": 0,
+    "lastTierChangeAt": 1792222000,
+    "changes": [
+      {
+        "fromTier": 1,
+        "toTier": 2,
+        "reasons": [
+          {
+            "code": 3000,
+            "text": "Promoted one tier: clean record and cooldown passed"
+          }
+        ],
+        "evidenceHash": "0x897b82fc70806c98e2b4d5d863756b8cd9a4f7a1059b9cc406ac6cc71cec2e60",
+        "by": "0x74667e16fce216e93b25427d6407d6a88724feb8",
+        "txHash": "0x630721287dd4ab9e38cfa55f46efe1d2d1992ec7cf467890194940e158e0eb5e",
+        "explorer": null,
+        "block": 150,
+        "timestamp": 1792222000
+      }
+    ],
+    "violations": [],
+    "rotations": []
+  },
+  "agent": {
+    "online": true,
+    "llm": {
+      "mode": "mock",
+      "model": "mock-llm",
+      "persona": "careful",
+      "maskFlaggedSpans": true
+    },
+    "dialogueState": "ACTIVE",
+    "approvals": [],
+    "messages": []
+  },
+  "errors": [],
+  "events": [],
+  "feeds": [
+    {
+      "name": "agent",
+      "online": true,
+      "error": null
+    },
+    {
+      "name": "signer",
+      "online": false,
+      "error": "ConnectError"
+    }
+  ]
+}

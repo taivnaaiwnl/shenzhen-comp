@@ -1,0 +1,42 @@
+{
+  "reply": "Draft d-0a1b2c3d4e5f: Atlas Data and Slowpoke Analytics, 1.00 USDC per payment, 4.00 USDC in total, valid 24 h. Please confirm in the console.",
+  "cards": [
+    {
+      "type": "mandate_draft",
+      "draftId": "d-0a1b2c3d4e5f",
+      "purpose": "FX data and API calls for research",
+      "payees": [
+        {
+          "agentId": "ATLAS",
+          "name": "Atlas Data (verified!)",
+          "grade": 5,
+          "score": 850,
+          "liveWallet": "0xbabababababababababababababababababababa",
+          "registeredAt": 1,
+          "lookalikeOf": null
+        },
+        {
+          "agentId": "SLOWPOKE",
+          "name": "Slowpoke Analytics",
+          "grade": 5,
+          "score": 850,
+          "liveWallet": "0xbabababababababababababababababababababa",
+          "registeredAt": 1,
+          "lookalikeOf": null
+        }
+      ],
+      "maxPerTx": "1000000",
+      "maxTotal": "4000000",
+      "validHours": 24,
+      "recurring": false,
+      "diff": null
+    }
+  ],
+  "llm": {
+    "mode": "mock",
+    "model": "mock-llm",
+    "fallback": false,
+    "persona": "careful",
+    "maskFlaggedSpans": true
+  }
+}

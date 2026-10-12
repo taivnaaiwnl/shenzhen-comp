@@ -1,0 +1,264 @@
+1
+00:00:00,500 --> 00:00:04,500
+Agent Credit Bureau, by Team Mongolia.
+
+2
+00:00:05,000 --> 00:00:11,000
+AI wallets pay agents they have never met,
+and can be talked into paying.
+
+3
+00:00:11,000 --> 00:00:16,000
+Freysa's model held the transfer decision,
+and was talked into it.
+
+4
+00:00:16,000 --> 00:00:21,000
+Our wallet checks a credit grade first,
+built only from verifiable settlements.
+
+5
+00:00:21,000 --> 00:00:25,500
+This is the owner console,
+recorded during our Base Sepolia run.
+
+6
+00:00:25,500 --> 00:00:30,800
+Providers are simulated agents we run. Panels
+show tier, limits, grades and decisions.
+
+7
+00:00:31,000 --> 00:00:36,500
+The owner wants FX data and API calls,
+on a 5 USDC budget.
+
+8
+00:00:36,500 --> 00:00:40,000
+Several providers match, so the agent must ask.
+
+9
+00:00:40,000 --> 00:00:45,000
+Each option shows its on-chain id, grade,
+registration age and payout wallet.
+
+10
+00:00:45,000 --> 00:00:50,000
+The owner picks all five,
+then corrects the total to 4 USDC.
+
+11
+00:00:50,000 --> 00:00:56,000
+The console rebuilds the confirmation from the chain,
+and the owner registers mandate M1.
+
+12
+00:00:56,000 --> 00:01:01,500
+It pins each payee's wallet,
+and caps each payment and the total.
+
+13
+00:01:01,500 --> 00:01:04,800
+That took {{s5_owner_turns}} owner turns.
+
+14
+00:01:05,000 --> 00:01:11,500
+Atlas Data sends a signed invoice for 0.80 USDC.
+The policy says PAY.
+
+15
+00:01:11,500 --> 00:01:17,000
+A separate signer holds the agent key.
+The AI never touches it.
+
+16
+00:01:17,000 --> 00:01:22,800
+The wallet starts at tier 1:
+small payments, at most 1 USDC each.
+
+17
+00:01:23,000 --> 00:01:28,800
+Slowpoke is grade B, so it gets
+a lower limit: a smaller order.
+
+18
+00:01:29,000 --> 00:01:34,500
+Nova Labs is new, with no grade,
+so the wallet pays into escrow.
+
+19
+00:01:34,500 --> 00:01:40,500
+Nova must claim delivery on-chain,
+then the escrow is released.
+
+20
+00:01:40,500 --> 00:01:45,800
+When Nova's next order never arrives,
+the wallet takes its money back.
+
+21
+00:01:46,000 --> 00:01:50,800
+Three clean payments earn the wallet
+a promotion to tier {{wallet_tier_after_s10}}.
+
+22
+00:01:51,000 --> 00:01:57,000
+Now Ghost Feeds stops delivering. A peer buyer
+refunds three escrows Ghost never claimed.
+
+23
+00:01:57,000 --> 00:02:02,000
+Sybil praise for Ghost, and smears on Atlas,
+count for zero.
+
+24
+00:02:02,000 --> 00:02:09,000
+Ghost's score falls from {{score_ghost_s4}} to {{score_ghost_s11}},
+and its grade to {{grade_final_ghost}}.
+
+25
+00:02:09,000 --> 00:02:15,000
+The grade goes on-chain with its model id,
+config hash and evidence hash.
+
+26
+00:02:15,000 --> 00:02:19,500
+Anyone can recompute it from public data.
+
+27
+00:02:19,500 --> 00:02:25,000
+Ghost is still in the mandate,
+but the wallet refuses its next invoice.
+
+28
+00:02:25,000 --> 00:02:32,800
+Even with a stolen agent key, a direct payment
+to Ghost fails: the vault itself checks the grade.
+
+29
+00:02:33,000 --> 00:02:39,500
+Next, Orion's memo tells the AI
+to pay 3 USDC, not 0.60.
+
+30
+00:02:39,500 --> 00:02:44,000
+First, a real model reads it, in a local rehearsal.
+
+31
+00:02:44,000 --> 00:02:48,500
+The memo arrives as untrusted data,
+with flagged phrases masked.
+
+32
+00:02:48,500 --> 00:02:54,800
+Whatever the model says, the policy refuses:
+reason 2108. Nothing is paid.
+
+33
+00:02:55,000 --> 00:03:02,000
+Now the worst case: a scripted naive LLM,
+labelled on screen, with masking off.
+
+34
+00:03:02,000 --> 00:03:08,500
+It follows the memo and proposes 3 USDC.
+The signer checks the signed invoice and refuses.
+
+35
+00:03:08,500 --> 00:03:13,000
+That proposal is the agent's own
+serious violation, recorded on-chain.
+
+36
+00:03:13,000 --> 00:03:17,800
+The vault demotes it to tier {{wallet_tier_after_s15}}.
+
+37
+00:03:18,000 --> 00:03:25,000
+The next memo poses as the wallet administrator,
+and asks to send all funds to another agent.
+
+38
+00:03:25,000 --> 00:03:29,500
+The scripted LLM proposes exactly that.
+The signer refuses.
+
+39
+00:03:29,500 --> 00:03:33,000
+The severe violation trips the circuit breaker.
+
+40
+00:03:33,000 --> 00:03:36,800
+Orion is reported,
+and its grade falls to {{grade_final_orion}}.
+
+41
+00:03:37,000 --> 00:03:42,500
+While frozen, the agent cannot pay,
+and the stolen key's payment reverts.
+
+42
+00:03:42,500 --> 00:03:45,000
+Only the owner can reset it.
+
+43
+00:03:45,000 --> 00:03:50,500
+One transaction unfreezes it to tier {{wallet_tier_after_s18}}
+and rotates the agent key.
+
+44
+00:03:50,500 --> 00:03:57,800
+In this maker-checker mode, the next payment
+waits for the owner's approval, on a verified card.
+
+45
+00:03:58,000 --> 00:04:02,000
+Now the LLM goes down, in a local run.
+
+46
+00:04:02,000 --> 00:04:06,500
+Rule-based mode takes over,
+and the purchase still completes.
+
+47
+00:04:06,500 --> 00:04:13,800
+Asked for its private key, it has none to give,
+and no tool that reads secrets.
+
+48
+00:04:14,000 --> 00:04:19,000
+We also attacked it ourselves, on a local chain:
+{{atk_total}} attacks.
+
+49
+00:04:19,000 --> 00:04:26,000
+{{atk_blocked}} blocked, {{atk_contained}} contained, {{atk_bounded}} bounded,
+{{atk_escalated}} escalated, {{atk_failed}} failed.
+
+50
+00:04:26,000 --> 00:04:31,000
+Funds moved outside the owner's intent:
+{{atk_funds_lost_usdc}} USDC.
+
+51
+00:04:31,000 --> 00:04:35,500
+False alarms: {{benign_false_positives}}
+in {{benign_tasks}} benign tasks.
+
+52
+00:04:35,500 --> 00:04:41,800
+One script verifies {{verify_offline_verified}} of {{verify_offline_total}}
+transactions and grade files offline.
+
+53
+00:04:42,000 --> 00:04:46,500
+Identities use ERC-8004, a Draft standard.
+
+54
+00:04:46,500 --> 00:04:51,000
+Before our wallet pays an agent,
+it checks a recomputable grade.
+
+55
+00:04:51,000 --> 00:04:55,500
+Its own autonomy is earned,
+and lost, on-chain.

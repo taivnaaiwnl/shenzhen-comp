@@ -1,0 +1,42 @@
+# secrets: private keys, API keys, RPC URLs with keys
+.env
+.env.*
+!.env.example
+*.key
+keystore/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# Solidity build output (rebuilt from source)
+contracts/out/
+contracts/cache/
+.solcx/
+
+# Node
+node_modules/
+
+# editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# local run output (evidence/ keeps the curated transaction log, runs/ is scratch)
+runs/
+*.log
+
+# runtime state (data/<network>/agent|signer/, launcher state) and local deployments
+data/*
+!data/.gitkeep
+deployments/anvil.json
+
+# organiser files and the filled registration form (personal data): never committed
+private/

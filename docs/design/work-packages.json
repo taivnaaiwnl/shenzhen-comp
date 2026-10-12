@@ -1,0 +1,389 @@
+[
+  {
+    "id": "WP1",
+    "title": "Foundations: shared types, canonical hashing, reason codes, detector, keys, config, logbus, CLI, launcher, test fixtures",
+    "depends_on": [],
+    "owns": [
+      "src/acb/__init__.py",
+      "src/acb/__main__.py",
+      "src/acb/cli.py",
+      "src/acb/launcher.py",
+      "src/acb/config.py",
+      "src/acb/types.py",
+      "src/acb/reason_codes.py",
+      "src/acb/canonical.py",
+      "src/acb/injection.py",
+      "src/acb/keys.py",
+      "src/acb/logbus.py",
+      "config/networks.yaml",
+      "config/processes.yaml",
+      ".env.example",
+      ".gitattributes",
+      ".gitignore",
+      "pyproject.toml",
+      "uv.lock",
+      "scripts/gas_estimate.py",
+      "scripts/new_testnet_wallet.py (delete)",
+      "scripts/balances.py (delete)",
+      "data/.gitkeep",
+      "tests/conftest.py",
+      "tests/foundations/**",
+      "tests/fixtures/memos_benign.txt",
+      "tests/fixtures/memos_attack.txt",
+      "docs/design/changes.md"
+    ],
+    "provides": [
+      "acb.types: every model and enum of spec Appendix B, ToolAction<->Decision mapping, STRICTNESS, GRADE_RANK (frozen 12 Oct 18:00)",
+      "acb.canonical: canonical_bytes, chash, order_id, invoice_hash, sign_digest_eip191, recover_eip191, atomic_write_bytes",
+      "acb.reason_codes: catalogue of spec Appendix A with text(code), name(code), category(code)",
+      "acb.injection.detect(fields) -> DetectorResult with quarantine/adverse split (spec 6.4)",
+      "acb.keys: KeyRing.anvil(), KeyRing.from_env(), load_role_key(role), assert_no_private_keys(); CLI 'acb keys init|addresses|balances'",
+      "acb.config: load_env_file() (only dotenv user), load_yaml (utf-8-sig), NetworkProfile.load(network), out_dir()",
+      "acb.logbus: EventBus (JSONL writer + in-memory feed), events_router(token_env='EVENTS_TOKEN') for GET /events",
+      "acb.cli: 'acb' entry point mounting each package's register(subparsers), 'acb up|down' via acb.launcher",
+      "tests/conftest.py fixtures: anvil, deployed (lazy import of acb.chain.deploy), fresh_deployed, warp, out_dir",
+      "tests/fixtures/memos_benign.txt (>= 60 honest memos) and memos_attack.txt (>= 30)"
+    ],
+    "consumes": [],
+    "acceptance": [
+      "uv run pytest tests/foundations -q",
+      "uv run acb --help  (lists every subcommand; packages not built yet show 'not built')",
+      "uv run ruff check src/acb",
+      "git check-attr eol -- src/acb/types.py  (reports lf)",
+      "tests/foundations/vectors.json matches chash, orderId, invoice hash and EIP-191 recovery vectors",
+      "detector: 0 adverse hits on memos_benign.txt, 100% adverse on memos_attack.txt, both scenario templates adverse",
+      "test: dotenv is imported only in src/acb/config.py (ast scan); launcher passes only allow-listed env vars (case-insensitive)",
+      "test: a process with ACB_PROCESS_ROLE=agent and any *_PRIVATE_KEY or *_MNEMONIC variable exits via assert_no_private_keys",
+      "a strict dotenv parse of .env.example succeeds (Foundry-compatible: values with spaces are quoted)"
+    ],
+    "brief": "Build the shared base every other package imports. Read spec 0.1-0.3, 2.1 (launch and environment rules), 6.4 (detector), 10.3 (event envelope), 13.1-13.4 (keys, .env.example, networks.yaml, processes.yaml), 14 (layout), Appendix A (reason codes) and Appendix B (types). Priority order: (1) by 12 Oct 18:00 UTC+8 deliver and announce acb/types.py, acb/canonical.py, acb/reason_codes.py, .gitattributes ('* text=auto eol=lf', 'evidence/** -text', 'abi/** -text', '*.json -text', '*.png binary') and rewrite src/acb/__init__.py and README.md without the UTF-8 BOM (keep README content; WP10 owns later edits); types are frozen at that time. Pydantic models: frozen, extra='forbid', alias_generator=to_camel, populate_by_name=True, Amount serialised as a decimal string in JSON; Event keeps snake_case. canonical_bytes is json.dumps(sort_keys=True, separators=(',',':'), ensure_ascii=True, allow_nan=False) and must raise TypeError on floats; order_id = keccak(abi.encode(uint256 chainId, address vault, uint256 issuerAgentId, bytes32 keccak(invoiceId))). (2) injection.py exactly as spec 6.4, including rule R11 and the rule classes (instruction R1/R2/R3/R11, action R4-R7, hidden R8/R9, sensitive R10); adverse = R8 or R9, or an instruction rule and an action rule in the same field. Write memos_benign.txt BEFORE tuning regexes and include provider-domain phrases (API keys emailed after payment, new price lists, updated invoices, agent ids); Engineer B reviews the corpus. (3) keys.py: role index map of spec 13.1; KeyRing.anvil() derives from the Anvil test mnemonic with --accounts 30; 'acb keys init --network base_sepolia' reads ACB_MNEMONIC once, derives hot roles, generates OWNER and ADMIN keys with Account.create(), writes <ROLE>_PRIVATE_KEY lines and random service tokens into .env (quoted values where needed), removes the ACB_MNEMONIC line, prints only addresses and the funding plan; 'acb keys addresses' and 'acb keys balances' replace scripts/new_testnet_wallet.py and scripts/balances.py (delete both). The existing .env holds OPENAI_API_KEY and ACB_MNEMONIC: do not print or move their values; the new variable name is LLM_API_KEY (tell the team in changes.md). (4) config.py (load_env_file is the only dotenv import; YAML read with utf-8-sig), logbus.py (envelope of spec 10.3, JSONL under ACB_OUT_DIR, /events router requiring EVENTS_TOKEN), cli.py (mount acb.chain.cli, acb.bureau.cli, acb.autonomy.cli, acb.signer.cli, acb.agent.cli, acb.owner.cli, acb.sim.cli, acb.scenario.cli; show 'not built' on ImportError), __main__.py, launcher.py (children via sys.executable -m acb, CREATE_NEW_PROCESS_GROUP, CTRL_BREAK_EVENT then terminate after 5 s, env from config/processes.yaml plus base vars, PYTHONUTF8=1, literal 127.0.0.1). (5) tests/conftest.py fixtures of spec 12.2 (anvil on a free port, automine, --accounts 30; deployed imports acb.chain.deploy lazily and skips if WP3 is not built). Add the 'slow' marker to pyproject.toml and data/* plus deployments/anvil.json to .gitignore (keep private/ ignored). Common rules for every package: the normative source is docs/design/spec.md v1.1 (read sections 0, 2, 15 and Appendix B first, then the sections named here). Write only the paths listed in 'owns'; consume other packages only through the interfaces in spec 15.3 and Appendix B, using the stated stubs until they land. Shared types are frozen on 12 Oct 18:00 UTC+8; ask for changes in docs/design/changes.md instead of editing acb/types.py. Python 3.12 via 'uv run'; Foundry binaries are in %USERPROFILE%/.foundry/bin (prepend to PATH). Write files with LF endings and no BOM (never with PowerShell redirection or Set-Content); hashed files only via acb.canonical.canonical_bytes. Money is int base units (USDC 6 decimals), JSON amounts are strings. Time comes from acb.chain.clock.now(w3). Never put secrets in any file except the git-ignored .env, never read or reference private/, never commit or push, use plain ASCII hyphens and English in docs and messages. If something is missing, choose the most restrictive safe behaviour and write it in NOTES.md of your PR description."
+  },
+  {
+    "id": "WP2",
+    "title": "Smart contracts: AgentCreditBureau, TierVault (mandates, escrow claims, autonomy), MockUSDC, ERC-8004 Lite, forge tests, ABI export",
+    "depends_on": [],
+    "owns": [
+      "foundry.toml",
+      "contracts/src/**",
+      "contracts/test/**",
+      "abi/**",
+      "scripts/export_abi.py",
+      "config/tiers.yaml",
+      "tests/contracts_py/**"
+    ],
+    "provides": [
+      "contracts/src/AgentCreditBureau.sol per spec 3.1 (grade registry with upgrade delay, config-bound vault registry, appeals)",
+      "contracts/src/TierVault.sol per spec 3.2 (on-chain mandates with pinned wallets, pay/escrow via OutflowParams, claimDelivered, release, refund rules, approvals, recording, autonomy, unfreeze with key rotation)",
+      "contracts/src/MockUSDC.sol, erc8004/IdentityRegistryLite.sol, erc8004/ReputationRegistryLite.sol, lib/AcbTypes.sol, interfaces/*.sol",
+      "abi/*.json: {contractName, abi, bytecode, deployedBytecode, codehash}; skeleton with every signature by 12 Oct 22:00, final 13 Oct",
+      "abi/erc8004_official_signatures.json",
+      "config/tiers.yaml (spec 13.3)"
+    ],
+    "consumes": [
+      "spec section 3 only"
+    ],
+    "acceptance": [
+      "forge build --sizes  (TierVault under 24,576 bytes)",
+      "forge test -vv  (all files of spec 3.6 green, including fuzz)",
+      "forge test --match-contract Invariant -vvv  (TV-I1..TV-I11, ACB-I1..ACB-I5; 512 runs, depth 64 from foundry.toml)",
+      "uv run python scripts/export_abi.py && git diff --exit-code abi/  (reproducible)",
+      "uv run pytest tests/contracts_py -q  (ABI parity with official ERC-8004 signatures; codehash equals a fresh build)"
+    ],
+    "brief": "Implement the contracts of spec section 3 exactly (signatures, events, errors, check order). First edit foundry.toml: via_ir = true, bytecode_hash = 'none', keep solc 0.8.30 / cancun / optimizer 200 / fuzz runs 512, add [profile.default.invariant] runs = 512, depth = 64, fail_on_revert = false, and [lint] lint_on_build = false. Milestone M1 (12 Oct 22:00 UTC+8): skeleton contracts with every function, event, error and struct of spec 3.1-3.5 (bodies may revert) and an exported skeleton abi/ so WP3 can start. Final contracts and ABI by 13 Oct evening; full test suite 14 Oct. Key points: no immutables in TierVault; constructor takes one VaultInit struct; every agent outflow goes through _checkMandate, the grade mask, _checkPayee (live getAgentWallet must equal the pinned wallet; funds go to the pinned wallet), reserve and the rolling 32-slot window; claimDelivered only by the stored payee; release computes ON_TIME/LATE from claimedAt; refund rules by caller and claim state (2400 only after the deadline and never after a claim; third parties only after deadline + disputeWindow with forced 2402; owner 2403 after a claim); agent recordDelivery and refund 2400 revert while frozen; clean-record rule (amount >= minCleanAmount and payee graded A or B); tier leaves 255 only through unfreeze; setMaxAutoTier never unfreezes; saturating counters; nonReentrant on every token transfer; all external reads declared view. ACB: registerVault checks code hash AND token/bureau/identity binding; effectiveGrade applies the upgrade delay with GRADE_RANK; score 300..850. ERC-8004 Lite copies the official v2.0.0 signatures, revert strings and MetadataSet('agentWallet') emissions (verify against https://github.com/erc-8004/erc-8004-contracts, MIT; keep SPDX and attribution). Write every test file of spec 3.6, the handlers and mocks (FalseToken, ERC721Gift, StubProxy). scripts/export_abi.py reads contracts/out and writes deterministic JSON (sorted keys, LF) with the TierVault runtime codehash. If TierVault exceeds 24,576 bytes apply cut C4 of spec 17.3 and record it in changes.md. Common rules for every package: the normative source is docs/design/spec.md v1.1 (read sections 0, 2, 15 and Appendix B first, then the sections named here). Write only the paths listed in 'owns'; consume other packages only through the interfaces in spec 15.3 and Appendix B, using the stated stubs until they land. Shared types are frozen on 12 Oct 18:00 UTC+8; ask for changes in docs/design/changes.md instead of editing acb/types.py. Python 3.12 via 'uv run'; Foundry binaries are in %USERPROFILE%/.foundry/bin (prepend to PATH). Write files with LF endings and no BOM (never with PowerShell redirection or Set-Content); hashed files only via acb.canonical.canonical_bytes. Money is int base units (USDC 6 decimals), JSON amounts are strings. Time comes from acb.chain.clock.now(w3). Never put secrets in any file except the git-ignored .env, never read or reference private/, never commit or push, use plain ASCII hyphens and English in docs and messages. If something is missing, choose the most restrictive safe behaviour and write it in NOTES.md of your PR description."
+  },
+  {
+    "id": "WP3",
+    "title": "Chain layer and deployment: Web3 client, chunked logs, clock, TxSender, contract wrappers, deployments I/O, deploy_all",
+    "depends_on": [
+      "WP1",
+      "WP2"
+    ],
+    "owns": [
+      "src/acb/chain/**",
+      "deployments/**",
+      "tests/chain/**"
+    ],
+    "provides": [
+      "acb.chain.client: make_web3(net, purpose='rpc'|'logs'), get_logs_chunked(event, from_block, to_block, argument_filters) with retries",
+      "acb.chain.clock: now(w3) = latest block timestamp; warp(w3, seconds) for Anvil",
+      "acb.chain.abi: load(contract_name), error selector table built from every abi 'error' entry",
+      "acb.chain.tx: TxSender(w3, account).send(fn, expect_revert=False, simulate=True, gas=None) -> TxResult; NonceManager",
+      "acb.chain.contracts: typed wrappers AcbContract, VaultContract, IdentityContract, ReputationContract, Erc20Contract (one method per function, reads return Appendix B views)",
+      "acb.chain.explorer: tx_url, address_url per network",
+      "acb.chain.deployments: load_deployments(network) / save (atomic) per spec 13.5",
+      "acb.chain.deploy: deploy_contracts, register_agents, deploy_vaults, fund, deploy_all (idempotent per phase)",
+      "CLI: 'acb deploy all --network anvil|base_sepolia [--fresh]', 'acb chain up|down'"
+    ],
+    "consumes": [
+      "WP1 types, keys (KeyRing), config (NetworkProfile), canonical",
+      "WP2 abi/*.json (skeleton from 12 Oct 22:00, final 13 Oct) and config/tiers.yaml",
+      "WP8 config/personas.yaml for agent names, categories, catalogues and the anchor flag (stub: a minimal personas fixture in tests/chain)"
+    ],
+    "acceptance": [
+      "uv run pytest tests/chain -q",
+      "uv run acb deploy all --network anvil --fresh  (writes a valid deployments/anvil.json; a second run without --fresh skips every phase)",
+      "test: get_logs_chunked against a mock provider that errors above 200 blocks",
+      "test: NonceManager resyncs after evm_revert and after a receipt timeout",
+      "test: custom errors decoded by selector, including a mined revert replayed at block - 1"
+    ],
+    "brief": "Provide the only code that talks to the chain for writes and the typed read layer everyone else uses. Read spec 0.4 (verified facts and web3 7.16 names), 3.7 (deployment), 4.11 (indexer needs), 7.4 (TxSender), 10.1 (clock and Anvil modes), 13.2 and 13.5. Rules: always Web3.to_hex (hexbytes 2.x .hex() has no 0x); EIP-1559 fees with the fallbacks of 7.4; gas = estimate*1.25+10000, or 500000 without simulation for expected reverts; replay mined reverts with eth_call at receipt.blockNumber - 1; logs always chunked by logs_chunk_blocks (200 on Base Sepolia) with 3 retries and backoff; use the log RPC for indexing. clock.now(w3) returns the latest block timestamp. Deployment (spec 3.7): deployer deploys ACB with admin = ADMIN role address, token = USDC, vaultCodeHash from abi/TierVault.json, upgradeDelay from the network profile, then the admin key calls setPoster(bureau). On anvil also deploy MockUSDC and the ERC-8004 Lite registries; on base_sepolia use the official addresses and first check getVersion() and the EIP-1967 implementation slots against networks.yaml (abort on mismatch). Register identities: the wallet's identity by the OWNER key, every simulated agent by its own key, with agentURI data:application/json;base64 of the registration JSON in spec 9.1 including 'ACB demo, simulated agent. Not a real service.'. Deploy the wallet vault (wallet profile: owner = OWNER, agent = AGENT_SIGNER, autonomyOperator = AUTONOMY) and Beacon's vault (market profile: owner = beacon owner key, agent = beacon key); on anvil also Echo and sybil vaults on request of the attack harness via a helper deploy_extra_vault(). registerVault from the identity owner of each vault's agent. Fund per the plan of 13.1. Write deployments/<network>.json atomically, including the pinned directory (agents with name, category, skus and prices from config/personas.yaml) and the anchors list (agentIds of personas with anchor: true). deployments/anvil.json is git-ignored. Common rules for every package: the normative source is docs/design/spec.md v1.1 (read sections 0, 2, 15 and Appendix B first, then the sections named here). Write only the paths listed in 'owns'; consume other packages only through the interfaces in spec 15.3 and Appendix B, using the stated stubs until they land. Shared types are frozen on 12 Oct 18:00 UTC+8; ask for changes in docs/design/changes.md instead of editing acb/types.py. Python 3.12 via 'uv run'; Foundry binaries are in %USERPROFILE%/.foundry/bin (prepend to PATH). Write files with LF endings and no BOM (never with PowerShell redirection or Set-Content); hashed files only via acb.canonical.canonical_bytes. Money is int base units (USDC 6 decimals), JSON amounts are strings. Time comes from acb.chain.clock.now(w3). Never put secrets in any file except the git-ignored .env, never read or reference private/, never commit or push, use plain ASCII hyphens and English in docs and messages. If something is missing, choose the most restrictive safe behaviour and write it in NOTES.md of your PR description."
+  },
+  {
+    "id": "WP4",
+    "title": "Bureau and autonomy operator: scorecard acb-sc-1.0.0, indexer, evidence bundles, posting and mirroring, recompute, backtest, autonomy evaluator",
+    "depends_on": [
+      "WP1",
+      "WP3"
+    ],
+    "owns": [
+      "src/acb/bureau/**",
+      "src/acb/autonomy/**",
+      "config/scorecard.yaml",
+      "config/autonomy.yaml",
+      "config/scorecard/archive/**",
+      "tests/bureau/**",
+      "tests/autonomy/**",
+      "docs/deliverables/model-card.md"
+    ],
+    "provides": [
+      "acb.bureau.models.sc_1_0_0.score(inputs: ScoreInputs, cfg) -> Bundle (pure)",
+      "acb.bureau.indexer / inputs / clusters: ScoreInputs from chain logs and published files (events-derived owners and wallets, no archive node)",
+      "acb.bureau.poster: rescore(rounds) posting postGrade + ERC-8004 mirror; acb.bureau.recompute: MATCH / MATCH_WITH_OVERRIDE / MISMATCH",
+      "acb.bureau.backtest: synthetic population report (spec 4.12) -> evidence/backtest.json via WP9 export",
+      "P4 service :8703: GET /grades, GET /grades/{agentId}, POST /rescore, GET /events",
+      "acb.autonomy.evaluator.evaluate() (rules 1-7 of spec 5.4), acb.autonomy.model.simulate_onchain(); P5 service :8705: POST /evaluate, GET /status, GET /events",
+      "CLI: acb bureau serve|rescore|recompute|backtest, acb autonomy serve|evaluate",
+      "docs/deliverables/model-card.md"
+    ],
+    "consumes": [
+      "WP1 types, canonical, injection.detect, logbus, config",
+      "WP3 client, get_logs_chunked, TxSender, wrappers, deployments (stub for pure parts: hand-built ScoreInputs)",
+      "WP5 signer GET /v1/decisions/{hash} (stub: an in-memory dict)"
+    ],
+    "acceptance": [
+      "uv run pytest tests/bureau tests/autonomy -q",
+      "golden vectors G1-G14 of spec 4.5 exact (score, grade, reasons)",
+      "monotonicity property test, 5,000 seeded cases",
+      "on Anvil: acb bureau rescore posts grades; acb bureau recompute returns MATCH for every posting; getSummary equals the latest score",
+      "on Anvil: events-derived identity owner and agentWallet at a past block equal eth_call at that block",
+      "autonomy Python model equals the contract on 20 random sequences; unmatched outflow freezes (3205); own grade D demotes to tier 0 without freezing",
+      "uv run acb bureau backtest --agents 300 --seed 2026  (same output twice, under 60 s)"
+    ],
+    "brief": "Build the credit bureau and the separate autonomy operator. Read spec 1.3, 2.6, 4 (all), 5.3-5.5, 9.5, 10.2 (S4, S10, S11, S16, S20, S21), 12.3 (A34-A45, A59, A63) and 13.3. Start with the pure scorecard (12-13 Oct, against hand-built ScoreInputs): counted-order filters (registered config-bound vault, amount >= 0.10 USDC, published payee-signed invoice matching invoiceHash, buyerVault, issuer and amount, not self-dealing within a cluster), clusters by identity owner and vault owner, standing tables P and W (anchors 1000, NEW positive 250 and adverse 0), features F1-F6 with integer arithmetic, points table 4.4, grade rules 4.5 in order (hard flag on inj_w, cold start, bands, circular cap, standing gate, age gate), reason ordering 4.6, bundle 4.8 written with canonical_bytes under ACB_OUT_DIR/bundles. Report rules 4.2: binding via the vault's agent at the report block; INJECTION_ATTEMPT and SPAM count only when verified from signed evidence (use acb.injection.detect(...).adverse); BAD_DATA backed by a settled order; NON_DELIVERY/LATE_DELIVERY/POSITIVE weight 0; dedupe, caps and decay. configHash = chash({'scorecard': yaml, 'anchors': deployments anchors}); archive the combined object as config/scorecard/archive/<configHash>.json. Make G1-G14 golden tests first and do not change the tables to fit code. Then the indexer (chunked logs from the deployment's startBlock, filtered by our agentIds; owners and agentWallet history from Transfer and MetadataSet('agentWallet') events), posting with the mirror of 4.10 (revoke previous acb-grade feedback, then giveFeedback), recompute 4.9 reading only logs, block headers and files, the backtest 4.12 and the model card. The autonomy operator is its own process (P5) holding only AUTONOMY_PRIVATE_KEY: rules of 5.4 in order, simulate with eth_call before sending, evidence acb-autonomy/1 under ACB_OUT_DIR/autonomy, and the unmatched-outflow check that looks up every Paid/EscrowOpened decisionHash at the signer. Services: FastAPI on 127.0.0.1, GET needs EVENTS_TOKEN, POST needs BUREAU_TOKEN or AUTONOMY_TOKEN. Engineer A reviews the backtest. Common rules for every package: the normative source is docs/design/spec.md v1.1 (read sections 0, 2, 15 and Appendix B first, then the sections named here). Write only the paths listed in 'owns'; consume other packages only through the interfaces in spec 15.3 and Appendix B, using the stated stubs until they land. Shared types are frozen on 12 Oct 18:00 UTC+8; ask for changes in docs/design/changes.md instead of editing acb/types.py. Python 3.12 via 'uv run'; Foundry binaries are in %USERPROFILE%/.foundry/bin (prepend to PATH). Write files with LF endings and no BOM (never with PowerShell redirection or Set-Content); hashed files only via acb.canonical.canonical_bytes. Money is int base units (USDC 6 decimals), JSON amounts are strings. Time comes from acb.chain.clock.now(w3). Never put secrets in any file except the git-ignored .env, never read or reference private/, never commit or push, use plain ASCII hyphens and English in docs and messages. If something is missing, choose the most restrictive safe behaviour and write it in NOTES.md of your PR description."
+  },
+  {
+    "id": "WP5",
+    "title": "Policy engine and signer: invoice validation V01-V09, decide C01-C18, violation classifier, signer service with decision log",
+    "depends_on": [
+      "WP1",
+      "WP3"
+    ],
+    "owns": [
+      "src/acb/policy/**",
+      "src/acb/signer/**",
+      "config/policy.yaml",
+      "tests/policy/**",
+      "tests/signer/**"
+    ],
+    "provides": [
+      "acb.policy.invoice.validate_invoice(raw, vctx, cfg) -> ValidatedInvoice | InvoiceRejection (pure)",
+      "acb.policy.engine.decide(proposal | None, ctx, cfg) -> PolicyDecision (pure; preview mode when proposal is None)",
+      "acb.policy.severity.classify(proposal, ctx, decision) -> Violation | None",
+      "acb.policy.context: builders for ValidationContext and PolicyContext from chain views",
+      "P3 signer service :8702 (spec 7.2): POST /v1/execute, GET /v1/requests/{id}, GET /v1/decisions/{hash}, GET /events, GET /health",
+      "CLI: acb signer serve"
+    ],
+    "consumes": [
+      "WP1 types, canonical, injection, reason_codes, logbus, keys (signer key only)",
+      "WP3 TxSender, wrappers, clock, deployments (stub for pure parts: hand-built contexts)"
+    ],
+    "acceptance": [
+      "uv run pytest tests/policy tests/signer -q",
+      "tests/policy/golden_decisions.csv (>= 200 rows) generated by hand-written code from spec 6.5 passes",
+      "every V01-V09 rule, every check C01-C18 and every violation kind has a test; reason formation examples of spec 6.2 reproduce",
+      "policy/vault parity on Anvil: every PAY/ESCROW outcome passes eth_call; every approval amount reverts for the agent",
+      "signer on Anvil executes PAY and refuses A01-A07, A27, A30, A31 with the expected codes",
+      "a test walks the executor's call builders and finds no function outside the whitelist of spec 7.3"
+    ],
+    "brief": "Build the deterministic decision core and the only process that holds the wallet agent's key. Read spec 2.2, 2.5, 2.6, 5.1-5.2, 6 (all), 7 (all), 9.2 and 13.3 (policy.yaml). Pure parts first (12-13 Oct): validate_invoice with rules V01-V09 in order (code 2119 plus sub-reason; keep unsolicited signed invoices as spam evidence), decide with gates C01-C12, the generic matrix of 6.5 that reads the vault's own masks (PAY_CAPPED preview with q' and executable=False; PAY_CAPPED only on a capOf re-quote), limit checks C14-C17 evaluated only when C13 gives PAY/PAY_CAPPED/ESCROW, the LLM merge C18 and the exact reason formation rule of 6.2; decision_hash = chash(core). classify() implements 5.2 (highest severity, ties lowest kind; INJECTION_FOLLOWED when the proposed payee appears in counterparty text and is in no mandate). Then the signer (14 Oct): FastAPI bound to 127.0.0.1 only, constant-time token checks (SIGNER_TOKEN for execute, EVENTS_TOKEN for reads), 64 KiB bodies, one transaction in flight, idempotent request ids persisted under data/<network>/signer/, decision log appended BEFORE any outflow, the per-kind re-validation of 7.3 on fresh 'latest' state (mandate and pinned wallets from chain, never from the request), violation recorded first, recordDecision for refusals within the hourly recording budget, eth_call simulation before sending, rate limit 6 outflows per minute, third violation in 10 minutes recorded as kind 11. REPORT: the signer decides whether evidence suffices (INJECTION_ATTEMPT only with our REFUSE record carrying that invoiceHash and the signer's own adverse detector result; NON_DELIVERY only with FAILED; SPAM with >= 3 signed unsolicited invoices; BAD_DATA only with an owner signature) and writes the payload file under ACB_OUT_DIR/reports. REPORT_VIOLATION classifies non-payment violations from the raw tool call. Never log keys, tokens, owner signatures or full counterparty text. Engineer B reviews the golden CSV. Common rules for every package: the normative source is docs/design/spec.md v1.1 (read sections 0, 2, 15 and Appendix B first, then the sections named here). Write only the paths listed in 'owns'; consume other packages only through the interfaces in spec 15.3 and Appendix B, using the stated stubs until they land. Shared types are frozen on 12 Oct 18:00 UTC+8; ask for changes in docs/design/changes.md instead of editing acb/types.py. Python 3.12 via 'uv run'; Foundry binaries are in %USERPROFILE%/.foundry/bin (prepend to PATH). Write files with LF endings and no BOM (never with PowerShell redirection or Set-Content); hashed files only via acb.canonical.canonical_bytes. Money is int base units (USDC 6 decimals), JSON amounts are strings. Time comes from acb.chain.clock.now(w3). Never put secrets in any file except the git-ignored .env, never read or reference private/, never commit or push, use plain ASCII hyphens and English in docs and messages. If something is missing, choose the most restrictive safe behaviour and write it in NOTES.md of your PR description."
+  },
+  {
+    "id": "WP6",
+    "title": "Wallet agent: LLM clients and MockLLM, turn-type tools, dialogue, quarantine, pinned directory, purchase runtime, redactor, agent API, dialogue evaluation",
+    "depends_on": [
+      "WP1",
+      "WP3",
+      "WP5"
+    ],
+    "owns": [
+      "src/acb/agent/**",
+      "config/agent.yaml",
+      "config/mock_llm/default.yaml",
+      "tests/agent/**",
+      "tests/llm/**"
+    ],
+    "provides": [
+      "acb.agent.llm: LLMClient protocol, OpenAICompatClient (extra_body, tool-choice fallback, json mode), FallbackLLM",
+      "acb.agent.mock_llm.MockLLM(script_path, persona) and MockLLM.from_rules(list), personas careful and naive",
+      "acb.agent.tools: owner-turn and invoice-turn tool specs (spec 8.3) and validators (amount strings, catalogue sku enum)",
+      "acb.agent.dialogue / directory / quarantine / redact / runtime / quotes / delivery_check / fallback_parser / store",
+      "P2 agent service :8701 (spec 8.8) and CLI 'acb agent serve', 'acb chat'",
+      "tests/llm dialogue evaluation writing dialogue_eval.json (marker llm)"
+    ],
+    "consumes": [
+      "WP1 types, canonical, injection, logbus, keys.assert_no_private_keys, config",
+      "WP5 validate_invoice, decide, classify (real, pure)",
+      "WP5 signer HTTP API (stub: fake signer returning canned ExecuteResponse)",
+      "WP3 chain reads and deployments directory (stub: fake chain views)",
+      "WP8 provider endpoints /p/{key}/quote and /deliver (stub: local fixture provider)"
+    ],
+    "acceptance": [
+      "uv run pytest tests/agent -q",
+      "dialogue tests with MockLLM: clarify (forced on ambiguous payees, with lookalike warning), correct (amend_mandate), register (mandate activated only after on-chain check), fallback parser when the LLM errors",
+      "turn-type tool sets enforced: a tool outside the turn's set becomes REPORT_VIOLATION",
+      "redactor: exact secret values and BIP-39 runs removed; a reply with tx hashes and a mandateId is neither redacted nor a violation",
+      "agent refuses to start, and refuses any LLM call, with a *_PRIVATE_KEY or *_MNEMONIC variable present",
+      "POST /admin/llm rejected unless ACB_ALLOW_LLM_SWITCH=1 and AGENT_ADMIN_TOKEN; inbox endpoints always answer {'status': 'accepted'}",
+      "with LLM_API_KEY set: uv run pytest -m llm tests/llm  (writes dialogue_eval.json)"
+    ],
+    "brief": "Build the LLM-facing wallet agent (process P2, holds no private keys). Read spec 2.1-2.4, 5.2, 6.1-6.3, 6.5 (PAY_CAPPED execution), 8 (all), 9.2-9.3, 10.1 (LLM modes) and 13.3 (agent.yaml). The LLM picks exactly one tool per turn from the closed set of the turn type: owner turns (reply_to_owner, ask_clarification, draft_mandate, amend_mandate, request_quotes, explain, show_status, freeze_wallet) and invoice turns (decide_invoice, reply_to_owner). Counterparty messages never start a turn; reports are filed by code. Purchase runtime: for each request_quotes item create a single-use quoteRequestId bound to mandate, payee, sku and quantity (persist under data/<network>/agent/ atomically), call the provider, run validate_invoice before any LLM sees the invoice, compute the policy preview, re-quote by code when the preview is the non-executable PAY_CAPPED, give the LLM one invoice from one counterparty with memo and descriptions quarantined (random-boundary DATA blocks, masking per config), validate the tool call (amounts as strings converted with Decimal, sku enum built from the pinned catalogue), run decide (pass 1), send ExecuteRequest to the signer, then delivery: escrow -> wait for the provider's claim, run the deterministic payload check, ask RELEASE; direct pay -> poll until deadline + grace, judge ON_TIME/LATE by the chain-clock receipt time, ask RECORD_DELIVERY. After a REFUSE with an adverse invoice, file INJECTION_ATTEMPT via the signer; after FAILED, NON_DELIVERY; after >= 3 dropped signed unsolicited invoices from one issuer, SPAM. The directory is the pinned agents map of deployments/<network>.json (never the simulator or global ERC-8004 names); forced clarifications show agentId, grade, wallet, registration age and lookalike warnings. Redactor matches exact secret values (keccak compare), BIP-39 runs and key prefixes, never 32-byte hash shapes. MockLLM rules use policy_preview.tool_action; the naive persona is spec 8.7. OpenAICompatClient: temperature 0, LLM_EXTRA_BODY, retry with tool_choice='auto' on HTTP 400, then json mode; no reliance on seed. Dialogue evaluation per 8.9 with at least 30 intents (>= 3 in Chinese). Common rules for every package: the normative source is docs/design/spec.md v1.1 (read sections 0, 2, 15 and Appendix B first, then the sections named here). Write only the paths listed in 'owns'; consume other packages only through the interfaces in spec 15.3 and Appendix B, using the stated stubs until they land. Shared types are frozen on 12 Oct 18:00 UTC+8; ask for changes in docs/design/changes.md instead of editing acb/types.py. Python 3.12 via 'uv run'; Foundry binaries are in %USERPROFILE%/.foundry/bin (prepend to PATH). Write files with LF endings and no BOM (never with PowerShell redirection or Set-Content); hashed files only via acb.canonical.canonical_bytes. Money is int base units (USDC 6 decimals), JSON amounts are strings. Time comes from acb.chain.clock.now(w3). Never put secrets in any file except the git-ignored .env, never read or reference private/, never commit or push, use plain ASCII hyphens and English in docs and messages. If something is missing, choose the most restrictive safe behaviour and write it in NOTES.md of your PR description."
+  },
+  {
+    "id": "WP7",
+    "title": "Owner console: P1 web app with five panels, chain-rebuilt confirm screens, owner transactions, owner CLI, stretch goals",
+    "depends_on": [
+      "WP1",
+      "WP3",
+      "WP6"
+    ],
+    "owns": [
+      "src/acb/owner/**",
+      "tests/owner/**",
+      "site/**"
+    ],
+    "provides": [
+      "P1 web app :8700 (spec 11.1-11.2): login, CSRF, CSP, SSE merge of all event feeds, chat proxy, mandate confirm (registerMandate), revoke, approve (ownerApprove), reject, BAD_DATA signature, freeze, unfreeze with key rotation, snapshot",
+      "owner CLI (spec 11.3): acb owner serve|status|freeze|unfreeze|approve|revoke",
+      "stretch (spec 11.4): OWNER_SIGNING=browser via MetaMask; site/bureau.html read-only lookup"
+    ],
+    "consumes": [
+      "WP1 types, logbus, keys (owner key), config",
+      "WP3 owner transactions and chain reads (wallets, grades, registration ages, mandates), deployments directory",
+      "WP6 agent API (stub: recorded tests/owner/fixtures/*.json)",
+      "event feeds of P2-P6 with EVENTS_TOKEN"
+    ],
+    "acceptance": [
+      "uv run pytest tests/owner -q",
+      "every response carries the CSP of spec 11.1 and X-Content-Type-Options: nosniff",
+      "grep test: app.js never uses innerHTML, insertAdjacentHTML, document.write or inline handlers; no inline scripts in index.html",
+      "XSS fixture (memo, agent name, LLM reply containing script tags) renders as text",
+      "a draft from P2 with a swapped wallet or amount is ignored: the card and the registerMandate call use chain reads",
+      "approval card and ownerApprove arguments come only from an invoice P1 verified itself; approve flow works on Anvil",
+      "the page renders the five panels from tests/owner/fixtures/events.jsonl"
+    ],
+    "brief": "Build the human owner's console (process P1, holds the owner key, AGENT_TOKEN and the read-only EVENTS_TOKEN, no SIGNER_TOKEN). Read spec 2.2 (TB7), 2.6, 8.6 (confirmation, correction), 11 (all), 12.3 A21 and A53, and 16.1 (video layout). Vanilla JS, no build step, no CDN; base font 18 px; light theme; colour-blind-safe grade colours. All untrusted strings go through textContent; CSP default-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'. Security core: never sign what P2 describes. For a mandate take only agentIds, numbers and purpose from the draft, read each payee's live wallet, grade, score and registration age from chain, look up names in the pinned directory, show lookalike warnings, then send registerMandate with exactly the displayed values and a random salt-based mandateId (spec 3.2), and notify the agent with POST /mandates/activated. For an approval fetch the signed invoice, verify its EIP-191 signature against the live wallet, recompute orderId and amount, and build ownerApprove only from those. Unfreeze offers key rotation (unfreeze(toTier, 3300, newAgent)). Panels: Wallet, Counterparty grades, Decision log, Autonomy timeline, Messages. The CLI is the recording fallback and uses the same verification code. Stretch goals only after the 16 Oct dress rehearsal. Common rules for every package: the normative source is docs/design/spec.md v1.1 (read sections 0, 2, 15 and Appendix B first, then the sections named here). Write only the paths listed in 'owns'; consume other packages only through the interfaces in spec 15.3 and Appendix B, using the stated stubs until they land. Shared types are frozen on 12 Oct 18:00 UTC+8; ask for changes in docs/design/changes.md instead of editing acb/types.py. Python 3.12 via 'uv run'; Foundry binaries are in %USERPROFILE%/.foundry/bin (prepend to PATH). Write files with LF endings and no BOM (never with PowerShell redirection or Set-Content); hashed files only via acb.canonical.canonical_bytes. Money is int base units (USDC 6 decimals), JSON amounts are strings. Time comes from acb.chain.clock.now(w3). Never put secrets in any file except the git-ignored .env, never read or reference private/, never commit or push, use plain ASCII hyphens and English in docs and messages. If something is missing, choose the most restrictive safe behaviour and write it in NOTES.md of your PR description."
+  },
+  {
+    "id": "WP8",
+    "title": "Counterparty simulator: personas, signed invoices and receipts, claim-before-delivery, warm-up and attack actions",
+    "depends_on": [
+      "WP1",
+      "WP3"
+    ],
+    "owns": [
+      "src/acb/sim/**",
+      "config/personas.yaml",
+      "tests/sim/**"
+    ],
+    "provides": [
+      "P6 simulator service :8704 (spec 9.4): POST /p/{key}/quote, POST /p/{key}/deliver, POST /admin/run, GET /events",
+      "config/personas.yaml: personas, catalogues, anchor flag (beacon), injection templates, behaviour scripts",
+      "market actions for the runner and attack harness: warmup, ghost_default_round, boost_ghost, smear_atlas, push_spam, push_duplicate, ghost_appeal and the Anvil-only attack actions",
+      "every issued invoice written to ACB_OUT_DIR/invoices/<invoiceHash>.json (canonical)"
+    ],
+    "consumes": [
+      "WP1 canonical (invoice hashing and EIP-191 signing), keys, logbus, config",
+      "WP3 TxSender and wrappers (claimDelivered, Beacon escrow/release/refund, registerMandate by Beacon's owner, feedback, appeals)",
+      "WP6 agent inbox endpoints (stub: capture requests in tests)"
+    ],
+    "acceptance": [
+      "uv run pytest tests/sim -q",
+      "every invoice the simulator issues passes acb.policy.validate_invoice for a matching quote request",
+      "claim-before-delivery on Anvil: the escrow is claimed on-chain before the payload is returned",
+      "each persona's scripted behaviour (Slowpoke odd orders late, Ghost stops after 4, Orion injects from its 6th quote, Nova outage on order 2, Blaster unsolicited)",
+      "both injection templates are adverse under acb.injection.detect",
+      "warmup action on Anvil produces 19 escrow/claim/release orders under Beacon's mandate"
+    ],
+    "brief": "Simulate every other agent of the demo with its own key. Read spec 9 (all), 3.2 (claimDelivered, mandates, refund rules), 4.1 (published invoices), 6.2 V01-V09 (what a valid invoice must look like), 10.2 (S4, S8, S9, S11, S14-S16, S19, S20) and 12.3 (A34-A45, A59). Invoices follow acb-invoice/1 exactly, signed with EIP-191 over the 32-byte invoiceHash by the persona's registered wallet; include quoteRequestId, buyerVault and capOf as received; amounts in multiples of 10,000 base units at catalogue prices; deliveryDeadline within max_delivery_s. For escrows the provider sends claimDelivered from its own key BEFORE returning the payload; late personas claim after the deadline. Payloads are synthetic (quantity x 10 items). Beacon's owner key registers mandate MB in Beacon's vault before the warm-up (every agent outflow needs an on-chain mandate). Echo vaults and sybil vaults exist only on Anvil (deploy via WP3's deploy_extra_vault). Inbox pushes are signed messages or unsolicited invoices with empty quoteRequestId. The service has no directory endpoint; admin actions need SIM_TOKEN, events need EVENTS_TOKEN. Common rules for every package: the normative source is docs/design/spec.md v1.1 (read sections 0, 2, 15 and Appendix B first, then the sections named here). Write only the paths listed in 'owns'; consume other packages only through the interfaces in spec 15.3 and Appendix B, using the stated stubs until they land. Shared types are frozen on 12 Oct 18:00 UTC+8; ask for changes in docs/design/changes.md instead of editing acb/types.py. Python 3.12 via 'uv run'; Foundry binaries are in %USERPROFILE%/.foundry/bin (prepend to PATH). Write files with LF endings and no BOM (never with PowerShell redirection or Set-Content); hashed files only via acb.canonical.canonical_bytes. Money is int base units (USDC 6 decimals), JSON amounts are strings. Time comes from acb.chain.clock.now(w3). Never put secrets in any file except the git-ignored .env, never read or reference private/, never commit or push, use plain ASCII hyphens and English in docs and messages. If something is missing, choose the most restrictive safe behaviour and write it in NOTES.md of your PR description."
+  },
+  {
+    "id": "WP9",
+    "title": "Scenario runner, attack and benign suites, evidence export, HEADLINE.md, verify script",
+    "depends_on": [
+      "WP1",
+      "WP2",
+      "WP3",
+      "WP4",
+      "WP5",
+      "WP6",
+      "WP7",
+      "WP8"
+    ],
+    "owns": [
+      "src/acb/scenario/**",
+      "scripts/verify_evidence.py",
+      "config/scenario.yaml",
+      "config/mock_llm/scenario.yaml",
+      "evidence/**",
+      "tests/scenario/**",
+      "tests/attacks/**",
+      "tests/benign/**"
+    ],
+    "provides": [
+      "acb scenario run --network anvil|base_sepolia [--llm] [--from] [--to] [--run-id] (S0-S21 of spec 10.2, resumable)",
+      "acb attacks run --network anvil [--export] (A01-A63, categories Blocked/Contained/Bounded/Escalated/Failed computed from observations)",
+      "benign suite B01-B14",
+      "acb evidence export|verify: evidence/<network>/ (evidence.json, evidence.csv, HEADLINE.md, receipts, bundles, invoices, reports, decisions, violations, autonomy, dialogue, run.txt, narration.srt) plus attack_suite.json, backtest.json, dialogue_eval.json",
+      "scripts/verify_evidence.py (stdlib only, offline --receipts-only mode)"
+    ],
+    "consumes": [
+      "every service API (P1-P6) and the launcher of WP1",
+      "WP3 TxSender for stolen-key demonstrations (expect_revert=True) and receipts",
+      "WP4 bureau rescore/recompute and backtest; WP6 /admin/llm for the naive persona in S15/S16"
+    ],
+    "acceptance": [
+      "uv run acb scenario run --network anvil  (passes S0-S21 twice in a row from scratch with identical decisions, reasons and grade-change sets)",
+      "uv run acb attacks run --network anvil  (0 Failed; writes attack_suite.json with totals computed by the harness)",
+      "uv run pytest tests/benign -q -m slow  (<= 1 false positive of 14)",
+      "python scripts/verify_evidence.py evidence/anvil/evidence.json --receipts-only",
+      "Base Sepolia: the recorded run's evidence verifies against https://sepolia.base.org"
+    ],
+    "brief": "Integrate everything into the recorded run and the counted suites. Read spec 1.1, 1.4, 2.6, 10 (all), 12.3, 12.4, 15.5 and 16.1. Runner: start Anvil with --block-time 1 --accounts 30 (or use Base Sepolia with the funding preflight of 10.1), start services via the launcher, run steps S0-S21 with the exact expected decisions, reason codes, tiers, grade-change sets and tx statuses of 10.2 (exact match in mock mode; with a real LLM the signer outcome must be at least as strict and no violation may occur outside S15/S16). Warp on Anvil before waiting steps; wait in real time on Base Sepolia. Switch the agent to MockLLM naive with masking off for S15/S16 via POST /admin/llm (ACB_ALLOW_LLM_SWITCH=1) and back afterwards. Stolen-key steps send directly from the agent signer key with expect_revert=True; S18 restarts the signer with the next signer key after unfreeze(0, 3300, newAgent). Persist progress in runs/<run_id>/state.json. All runtime output goes to ACB_OUT_DIR; only 'acb evidence export' writes evidence/<network>/ (use run.txt, not .log). evidence.json schema acb-run/1 with signedByAgentKey and headline flags; HEADLINE.md lists about 25 curated hashes. Attack harness: one parametrised test per attack id, classifying results from what actually happened (funds moved outside intent, secrets in output, tier/grade changes, owner action needed). verify_evidence.py: stdlib only, embedded pure-Python keccak (tested against Web3.keccak), topic table generated from abi/, 4 requests per second with retries. Engineer A owns the runner and evidence half, Engineer B the attack and benign half. Common rules for every package: the normative source is docs/design/spec.md v1.1 (read sections 0, 2, 15 and Appendix B first, then the sections named here). Write only the paths listed in 'owns'; consume other packages only through the interfaces in spec 15.3 and Appendix B, using the stated stubs until they land. Shared types are frozen on 12 Oct 18:00 UTC+8; ask for changes in docs/design/changes.md instead of editing acb/types.py. Python 3.12 via 'uv run'; Foundry binaries are in %USERPROFILE%/.foundry/bin (prepend to PATH). Write files with LF endings and no BOM (never with PowerShell redirection or Set-Content); hashed files only via acb.canonical.canonical_bytes. Money is int base units (USDC 6 decimals), JSON amounts are strings. Time comes from acb.chain.clock.now(w3). Never put secrets in any file except the git-ignored .env, never read or reference private/, never commit or push, use plain ASCII hyphens and English in docs and messages. If something is missing, choose the most restrictive safe behaviour and write it in NOTES.md of your PR description."
+  },
+  {
+    "id": "WP10",
+    "title": "Documents and submission: README, technical document, deck, security self-assessment, execution evidence, video script",
+    "depends_on": [
+      "WP9"
+    ],
+    "owns": [
+      "README.md",
+      "docs/deliverables/** (except docs/deliverables/model-card.md)"
+    ],
+    "provides": [
+      "README.md with the seven sections of the official README template",
+      "technical document, presentation deck (official PPTX, English), security self-assessment, execution-evidence document, video narration script"
+    ],
+    "consumes": [
+      "docs/design/spec.md, evidence/<network>/*, attack_suite.json, backtest.json, dialogue_eval.json, docs/deliverables/model-card.md",
+      "official templates in private/templates/ (read headings only; never copy private files into the repository)"
+    ],
+    "acceptance": [
+      "every deliverable of spec 16.1 exists and follows the template headings",
+      "every number in the documents is taken from the evidence files (no hand-typed totals)",
+      "no secrets; no personal data beyond team names, majors and university; registration documents never referenced",
+      "only ASCII hyphens (no em or en dashes); English"
+    ],
+    "brief": "Write the submission documents on 18-19 Oct from the spec and the recorded evidence. Read spec 1, 2.6, 16 (mapping, compliance and privacy statement), 17 (known risks) and Appendix D. Lead with HEADLINE.md hashes; state the narrowed novelty claim of 1.3 and the related work honestly; label the scripted naive-LLM steps; generate the attack table from attack_suite.json; include the backtest and dialogue-evaluation metrics; include the compliance statement of 16.2 in the self-assessment's data and privacy section. The private/ folder (templates, passports, student ids, enrolment proofs, registration form) is git-ignored: read only the templates' headings, and never copy, quote or reference personal documents or details such as ages. Common rules for every package: the normative source is docs/design/spec.md v1.1 (read sections 0, 2, 15 and Appendix B first, then the sections named here). Write only the paths listed in 'owns'; consume other packages only through the interfaces in spec 15.3 and Appendix B, using the stated stubs until they land. Shared types are frozen on 12 Oct 18:00 UTC+8; ask for changes in docs/design/changes.md instead of editing acb/types.py. Python 3.12 via 'uv run'; Foundry binaries are in %USERPROFILE%/.foundry/bin (prepend to PATH). Write files with LF endings and no BOM (never with PowerShell redirection or Set-Content); hashed files only via acb.canonical.canonical_bytes. Money is int base units (USDC 6 decimals), JSON amounts are strings. Time comes from acb.chain.clock.now(w3). Never put secrets in any file except the git-ignored .env, never read or reference private/, never commit or push, use plain ASCII hyphens and English in docs and messages. If something is missing, choose the most restrictive safe behaviour and write it in NOTES.md of your PR description."
+  }
+]

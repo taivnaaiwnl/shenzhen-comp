@@ -1,0 +1,33 @@
+# Tier profiles of the TierVault (spec 5.1 and 13.3). Read by deploy (VaultInit) and for display; at run
+# time the chain is the source of truth and the policy reads the masks from the vault.
+# Amounts are strings of USDC base units (6 decimals). Grade lists become masks (1 << grade, spec 0.2).
+# promotion_cooldown and dispute_window hold the demo and production values; the network profile picks one.
+profiles:
+  wallet:
+    window_seconds: 86400
+    promotion_cooldown: {demo: 60, production: 86400}
+    dispute_window: {demo: 120, production: 259200}
+    max_grade_age: 604800
+    max_auto_tier: 2
+    initial_tier: 1
+    reserve_floor: "3000000"
+    min_clean_amount: "100000"
+    tiers:
+      0: {per_tx: "0", window_cap: "0", new_payee_cap: "0", max_tx: 0, pay: [], escrow: [], min_clean_to_promote: 3}
+      1: {per_tx: "1000000", window_cap: "5000000", new_payee_cap: "500000", max_tx: 10, pay: [A, B], escrow: [A, B, C, NEW, NONE], min_clean_to_promote: 3}
+      2: {per_tx: "2000000", window_cap: "10000000", new_payee_cap: "1000000", max_tx: 20, pay: [A, B], escrow: [A, B, C, NEW, NONE], min_clean_to_promote: 6}
+      3: {per_tx: "4000000", window_cap: "20000000", new_payee_cap: "1000000", max_tx: 32, pay: [A, B, NEW], escrow: [A, B, C, NEW, NONE], min_clean_to_promote: 0}
+  market:     # Beacon vault, and Echo/sybil vaults on Anvil
+    window_seconds: 3600
+    promotion_cooldown: {demo: 60, production: 86400}
+    dispute_window: {demo: 120, production: 259200}
+    max_grade_age: 604800
+    max_auto_tier: 1
+    initial_tier: 1
+    reserve_floor: "0"
+    min_clean_amount: "100000"
+    tiers:
+      0: {per_tx: "0", window_cap: "0", new_payee_cap: "0", max_tx: 0, pay: [], escrow: [], min_clean_to_promote: 0}
+      1: &market_tier {per_tx: "1000000", window_cap: "20000000", new_payee_cap: "1000000", max_tx: 32, pay: [A, B, NEW, NONE], escrow: [A, B, C, NEW, NONE], min_clean_to_promote: 0}
+      2: *market_tier
+      3: *market_tier

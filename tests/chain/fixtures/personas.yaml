@@ -1,0 +1,23 @@
+# Minimal personas fixture (stub of WP8's config/personas.yaml, spec 9.1) used by the WP3 tests.
+# Only the fields deploy reads: name, category, skus (base units), anchor, description.
+personas:
+  atlas:
+    name: Atlas Data
+    category: fx-data
+    description: FX live data in 15 minute slices.
+    skus: {fx-live-15m: "200000"}
+  slowpoke:
+    name: Slowpoke Analytics
+    category: fx-data
+    skus:
+      - {sku: fx-history-day, unit_price: "200000"}
+      - {sku: fx-history-day-promo, unit_price: "100000"}
+  ghost: {name: Ghost Feeds, category: fx-data, skus: {fx-backup-15m: "200000"}}
+  blaster: {name: Blaster Ads, category: ads, skus: {ad-slot: "500000"}}
+  orion: {name: Orion API, category: api-calls, skus: {api-bundle-1k: "200000", api-priority-1k: "300000"}}
+  nova: {name: Nova Labs Fixture, category: sample-data, skus: {fx-sample: "400000"}}
+  beacon: {name: Beacon Research, category: research, anchor: true}
+  echo1: {name: Echo-1, category: research}
+  echo2: {name: Echo-2, category: research}
+  echo3: {name: Echo-3, category: research}
+  attacker: {name: Treasury Helper, category: research}

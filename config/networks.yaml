@@ -1,0 +1,36 @@
+# Network profiles (spec 13.2). RPC URLs come from the environment variables named here.
+anvil:
+  chain_id: 31337
+  rpc_env: ANVIL_RPC_URL
+  log_rpc_env: ANVIL_RPC_URL
+  confirmations: 0
+  logs_chunk_blocks: 5000
+  erc8004: {mode: deploy_lite}
+  usdc: {mode: deploy_mock, decimals: 6}
+  explorers: []
+  profile: demo
+  upgrade_delay_s: 60
+  funding: {min_eth_service: "300000000000000", min_eth_deployer: "2000000000000000", topup_eth: "500000000000000"}
+base_sepolia:
+  chain_id: 84532
+  rpc_env: BASE_SEPOLIA_RPC_URL
+  log_rpc_env: BASE_SEPOLIA_RPC_URL_2      # falls back to rpc_env if empty
+  confirmations: 2
+  logs_chunk_blocks: 200
+  erc8004:
+    mode: official
+    identity: "0x8004A818BFB912233c491871b3d84c89A494BD9e"
+    reputation: "0x8004B663056A597Dffe9eCcC1965A193B7388713"
+    identity_impl: "0x7274e874CA62410a93Bd8bf61c69d8045E399c02"
+    reputation_impl: "0x16e0FA7f7C56B9a767E34B192B51f921BE31dA34"
+    proxy_admin_owner: "0x547289319C3e6aedB179C0b8e8aF0B5ACd062603"   # recorded, KR-5
+    expected_version: "2.0.0"
+  usdc: {mode: existing, address: "0x036CbD53842c5426634e7929541eC2318f3dCF7e", decimals: 6}
+  explorers:
+    - {name: basescan, tx: "https://sepolia.basescan.org/tx/{hash}", address: "https://sepolia.basescan.org/address/{addr}"}
+    - {name: blockscout, tx: "https://base-sepolia.blockscout.com/tx/{hash}", address: "https://base-sepolia.blockscout.com/address/{addr}"}
+  profile: demo
+  upgrade_delay_s: 60
+  # sized for the funded deployer (about 0.0012 ETH, 20 test USDC) at about 0.006 gwei: 18 keys x 0.00004
+  # ETH plus about 0.0002 ETH of deployments; usdc_bps 9500 funds 14.25 + 5.70 = 19.95 USDC
+  funding: {min_eth_service: "20000000000000", min_eth_deployer: "500000000000000", topup_eth: "40000000000000", usdc_bps: "9500"}

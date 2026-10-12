@@ -1,0 +1,44 @@
+# Policy engine and signer configuration (spec 6, 7 and 13.3; package WP5).
+# Amounts are strings of USDC base units (6 decimals). The tier caps and grade masks are NOT here:
+# the policy reads them from the vault on-chain (spec 6.5), so the policy and the vault share one source.
+policy_version: acb-pol-1.0.0
+
+# B-grade cap as a share of the tier's per-transaction cap (basis points): capB = perTx * 5000 // 10000.
+b_cap_bps: 5000
+
+# Single-name (unsecured) exposure limit per payee grade (C14). A PAY above it becomes ESCROW 2009.
+exposure_limit: {A: "1000000", B: "500000", NEW: "500000", NONE: "500000", C: "0"}
+
+# C17: at least min_history previous payments to the payee and amount > multiplier * median.
+spike: {multiplier: 5, min_history: 3}
+
+# Invoice validation (6.2 V01-V09).
+invoice:
+  max_bytes: 16384
+  max_memo: 500
+  max_description: 80
+  max_delivery_s: 600
+  max_validity_s: 900
+  max_future_s: 30
+  min_amount: "100000"
+  amount_step: "10000"
+
+# A quote request closes this many seconds after the longest invoice validity (single use).
+quote: {close_after_s: 60}
+
+# C11 denylist (agent ids as integers, addresses lowercase 0x).
+denylist: {agent_ids: [], addresses: []}
+
+# Recurring mandates are usable from this tier (vault check RecurringNeedsTier2).
+recurring_min_tier: 2
+
+signer:
+  max_outflows_per_minute: 6
+  repeated_violations: {count: 3, window_s: 600}
+  max_recorded_decisions_per_hour: 30
+  receipt_timeout_s: 90
+
+delivery: {grace_s: 30, poll_s: 2}
+
+# DRAIN_ATTEMPT (5.2): proposed amount >= this share of freeBalance() (basis points).
+drain_fraction_bps: 5000

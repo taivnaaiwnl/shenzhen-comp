@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1640" height="1026" viewBox="0 0 1640 1026"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3E4C59"/></marker></defs><rect width="1640" height="1026" fill="#FFFFFF"/><rect x="8" y="106" width="1624" height="238" fill="#F7F9FB" stroke="#E4E7EB" stroke-width="1"/>
+<text x="14" y="122" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" fill="#2F6DB5">1  Mandate: owner turn</text>
+<rect x="8" y="348" width="1624" height="238" fill="#FFFFFF" stroke="#E4E7EB" stroke-width="1"/>
+<text x="14" y="364" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" fill="#2F6DB5">2  Quote and invoice turn</text>
+<rect x="8" y="590" width="1624" height="238" fill="#F7F9FB" stroke="#E4E7EB" stroke-width="1"/>
+<text x="14" y="606" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" fill="#2F6DB5">3  Signing and on-chain checks</text>
+<rect x="8" y="832" width="1624" height="166" fill="#FFFFFF" stroke="#E4E7EB" stroke-width="1"/>
+<text x="14" y="848" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" fill="#2F6DB5">4  Delivery and explanation</text>
+<rect x="18" y="20" width="184" height="54" rx="8" fill="#EAF2FB" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="110" y="43" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" fill="#1F2933" text-anchor="middle">Owner</text>
+<text x="110" y="62" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="middle">P1 console</text>
+<line x1="110" y1="74" x2="110" y2="1018" stroke="#9AA5B1" stroke-width="1.2" stroke-dasharray="4 4"/>
+<rect x="253" y="20" width="184" height="54" rx="8" fill="#EAF2FB" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="345" y="43" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" fill="#1F2933" text-anchor="middle">Wallet agent</text>
+<text x="345" y="62" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="middle">P2, no keys</text>
+<line x1="345" y1="74" x2="345" y2="1018" stroke="#9AA5B1" stroke-width="1.2" stroke-dasharray="4 4"/>
+<rect x="488" y="20" width="184" height="54" rx="8" fill="#F4F5F7" stroke="#7B8794" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="580" y="43" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" fill="#1F2933" text-anchor="middle">LLM</text>
+<text x="580" y="62" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="middle">no key</text>
+<line x1="580" y1="74" x2="580" y2="1018" stroke="#9AA5B1" stroke-width="1.2" stroke-dasharray="4 4"/>
+<rect x="723" y="20" width="184" height="54" rx="8" fill="#FFF1E6" stroke="#C2621C" stroke-width="1.5"/>
+<text x="815" y="43" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" fill="#1F2933" text-anchor="middle">Provider</text>
+<text x="815" y="62" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="middle">P6, simulated</text>
+<line x1="815" y1="74" x2="815" y2="1018" stroke="#9AA5B1" stroke-width="1.2" stroke-dasharray="4 4"/>
+<rect x="958" y="20" width="184" height="54" rx="8" fill="#EAF2FB" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="1050" y="43" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" fill="#1F2933" text-anchor="middle">Signer</text>
+<text x="1050" y="62" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="middle">P3, agent key</text>
+<line x1="1050" y1="74" x2="1050" y2="1018" stroke="#9AA5B1" stroke-width="1.2" stroke-dasharray="4 4"/>
+<rect x="1193" y="20" width="184" height="54" rx="8" fill="#F1F8F1" stroke="#2E7D32" stroke-width="1.5"/>
+<text x="1285" y="43" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" fill="#1F2933" text-anchor="middle">TierVault</text>
+<text x="1285" y="62" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="middle">our wallet</text>
+<line x1="1285" y1="74" x2="1285" y2="1018" stroke="#9AA5B1" stroke-width="1.2" stroke-dasharray="4 4"/>
+<rect x="1428" y="20" width="184" height="54" rx="8" fill="#F1F8F1" stroke="#2E7D32" stroke-width="1.5"/>
+<text x="1520" y="43" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" fill="#1F2933" text-anchor="middle">ACB and</text>
+<text x="1520" y="62" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#52606D" text-anchor="middle">ERC-8004 Identity</text>
+<line x1="1520" y1="74" x2="1520" y2="1018" stroke="#9AA5B1" stroke-width="1.2" stroke-dasharray="4 4"/>
+<path d="M110,150 L343,150" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="227.5" y="143" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">"Buy FX data and API calls for today, total 4 USDC"</text>
+<path d="M345,186 L578,186" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="462.5" y="179" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">owner message + status (owner-turn tools)</text>
+<path d="M580,222 L347,222" fill="none" stroke="#3E4C59" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#ah)"/>
+<text x="462.5" y="215" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">draft_mandate(...)</text>
+<path d="M345,258 L112,258" fill="none" stroke="#3E4C59" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#ah)"/>
+<text x="227.5" y="251" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">draft: payee agentIds, caps</text>
+<path d="M110,294 L1518,294" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="815.0" y="287" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">P1 reads each payee: payout wallet, grade, registration age</text>
+<path d="M110,330 L1283,330" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="697.5" y="323" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">registerMandate(M1, payees, pinned wallets, caps, expiry)</text>
+<path d="M345,392 L813,392" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="580.0" y="385" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">quote request (single-use id, mandated payee, catalogue sku, quantity)</text>
+<path d="M815,428 L347,428" fill="none" stroke="#3E4C59" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#ah)"/>
+<text x="580.0" y="421" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">invoice signed by the provider's registered wallet</text>
+<path d="M345,452 L379,452 L379,468 L349,468" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="387" y="464" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="start" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">validate V01-V09, detector, quarantine</text>
+<path d="M345,500 L578,500" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="462.5" y="493" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">invoice fields + masked memo as DATA (invoice-turn tools)</text>
+<path d="M580,536 L347,536" fill="none" stroke="#3E4C59" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#ah)"/>
+<text x="462.5" y="529" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">decide_invoice(PAY, payee and amount restated)</text>
+<path d="M345,560 L379,560 L379,576 L349,576" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="387" y="572" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="start" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">echo-and-verify, policy pass 1</text>
+<path d="M345,634 L1048,634" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="697.5" y="627" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">execute request (proposal + raw signed invoice)</text>
+<path d="M1050,670 L1283,670" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="1167.5" y="663" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">read mandate, tier, window, balance, order, grade, wallets</text>
+<path d="M1050,694 L1084,694 L1084,710 L1054,710" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="1092" y="706" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="start" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">re-validate, policy pass 2, classify, log decision</text>
+<path d="M1050,742 L1283,742" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="1167.5" y="735" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">simulate, then pay(OutflowParams)</text>
+<path d="M1285,778 L1518,778" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="1402.5" y="771" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">effectiveGrade(payee); live wallet = pinned wallet</text>
+<path d="M1285,814 L1052,814" fill="none" stroke="#3E4C59" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#ah)"/>
+<text x="1167.5" y="807" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Paid event (invoiceHash, decisionHash)</text>
+<path d="M345,876 L813,876" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="580.0" y="869" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">deliver (orderId, tx hash)</text>
+<path d="M815,912 L347,912" fill="none" stroke="#3E4C59" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#ah)"/>
+<text x="580.0" y="905" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">signed delivery receipt and payload</text>
+<path d="M345,948 L1048,948" fill="none" stroke="#3E4C59" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="697.5" y="941" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">record delivery: ON_TIME or LATE by the buyer's receipt time</text>
+<path d="M345,984 L112,984" fill="none" stroke="#3E4C59" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#ah)"/>
+<text x="227.5" y="977" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal" fill="#1F2933" text-anchor="middle" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">"Paid Atlas Data 0.80 USDC (2000: grade A within tier limits)"</text></svg>
