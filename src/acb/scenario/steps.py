@@ -301,7 +301,12 @@ def check_funding(run: Runner, ctx: StepCtx) -> None:
     usdc = Erc20Contract(env.w3, env.net.usdc["address"])
     held = usdc.balance_of(env.keys.address("deployer"))
     need_usdc = sum(int(v) for v in plan.usdc_to_vaults.values())
-    need_eth = sum(int(v) for v in plan.eth.values())
+    # like fund(): only the shortfall of each key is sent, so keys that already hold their top-up (from an
+    # earlier attempt on the same keys) need nothing
+    need_eth = sum(
+        max(0, int(target) - int(env.w3.eth.get_balance(env.keys.checksum_address(role))))
+        for role, target in plan.eth.items()
+    )
     ctx.data["funding"] = {
         "deployerEth": str(eth),
         "deployerUsdc": str(held),

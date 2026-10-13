@@ -251,18 +251,63 @@ class Recorder:
 
     # ------------------------------------------------------------------ scanning
 
+    BLOCK_WAIT_S = 45.0
+    """How long a public-network scan waits for a block a lagging RPC node has not served yet."""
+
     def latest_block(self) -> int:
         return int(self.w3.eth.block_number)
 
+    def _scan_target(self) -> int:
+        """The block a step's scan must reach.
+
+        On Anvil this is "latest". A public RPC is served by several nodes that can lag each other by a
+        block or two, so "latest" read right after a step can be lower than the block of the step's last
+        transaction. On a public network the target is therefore the highest of: a few "latest" reads,
+        the highest receipt block this process has seen (deploy, funding and runner transactions), and
+        the receipt block of every transaction the signer logged that is not recorded yet.
+        """
+        if self.network == "anvil":
+            return self.latest_block()
+        from acb.chain.tx import highest_receipt_block
+
+        target = max(self.latest_block(), highest_receipt_block(self.chain_id))
+        for _ in range(2):
+            time.sleep(1.0)
+            target = max(target, self.latest_block())
+        for tx_hash in list(self._signer_info):
+            if tx_hash in self.by_hash:
+                continue
+            receipt = self._wait_for(lambda h=tx_hash: _rpc(self.w3, "eth_getTransactionReceipt", [h],
+                                                             min_interval=self.min_interval))
+            if receipt and receipt.get("blockNumber"):
+                target = max(target, int(receipt["blockNumber"], 16))
+        return target
+
+    def _wait_for(self, fetch: Any) -> Any:
+        """Call ``fetch`` until it returns something, for up to BLOCK_WAIT_S on a public network."""
+        deadline = time.monotonic() + (self.BLOCK_WAIT_S if self.network != "anvil" else 0.0)
+        while True:
+            result = fetch()
+            if result or time.monotonic() >= deadline:
+                return result
+            time.sleep(1.0)
+
     def scan(self, step: str, to_block: int | None = None) -> list[dict[str, Any]]:
-        """Record every transaction of the run mined in ``(scanned_to, to_block]`` under ``step``."""
-        to_block = self.latest_block() if to_block is None else int(to_block)
+        """Record every transaction of the run mined in ``(scanned_to, to_block]`` under ``step``.
+
+        A block the node has not served yet is waited for, never skipped: skipping it would leave its
+        transactions out of the evidence for good."""
         self._read_signer_log()
+        to_block = self._scan_target() if to_block is None else int(to_block)
         new: list[dict[str, Any]] = []
         for number in range(self.scanned_to + 1, to_block + 1):
-            block = _rpc(self.w3, "eth_getBlockByNumber", [hex(number), True], min_interval=self.min_interval)
+            block = self._wait_for(
+                lambda n=number: _rpc(self.w3, "eth_getBlockByNumber", [hex(n), True], min_interval=self.min_interval)
+            )
             if not block:
-                continue
+                if self.network == "anvil":
+                    continue
+                raise RuntimeError(f"block {number} not available from the RPC after {self.BLOCK_WAIT_S:.0f} s")
             ts = int(block["timestamp"], 16)
             for tx in block.get("transactions") or []:
                 sender = str(tx.get("from") or "").lower()
@@ -274,7 +319,11 @@ class Recorder:
 
     def _record(self, tx: Mapping[str, Any], step: str, block_ts: int) -> dict[str, Any]:
         h = str(tx["hash"]).lower()
-        receipt = _rpc(self.w3, "eth_getTransactionReceipt", [h], min_interval=self.min_interval)
+        receipt = self._wait_for(
+            lambda: _rpc(self.w3, "eth_getTransactionReceipt", [h], min_interval=self.min_interval)
+        )
+        if not receipt:
+            raise RuntimeError(f"no receipt for {h} from the RPC after {self.BLOCK_WAIT_S:.0f} s")
         status = int(receipt["status"], 16)
         to = _hex(tx.get("to"))
         created = _hex(receipt.get("contractAddress"))
