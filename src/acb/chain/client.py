@@ -17,6 +17,7 @@ from typing import Any
 
 from web3 import Web3
 from web3.exceptions import Web3RPCError
+from web3.middleware import Web3Middleware
 
 from acb.types import NetworkProfile
 
@@ -42,8 +43,91 @@ _RANGE_ERROR_WORDS = (
 )
 
 
+_CHAIN_ATTR = "_acb_chain_id"
+ANVIL_CHAIN_ID = 31337
+
+# state reads whose block parameter ("latest") ReadYourWrites pins; value = index of the block parameter
+_READ_BLOCK_PARAM = {
+    "eth_call": 1,
+    "eth_estimateGas": 1,
+    "eth_getCode": 1,
+    "eth_getBalance": 1,
+    "eth_getStorageAt": 2,
+    "eth_getTransactionCount": 1,
+}
+_LAG_WORDS = ("header not found", "unknown block", "block not found", "missing trie node", "historical state")
+
+
+def _is_lag_error(error: Any) -> bool:
+    message = str(error.get("message", "") if isinstance(error, dict) else error).lower()
+    return any(w in message for w in _LAG_WORDS)
+
+
+class ReadYourWrites(Web3Middleware):
+    """Read-your-writes on a load-balanced public RPC.
+
+    ``sepolia.base.org`` is served by several nodes that can lag each other by a block or two, so a read
+    sent right after a receipt may reach a node that has not seen that block (it then reports no code at
+    a contract deployed one block earlier, an old balance, an old mandate). For state reads at "latest"
+    this middleware asks instead for an explicit block: the highest of the newest block any local process
+    has seen in a receipt (``acb.chain.tx.highest_receipt_block``) and the last ``eth_blockNumber``
+    (cached for one second). A node that does not have that block yet answers "header not found"; the
+    read is retried for up to ``WAIT_S``. Reads at an explicit block or at "pending" are left alone.
+    Installed by :func:`make_web3` on public networks only.
+    """
+
+    WAIT_S = 30.0
+    LATEST_CACHE_S = 1.0
+
+    def __init__(self, w3: Any) -> None:
+        super().__init__(w3)
+        self._cache: tuple[float, int] = (0.0, -1)
+
+    def _latest(self, make_request: Callable[..., Any]) -> int:
+        now = time.monotonic()
+        stamp, value = self._cache
+        if now - stamp < self.LATEST_CACHE_S:
+            return value
+        response = make_request("eth_blockNumber", [])
+        result = response.get("result") if isinstance(response, dict) else None
+        value = max(value, int(result, 16)) if result else value
+        self._cache = (now, value)
+        return value
+
+    def wrap_make_request(self, make_request: Callable[..., Any]) -> Callable[..., Any]:
+        def middleware(method: str, params: Any) -> Any:
+            pos = _READ_BLOCK_PARAM.get(method)
+            if pos is None:
+                return make_request(method, params)
+            params = list(params or [])
+            block = params[pos] if len(params) > pos else "latest"
+            if block not in ("latest", None):
+                return make_request(method, params)
+            from acb.chain.tx import highest_receipt_block
+
+            chain_id = getattr(self._w3, _CHAIN_ATTR, None)
+            mark = highest_receipt_block(int(chain_id)) if chain_id else -1
+            if mark < 0:
+                return make_request(method, params)
+            target = max(mark, self._latest(make_request))
+            while len(params) <= pos:
+                params.append("latest")
+            params[pos] = hex(target)
+            deadline = time.monotonic() + self.WAIT_S
+            while True:
+                response = make_request(method, params)
+                error = response.get("error") if isinstance(response, dict) else None
+                if not error or not _is_lag_error(error) or time.monotonic() >= deadline:
+                    return response
+                time.sleep(0.5)
+
+        return middleware
+
+
 def make_web3(net: NetworkProfile, purpose: str = "rpc", *, timeout: float = DEFAULT_TIMEOUT_S) -> Web3:
-    """A ``Web3`` (HTTP) for ``net``. ``purpose`` is ``"rpc"`` (reads and writes) or ``"logs"`` (indexing)."""
+    """A ``Web3`` (HTTP) for ``net``. ``purpose`` is ``"rpc"`` (reads and writes) or ``"logs"`` (indexing).
+
+    On public networks the instance reads its own writes (:class:`ReadYourWrites`)."""
     if purpose not in ("rpc", "logs"):
         raise ValueError("purpose must be 'rpc' or 'logs'")
     url = net.log_rpc_url if purpose == "logs" else net.rpc_url
@@ -52,6 +136,9 @@ def make_web3(net: NetworkProfile, purpose: str = "rpc", *, timeout: float = DEF
     w3 = Web3(Web3.HTTPProvider(url, request_kwargs={"timeout": timeout}))
     setattr(w3, _CHUNK_ATTR, int(net.logs_chunk_blocks))
     setattr(w3, _NETWORK_ATTR, net.name)
+    setattr(w3, _CHAIN_ATTR, int(net.chain_id))
+    if int(net.chain_id) != ANVIL_CHAIN_ID:
+        w3.middleware_onion.add(ReadYourWrites, name="acb_read_your_writes")
     return w3
 
 

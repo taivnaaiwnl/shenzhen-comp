@@ -20,9 +20,11 @@ all use it.
 
 from __future__ import annotations
 
+import os
 import threading
 import weakref
 from collections.abc import Callable
+from pathlib import Path
 from typing import Any
 
 from eth_account.signers.local import LocalAccount
@@ -45,6 +47,52 @@ RECEIPT_TIMEOUT_PUBLIC_S = 180.0
 
 _RETRYABLE_SEND = ("nonce too low", "replacement transaction underpriced", "nonce has already been used")
 _ALREADY_KNOWN = ("already known", "known transaction", "already imported")
+
+# Highest block of any receipt seen, per chain ("read your own writes" on a public RPC). A public RPC is
+# served by several nodes that can lag each other by a block or two, so a read sent right after a receipt
+# can reach a node that has not seen the receipt's block yet (and, for example, sees no code at a contract
+# deployed one block earlier). Every receipt raises this mark; on public networks it is also shared with
+# the run's other processes (signer, bureau, simulator, owner console) through a small file under
+# data/chain-<id>/, so reads in any process target a block at least as new as the newest local write
+# (see acb.chain.client.ReadYourWrites). Anvil mines instantly and never uses the file.
+_HIGHEST_RECEIPT_BLOCK: dict[int, int] = {}
+_HWM_DIR = Path(__file__).resolve().parents[3] / "data"
+
+
+def _hwm_file(chain_id: int) -> Path:
+    return _HWM_DIR / f"chain-{chain_id}" / "receipt_hwm"
+
+
+def _read_hwm_file(chain_id: int) -> int:
+    try:
+        return int(_hwm_file(chain_id).read_text(encoding="ascii").strip() or -1)
+    except (OSError, ValueError):
+        return -1
+
+
+def note_receipt_block(chain_id: int, block: int) -> None:
+    """Raise the per-chain high-water mark of mined blocks seen in a receipt (shared on public networks)."""
+    if block > _HIGHEST_RECEIPT_BLOCK.get(chain_id, -1):
+        _HIGHEST_RECEIPT_BLOCK[chain_id] = block
+    if chain_id == ANVIL_CHAIN_ID:
+        return
+    try:
+        if block > _read_hwm_file(chain_id):
+            path = _hwm_file(chain_id)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            tmp = path.with_name(f"receipt_hwm.{os.getpid()}.tmp")
+            tmp.write_text(str(block), encoding="ascii")
+            os.replace(tmp, path)
+    except OSError:
+        pass  # the in-process mark still covers this process's own writes
+
+
+def highest_receipt_block(chain_id: int) -> int:
+    """The highest receipt block seen on ``chain_id`` by this process or (public networks) any local one."""
+    mine = _HIGHEST_RECEIPT_BLOCK.get(chain_id, -1)
+    if chain_id == ANVIL_CHAIN_ID:
+        return mine
+    return max(mine, _read_hwm_file(chain_id))
 
 
 class TxError(RuntimeError):
@@ -351,6 +399,7 @@ class TxSender:
 
         status = int(receipt["status"])
         block = int(receipt["blockNumber"])
+        note_receipt_block(self.chain_id, block)
         revert_error: str | None = None
         if status == 0:
             revert_error = self._replay_revert(call, gas, block, int(receipt["gasUsed"]))
