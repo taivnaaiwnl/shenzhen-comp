@@ -77,6 +77,12 @@ OPEN_ORDER_STATUSES = frozenset({"awaiting_delivery"})
 RECONCILE_STATUSES = frozenset({"in_flight", "interrupted"})
 # how long (wall clock) an unknown answer is looked up before the order is marked interrupted
 UNKNOWN_GIVE_UP_S = 600.0
+# orders settled as FAILED by the agent (refund 2400 or RECORD_DELIVERY FAILED): each owes a NON_DELIVERY report
+FAILED_SETTLEMENTS = frozenset({"refunded", "failed"})
+# a NON_DELIVERY report the signer did not execute (on a public RPC its check can read a node that has not
+# seen the settlement yet) is filed again on a later tick: at most this many times, this far apart (wall clock)
+REPORT_RETRIES = 3
+REPORT_RETRY_S = 30.0
 
 
 def refusal_reply(payee_name: str, report_status: str | None) -> str:
@@ -1102,7 +1108,31 @@ class Runtime:
                     a.bus.emit(
                         "error", {"message": "delivery processing failed", "orderId": oid, "error": type(exc).__name__}
                     )
+            self.retry_reports()
             return open_ids
+
+    def retry_reports(self) -> None:
+        """File again the NON_DELIVERY report of a FAILED settlement that the signer did not execute."""
+        a = self.a
+        filed = a.store.read("reports")
+        now = int(time.time())
+        for oid, rec in a.store.read("orders").items():
+            if rec.get("status") not in FAILED_SETTLEMENTS or not rec.get("invoice"):
+                continue
+            subject = int(SignedInvoice.from_wire(rec["invoice"]).invoice.issuer_agent_id)
+            tries = int(rec.get("reportRetries") or 0)
+            if f"NON_DELIVERY:{subject}:{oid.lower()}" in filed or tries >= REPORT_RETRIES:
+                continue
+            if rec.get("reportRetryAt") is None:  # the first try was just now: wait before the next one
+                a.store.update_order(oid, reportRetryAt=now)
+                continue
+            if now - int(rec["reportRetryAt"]) < REPORT_RETRY_S:
+                continue
+            a.store.update_order(oid, reportRetries=tries + 1, reportRetryAt=now)
+            try:
+                self.file_report("NON_DELIVERY", subject, order_id=oid)
+            except Exception as exc:  # noqa: BLE001 - one order must not stop the others
+                a.bus.emit("error", {"message": "report retry failed", "orderId": oid, "error": type(exc).__name__})
 
     def process_order(self, oid: str) -> str | None:
         """Advance one order: fetch and check the delivery, then RELEASE / RECORD_DELIVERY / REFUND."""

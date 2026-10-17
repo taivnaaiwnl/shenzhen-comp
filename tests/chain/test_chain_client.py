@@ -204,3 +204,51 @@ def test_log_scans_need_a_start_block_on_public_networks():
     with pytest.raises(ValueError, match="start_block"):
         vault._scan_start(None)
     assert vault._scan_start(123) == 123
+
+
+class _LaggingRpc:
+    """Two load-balanced nodes: the fast one has block 105 (our receipt), the slow one only 100."""
+
+    def __init__(self) -> None:
+        self.calls: list[tuple[str, list]] = []
+        self.slow_left = 2  # the next two requests reach the slow node
+
+    def __call__(self, method: str, params: list) -> dict:
+        self.calls.append((method, list(params)))
+        head = 100 if self.slow_left > 0 else 105
+        self.slow_left -= 1
+        if method == "eth_blockNumber":
+            return {"jsonrpc": "2.0", "id": 1, "result": hex(head)}
+        if method == "eth_getBlockByNumber":
+            return {"jsonrpc": "2.0", "id": 1, "result": None if int(params[0], 16) > head else {"number": params[0]}}
+        block = head if params[1] == "pending" else int(params[1], 16)
+        if block > head:
+            return {"jsonrpc": "2.0", "id": 1, "error": {"code": -32000, "message": "header not found"}}
+        return {"jsonrpc": "2.0", "id": 1, "result": "0x01"}
+
+
+def _read_your_writes(monkeypatch, mark: int):
+    from acb.chain import client, tx
+
+    monkeypatch.setattr(tx, "highest_receipt_block", lambda chain_id: mark)
+    monkeypatch.setattr(client.time, "sleep", lambda s: None)
+    w3 = type("W3", (), {"_acb_chain_id": 84532})()
+    rpc = _LaggingRpc()
+    return rpc, client.ReadYourWrites(w3).wrap_make_request(rpc)
+
+
+def test_block_number_never_answers_below_our_own_receipts(monkeypatch):
+    rpc, request = _read_your_writes(monkeypatch, mark=105)
+    assert request("eth_blockNumber", [])["result"] == hex(105)  # the slow node said 100
+    rpc.slow_left = 0
+    assert request("eth_blockNumber", [])["result"] == hex(105)
+
+
+def test_reads_at_an_explicit_block_wait_for_a_lagging_node(monkeypatch):
+    rpc, request = _read_your_writes(monkeypatch, mark=105)
+    assert request("eth_call", [{"to": CONTRACT}, hex(105)])["result"] == "0x01"
+    assert [c[0] for c in rpc.calls] == ["eth_call"] * 3  # two "header not found", then the fast node
+    rpc.slow_left = 1
+    assert request("eth_getBlockByNumber", [hex(105), False])["result"] == {"number": hex(105)}
+    rpc.slow_left = 1
+    assert request("eth_call", [{"to": CONTRACT}, "pending"])["result"] == "0x01"  # tags other than latest pass

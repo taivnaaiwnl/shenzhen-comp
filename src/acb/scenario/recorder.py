@@ -277,8 +277,9 @@ class Recorder:
         for tx_hash in list(self._signer_info):
             if tx_hash in self.by_hash:
                 continue
-            receipt = self._wait_for(lambda h=tx_hash: _rpc(self.w3, "eth_getTransactionReceipt", [h],
-                                                             min_interval=self.min_interval))
+            receipt = self._wait_for(
+                lambda h=tx_hash: _rpc(self.w3, "eth_getTransactionReceipt", [h], min_interval=self.min_interval)
+            )
             if receipt and receipt.get("blockNumber"):
                 target = max(target, int(receipt["blockNumber"], 16))
         return target
