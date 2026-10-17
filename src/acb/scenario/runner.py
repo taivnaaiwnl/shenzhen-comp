@@ -422,15 +422,21 @@ class Runner:
             n = sum(1 for d in ctx.offchain if list(d.get("reasons") or []) == list(o["reasons"]))
             ctx.require(n == int(o.get("count", 1)), f"expected {o.get('count', 1)} off-chain {o['reasons']}, got {n}")
         # grades
+        early: dict[str, str] = self.state.setdefault("earlyGradeChanges", {})
         if "grade_changes" in exp:
             got_changes = self.grade_changes(ctx.id)
             want = {(k, v) for k, v in (exp["grade_changes"] or {}).items()}
-            self.soft(ctx, got_changes == want, f"grade changes {sorted(got_changes)} != expected {sorted(want)}")
             ctx.data["gradeChanges"] = sorted(f"{k}:{v}" for k, v in got_changes)
+            if self.env.network != "anvil":
+                want, got_changes = self._real_time_grade_window(ctx, want, got_changes, early)
+            self.soft(ctx, got_changes == want, f"grade changes {sorted(got_changes)} != expected {sorted(want)}")
         for key, grade in (exp.get("grades_after") or {}).items():
             got = self.effective_grade(key)
             self.soft(ctx, got == grade, f"{key} effective grade {got}, expected {grade}")
         for key, reasons in (exp.get("reasons") or {}).items():
+            taken = early.get(f"{key}:{(exp.get('grade_changes') or {}).get(key)}")
+            if taken and taken != ctx.id:
+                continue  # the change and its reasons were posted and checked in an earlier step
             got = self.posted_reasons(ctx.id, key)
             self.soft(ctx, got == list(reasons), f"{key} posted reasons {got}, expected {reasons}")
         # tier
@@ -484,6 +490,36 @@ class Runner:
 
         v = VaultContract(self.env.w3, self.env.dep.vaults["wallet"].address)
         return 255 if v.is_frozen() else int(v.tier())
+
+    def _real_time_grade_window(
+        self,
+        ctx: StepCtx,
+        want: set[tuple[str, str]],
+        got: set[tuple[str, str]],
+        early: dict[str, str],
+    ) -> tuple[set[tuple[str, str]], set[tuple[str, str]]]:
+        """Grade-change expectations on a public network, where the clock is not warped.
+
+        Anvil warps exactly as far as each step needs; on Base Sepolia real time passes between steps, so
+        a dispute window or a report decay can close earlier, and a grade change the scenario expects in a
+        later step can land in this one. Such a change is accepted here when a later step expects the same
+        (agent, grade) and, if that step names them, the same posted reasons; it is then recorded in
+        ``state.earlyGradeChanges`` and not expected again. Returns the (want, got) pair to compare."""
+        idx = STEP_IDS.index(ctx.id) if ctx.id in STEP_IDS else len(STEP_IDS)
+        want = {c for c in want if f"{c[0]}:{c[1]}" not in early or early[f"{c[0]}:{c[1]}"] == ctx.id}
+        accepted: set[tuple[str, str]] = set()
+        for agent, grade in sorted(got - want):
+            for later in STEP_IDS[idx + 1 :]:
+                lexp = (self.cfg["steps_by_id"].get(later) or {}).get("expect") or {}
+                if (lexp.get("grade_changes") or {}).get(agent) != grade:
+                    continue
+                reasons = (lexp.get("reasons") or {}).get(agent)
+                if reasons is None or self.posted_reasons(ctx.id, agent) == list(reasons):
+                    accepted.add((agent, grade))
+                    early[f"{agent}:{grade}"] = ctx.id
+                    ctx.note(f"{agent} -> {grade}: the change expected in {later} landed in {ctx.id} (real-time clock)")
+                break
+        return want, got - accepted
 
     def grade_changes(self, step: str) -> set[tuple[str, str]]:
         """``{(persona, new grade)}`` of the GradePosted events of a step whose grade differs from the
