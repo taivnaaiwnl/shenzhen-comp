@@ -23,6 +23,10 @@ import os
 import sys
 from typing import Any
 
+ANVIL_CHAIN_ID = 31337
+PUBLIC_PROVIDER_TIMEOUT_S = 60.0
+"""Provider HTTP timeout on a public network (config/agent.yaml's provider_timeout_s is the Anvil value)."""
+
 # ---------------------------------------------------------------------------
 # acb agent serve
 # ---------------------------------------------------------------------------
@@ -83,11 +87,16 @@ def build_agent(network: str, *, environ: dict[str, str] | None = None) -> Any:
         persona=settings.mock_persona if settings.mock_persona in ("careful", "naive") else "careful",
     )
     explorer = net.explorers[0].get("tx") if net.explorers else None
+    # a provider answers a quote or a delivery after its own chain reads; on a public network (2 s blocks,
+    # a load-balanced RPC) that takes tens of seconds where Anvil answers at once
+    provider_timeout = cfg.http.provider_timeout_s
+    if int(net.chain_id) != ANVIL_CHAIN_ID:
+        provider_timeout = max(provider_timeout, PUBLIC_PROVIDER_TIMEOUT_S)
     return WalletAgent(
         dep=dep,
         chain=chain,
         signer=HttpSignerClient(timeout_s=cfg.http.signer_timeout_s),
-        provider=HttpProviderClient(timeout_s=cfg.http.provider_timeout_s),
+        provider=HttpProviderClient(timeout_s=provider_timeout),
         llm=llm,
         llm_info=info,
         store=store,
