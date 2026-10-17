@@ -1,0 +1,388 @@
+{
+  "llm": {
+    "mode": "openai",
+    "model": "gpt-5.4-mini",
+    "persona": "careful",
+    "promptVersion": "acb-prompt-1.0.0"
+  },
+  "schema": "acb-dialogue/1",
+  "step": "S5",
+  "turns": [
+    {
+      "cards": [
+        {
+          "candidates": [
+            {
+              "ageS": 1126,
+              "agentId": "9801",
+              "category": "fx-data",
+              "grade": "A",
+              "gradePostedAt": 1792226946,
+              "inDirectory": true,
+              "liveWallet": "0x4a68fcadaf0b0a4b3254aff81dd2f5b779dae786",
+              "lookalikeOf": null,
+              "name": "Atlas Data",
+              "problems": [],
+              "registeredAt": 1792226132,
+              "score": 740,
+              "warnings": []
+            },
+            {
+              "ageS": 1120,
+              "agentId": "9802",
+              "category": "fx-data",
+              "grade": "B",
+              "gradePostedAt": 1792226960,
+              "inDirectory": true,
+              "liveWallet": "0x837c65c2fcf7762453dbbf08e17b56d4306f3a66",
+              "lookalikeOf": null,
+              "name": "Slowpoke Analytics",
+              "problems": [],
+              "registeredAt": 1792226138,
+              "score": 680,
+              "warnings": []
+            },
+            {
+              "ageS": 1114,
+              "agentId": "9803",
+              "category": "fx-data",
+              "grade": "A",
+              "gradePostedAt": 1792226974,
+              "inDirectory": true,
+              "liveWallet": "0x15d402017e5c82dee56159adf582db98ca1072f5",
+              "lookalikeOf": null,
+              "name": "Ghost Feeds",
+              "problems": [],
+              "registeredAt": 1792226144,
+              "score": 720,
+              "warnings": []
+            }
+          ],
+          "field": "payee",
+          "options": [
+            "Atlas Data",
+            "Slowpoke Analytics",
+            "Ghost Feeds",
+            "All of them"
+          ],
+          "question": "You did not name a provider, and I will not choose one for you. Matching providers: Atlas Data (#9801, grade A, registered 18 min ago, wallet 0x4a68...e786); Slowpoke Analytics (#9802, grade B, registered 18 min ago, wallet 0x837c...3a66); Ghost Feeds (#9803, grade A, registered 18 min ago, wallet 0",
+          "type": "clarification"
+        }
+      ],
+      "llm": {
+        "fallback": false,
+        "mode": "openai",
+        "model": "gpt-5.4-mini",
+        "persona": ""
+      },
+      "owner": "I need FX market data and API calls for my research today, budget 5 USDC",
+      "reply": "You did not name a provider, and I will not choose one for you. Matching providers: Atlas Data (#9801, grade A, registered 18 min ago, wallet 0x4a68...e786); Slowpoke Analytics (#9802, grade B, registered 18 min ago, wallet 0x837c...3a66); Ghost Feeds (#9803, grade A, registered 18 min ago, wallet 0x15d4...72f5). Already resolved: Orion API. Which should I use?",
+      "turn": 1
+    },
+    {
+      "cards": [
+        {
+          "code": "573707",
+          "confirmable": true,
+          "context": {
+            "frozen": false,
+            "now": 1792227294,
+            "tier": 1,
+            "vault": "0x16c7a9f608bf6d02788749a1134aed0eeddc12ad"
+          },
+          "draftId": "d-98de811af57c",
+          "expiresInS": 600,
+          "kind": "mandate",
+          "payees": [
+            {
+              "ageS": 1162,
+              "agentId": "9801",
+              "category": "fx-data",
+              "grade": "A",
+              "gradePostedAt": 1792226946,
+              "inDirectory": true,
+              "liveWallet": "0x4a68fcadaf0b0a4b3254aff81dd2f5b779dae786",
+              "lookalikeOf": null,
+              "name": "Atlas Data",
+              "problems": [],
+              "registeredAt": 1792226132,
+              "score": 740,
+              "warnings": []
+            },
+            {
+              "ageS": 1156,
+              "agentId": "9802",
+              "category": "fx-data",
+              "grade": "B",
+              "gradePostedAt": 1792226960,
+              "inDirectory": true,
+              "liveWallet": "0x837c65c2fcf7762453dbbf08e17b56d4306f3a66",
+              "lookalikeOf": null,
+              "name": "Slowpoke Analytics",
+              "problems": [],
+              "registeredAt": 1792226138,
+              "score": 680,
+              "warnings": []
+            },
+            {
+              "ageS": 1132,
+              "agentId": "9806",
+              "category": "sample-data",
+              "grade": "NEW",
+              "gradePostedAt": 1792226418,
+              "inDirectory": true,
+              "liveWallet": "0x13672943ab1d6bc45cc81740167e6c684ae34ee3",
+              "lookalikeOf": null,
+              "name": "Nova Labs",
+              "problems": [],
+              "registeredAt": 1792226162,
+              "score": 610,
+              "warnings": [
+                "agent #9806 is new or unrated: payments go to escrow with a small cap"
+              ]
+            },
+            {
+              "ageS": 1138,
+              "agentId": "9805",
+              "category": "api-calls",
+              "grade": "A",
+              "gradePostedAt": 1792226988,
+              "inDirectory": true,
+              "liveWallet": "0x9b58c199150dfae6fb180245e761abcd5ca6e65e",
+              "lookalikeOf": null,
+              "name": "Orion API",
+              "problems": [],
+              "registeredAt": 1792226156,
+              "score": 720,
+              "warnings": []
+            },
+            {
+              "ageS": 1150,
+              "agentId": "9803",
+              "category": "fx-data",
+              "grade": "A",
+              "gradePostedAt": 1792226974,
+              "inDirectory": true,
+              "liveWallet": "0x15d402017e5c82dee56159adf582db98ca1072f5",
+              "lookalikeOf": null,
+              "name": "Ghost Feeds",
+              "problems": [],
+              "registeredAt": 1792226144,
+              "score": 720,
+              "warnings": []
+            }
+          ],
+          "prepareId": "p-a4284925989e727f5d8103f3",
+          "problems": [],
+          "purpose": "FX market data and API calls for research today",
+          "signing": "server",
+          "type": "mandate",
+          "validHours": 24,
+          "values": {
+            "mandateId": "0x5d9a6bc0857e0527a913651b841486d07ff25d646804d2990762dee727044ac1",
+            "maxPerTx": "1000000",
+            "maxTotal": "5000000",
+            "payeeAgentIds": [
+              "9801",
+              "9802",
+              "9806",
+              "9805",
+              "9803"
+            ],
+            "payeeWallets": [
+              "0x4a68fcadaf0b0a4b3254aff81dd2f5b779dae786",
+              "0x837c65c2fcf7762453dbbf08e17b56d4306f3a66",
+              "0x13672943ab1d6bc45cc81740167e6c684ae34ee3",
+              "0x9b58c199150dfae6fb180245e761abcd5ca6e65e",
+              "0x15d402017e5c82dee56159adf582db98ca1072f5"
+            ],
+            "purposeHash": "0x2caf63131e3258e69f7045cc002e2f9b745244738dff92b586cc363b6e362260",
+            "recurring": false,
+            "validUntil": 1792313694
+          },
+          "warnings": [
+            "agent #9806 is new or unrated: payments go to escrow with a small cap"
+          ]
+        }
+      ],
+      "llm": {
+        "fallback": false,
+        "mode": "openai",
+        "model": "gpt-5.4-mini",
+        "persona": ""
+      },
+      "owner": "Use all five: Atlas, Slowpoke, Nova, Orion, and Ghost as a backup",
+      "reply": "Mandate draft d-98de811af57c: FX market data and API calls for research today. Payees: Atlas Data (#9801, grade A, registered 19 min ago, wallet 0x4a68...e786); Slowpoke Analytics (#9802, grade B, registered 18 min ago, wallet 0x837c...3a66); Nova Labs (#9806, grade NEW, registered 18 min ago, wallet 0x1367...4ee3); Orion API (#9805, grade A, registered 18 min ago, wallet 0x9b58...e65e); Ghost Feeds (#9803, grade A, registered 18 min ago, wallet 0x15d4...72f5). Max per payment 1.00 USDC, total 5.00 USDC, valid 24 h, not recurring. Nova Labs is new and unrated: paid by escrow. Please confirm it in the owner console; it re-reads every payee from the chain before you sign.",
+      "turn": 2
+    },
+    {
+      "cards": [
+        {
+          "code": "AF11E5",
+          "confirmable": true,
+          "context": {
+            "frozen": false,
+            "now": 1792227342,
+            "tier": 1,
+            "vault": "0x16c7a9f608bf6d02788749a1134aed0eeddc12ad"
+          },
+          "draftId": "d-98de811af57c",
+          "expiresInS": 600,
+          "kind": "mandate",
+          "payees": [
+            {
+              "ageS": 1210,
+              "agentId": "9801",
+              "category": "fx-data",
+              "grade": "A",
+              "gradePostedAt": 1792226946,
+              "inDirectory": true,
+              "liveWallet": "0x4a68fcadaf0b0a4b3254aff81dd2f5b779dae786",
+              "lookalikeOf": null,
+              "name": "Atlas Data",
+              "problems": [],
+              "registeredAt": 1792226132,
+              "score": 740,
+              "warnings": []
+            },
+            {
+              "ageS": 1204,
+              "agentId": "9802",
+              "category": "fx-data",
+              "grade": "B",
+              "gradePostedAt": 1792226960,
+              "inDirectory": true,
+              "liveWallet": "0x837c65c2fcf7762453dbbf08e17b56d4306f3a66",
+              "lookalikeOf": null,
+              "name": "Slowpoke Analytics",
+              "problems": [],
+              "registeredAt": 1792226138,
+              "score": 680,
+              "warnings": []
+            },
+            {
+              "ageS": 1180,
+              "agentId": "9806",
+              "category": "sample-data",
+              "grade": "NEW",
+              "gradePostedAt": 1792226418,
+              "inDirectory": true,
+              "liveWallet": "0x13672943ab1d6bc45cc81740167e6c684ae34ee3",
+              "lookalikeOf": null,
+              "name": "Nova Labs",
+              "problems": [],
+              "registeredAt": 1792226162,
+              "score": 610,
+              "warnings": [
+                "agent #9806 is new or unrated: payments go to escrow with a small cap"
+              ]
+            },
+            {
+              "ageS": 1186,
+              "agentId": "9805",
+              "category": "api-calls",
+              "grade": "A",
+              "gradePostedAt": 1792226988,
+              "inDirectory": true,
+              "liveWallet": "0x9b58c199150dfae6fb180245e761abcd5ca6e65e",
+              "lookalikeOf": null,
+              "name": "Orion API",
+              "problems": [],
+              "registeredAt": 1792226156,
+              "score": 720,
+              "warnings": []
+            },
+            {
+              "ageS": 1198,
+              "agentId": "9803",
+              "category": "fx-data",
+              "grade": "A",
+              "gradePostedAt": 1792226974,
+              "inDirectory": true,
+              "liveWallet": "0x15d402017e5c82dee56159adf582db98ca1072f5",
+              "lookalikeOf": null,
+              "name": "Ghost Feeds",
+              "problems": [],
+              "registeredAt": 1792226144,
+              "score": 720,
+              "warnings": []
+            }
+          ],
+          "prepareId": "p-6c2382f0ac0ebecfb2d2830e",
+          "problems": [],
+          "purpose": "FX market data and API calls for research today",
+          "signing": "server",
+          "type": "mandate",
+          "validHours": 24,
+          "values": {
+            "mandateId": "0xa335215c12f74a70f0343caf28afb5cbd4dbaed8c353977bd41e3fa47410d81e",
+            "maxPerTx": "1000000",
+            "maxTotal": "4000000",
+            "payeeAgentIds": [
+              "9801",
+              "9802",
+              "9806",
+              "9805",
+              "9803"
+            ],
+            "payeeWallets": [
+              "0x4a68fcadaf0b0a4b3254aff81dd2f5b779dae786",
+              "0x837c65c2fcf7762453dbbf08e17b56d4306f3a66",
+              "0x13672943ab1d6bc45cc81740167e6c684ae34ee3",
+              "0x9b58c199150dfae6fb180245e761abcd5ca6e65e",
+              "0x15d402017e5c82dee56159adf582db98ca1072f5"
+            ],
+            "purposeHash": "0x2caf63131e3258e69f7045cc002e2f9b745244738dff92b586cc363b6e362260",
+            "recurring": false,
+            "validUntil": 1792313742
+          },
+          "warnings": [
+            "agent #9806 is new or unrated: payments go to escrow with a small cap"
+          ]
+        }
+      ],
+      "llm": {
+        "fallback": false,
+        "mode": "openai",
+        "model": "gpt-5.4-mini",
+        "persona": ""
+      },
+      "owner": "Actually make the total 4 USDC, not 5",
+      "reply": "Changed max total from 5.00 to 4.00. Mandate draft d-98de811af57c: FX market data and API calls for research today. Payees: Atlas Data (#9801, grade A, registered 19 min ago, wallet 0x4a68...e786); Slowpoke Analytics (#9802, grade B, registered 19 min ago, wallet 0x837c...3a66); Nova Labs (#9806, grade NEW, registered 19 min ago, wallet 0x1367...4ee3); Orion API (#9805, grade A, registered 19 min ago, wallet 0x9b58...e65e); Ghost Feeds (#9803, grade A, registered 19 min ago, wallet 0x15d4...72f5). Max per payment 1.00 USDC, total 4.00 USDC, valid 24 h, not recurring. Nova Labs is new and unrated: paid by escrow. Please confirm it in the owner console; it re-reads every payee from the chain before you sign.",
+      "turn": 3
+    },
+    {
+      "confirm": {
+        "agent": {
+          "mandateId": "0x018ca7d23a68e90d50ef7fef330f20da7c092b4ae57b0b1dd565e125009c3887",
+          "status": "active",
+          "turnsToMandate": 3
+        },
+        "draftId": "d-98de811af57c",
+        "txHash": "0x0fd2d2a3a96cf245d4e6538a20f2f1caf0230924bffd6327ce7dbb05b4088fe1",
+        "values": {
+          "mandateId": "0xa335215c12f74a70f0343caf28afb5cbd4dbaed8c353977bd41e3fa47410d81e",
+          "maxPerTx": "1000000",
+          "maxTotal": "4000000",
+          "payeeAgentIds": [
+            "9801",
+            "9802",
+            "9806",
+            "9805",
+            "9803"
+          ],
+          "payeeWallets": [
+            "0x4a68fcadaf0b0a4b3254aff81dd2f5b779dae786",
+            "0x837c65c2fcf7762453dbbf08e17b56d4306f3a66",
+            "0x13672943ab1d6bc45cc81740167e6c684ae34ee3",
+            "0x9b58c199150dfae6fb180245e761abcd5ca6e65e",
+            "0x15d402017e5c82dee56159adf582db98ca1072f5"
+          ],
+          "purposeHash": "0x2caf63131e3258e69f7045cc002e2f9b745244738dff92b586cc363b6e362260",
+          "recurring": false,
+          "validUntil": 1792313742
+        }
+      }
+    }
+  ]
+}

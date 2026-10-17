@@ -1,0 +1,99 @@
+1
+00:00:00,012 --> 00:00:12,940
+S0: Preflight: the runner checks the chain, the pinned ERC-8004 registries, the vault code hash, balances and the LLM mode.
+
+2
+00:00:12,981 --> 00:00:38,011
+S1: The Agent Credit Bureau contract is deployed and the bureau key is allowed to post grades.
+
+3
+00:00:38,026 --> 00:02:37,340
+S2: Every agent registers its ERC-8004 identity from its own key; the wallet and Beacon vaults are deployed and registered.
+
+4
+00:02:37,390 --> 00:04:20,874
+S3: The deployer funds the wallet vault with 15 USDC and the Beacon vault with 6 USDC (both scaled by ACB_FUNDING_USDC_BPS when set).
+
+5
+00:04:21,000 --> 00:19:14,949
+S4: Beacon buys from four providers through escrow; providers claim before delivering; three rescore rounds grade the market.
+
+6
+00:19:15,099 --> 00:23:09,419
+S5: The owner states an intent; the agent forces a clarification, takes a correction, and the owner registers mandate M1 on-chain.
+
+7
+00:23:09,431 --> 00:25:41,319
+S6: The agent pays Atlas Data 0.80 USDC autonomously: grade A within the tier limits.
+
+8
+00:25:41,333 --> 00:28:28,425
+S7: Slowpoke's invoice is above the B-grade cap: code re-quotes two units and pays 0.40; the delivery is late.
+
+9
+00:28:28,470 --> 00:30:24,477
+S8: Nova Labs is new and unrated, so the agent pays into escrow; Nova claims on-chain before delivering and the escrow is released.
+
+10
+00:30:24,491 --> 00:31:53,669
+S9: A second escrow with Nova Labs; Nova has an outage and never claims.
+
+11
+00:31:53,682 --> 00:36:12,762
+S10: After a clean payment to Orion the bureau grades the wallet A and the autonomy operator promotes it from tier 1 to tier 2.
+
+12
+00:36:12,788 --> 00:42:50,279
+S11: Ghost Feeds never claims three Beacon escrows; Beacon refunds them; sybil praise and smears carry no weight; Ghost falls from A to D.
+
+13
+00:42:50,329 --> 00:44:41,400
+S12: Ghost is still in M1 but now graded D: the agent refuses its invoice and records the refusal on-chain.
+
+14
+00:44:41,411 --> 00:44:53,698
+S13: With the stolen agent key the attacker pays Ghost directly and replays an order id: the vault reverts both.
+
+15
+00:44:53,709 --> 00:46:58,250
+S14: Nova's escrow passed its deadline without a claim: the agent refunds it and files a NON_DELIVERY report.
+
+16
+00:06:51,732 --> 00:14:42,369
+S14: Nova's escrow passed its deadline without a claim: the agent refunds it and files a NON_DELIVERY report.
+
+17
+00:14:42,385 --> 00:17:27,832
+S15: A scripted worst-case LLM follows Orion's injected memo and proposes 3.00 USDC: the signer refuses, records a serious violation and demotes the wallet.
+
+18
+00:17:27,846 --> 00:20:35,130
+S16: The scripted LLM tries to send the free balance to the attacker: the signer refuses, the severe violation freezes the vault, and Orion is graded D.
+
+19
+00:20:35,155 --> 00:22:20,650
+S17: While frozen the agent refuses an Atlas invoice, and the stolen key's direct payment reverts with Frozen.
+
+20
+00:22:20,665 --> 00:27:11,102
+S18: The owner rotates the agent key and unfreezes to tier 0; the next Atlas invoice needs the owner's approval, which the owner gives on a verified card.
+
+21
+00:27:11,117 --> 00:28:00,420
+S19: Blaster pushes unsolicited signed invoices: they are dropped without an LLM turn or an on-chain record, and code files a verified SPAM report.
+
+22
+00:28:00,436 --> 00:28:15,108
+S20: Ghost files an appeal claiming delivery; the bureau checks the vault events and rejects it.
+
+23
+00:15:19,429 --> 00:20:09,572
+S20: Ghost files an appeal claiming delivery; the bureau checks the vault events and rejects it.
+
+24
+00:20:09,601 --> 00:29:45,322
+S21: Anyone can recompute the posted grades from public data and verify every transaction of the run.
+
+25
+00:18:05,352 --> 00:39:44,498
+S21: Anyone can recompute the posted grades from public data and verify every transaction of the run.
