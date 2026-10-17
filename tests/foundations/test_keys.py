@@ -3,6 +3,7 @@ temporary folder, with the public Anvil test mnemonic; the repository's .env is 
 
 from __future__ import annotations
 
+import hashlib
 import io
 import re
 import subprocess
@@ -34,6 +35,16 @@ from acb.keys import (
 
 REPO = Path(__file__).resolve().parents[2]
 KEY_HEX = re.compile(r"0x[0-9a-f]{64}")
+
+
+def _env_digest() -> str | None:
+    """sha256 of the repository's .env (None if absent): compared, never printed, since it holds keys."""
+    env = REPO / ".env"
+    return hashlib.sha256(env.read_bytes()).hexdigest() if env.is_file() else None
+
+
+ENV_AT_COLLECTION = _env_digest()
+"""Taken when pytest imports this module, before any test of the session has run."""
 
 # Anvil's well-known default accounts (public test keys)
 ANVIL_ADDRESSES = {
@@ -228,7 +239,7 @@ def test_rewrite_env_text_quotes_and_keeps_lines():
 
 
 def test_repository_env_is_not_modified_by_tests():
-    """Guard: this module never writes the repository's .env."""
-    env = REPO / ".env"
-    if env.is_file():
-        assert "written by `acb keys init`" not in env.read_text(encoding="utf-8-sig")
+    """Guard: no test of the session writes the repository's .env. A developer's own ``acb keys init``
+    output in it is legitimate; only a change since collection fails, and the file is never printed."""
+    unchanged = _env_digest() == ENV_AT_COLLECTION
+    assert unchanged, "the repository's .env changed during the test session"
