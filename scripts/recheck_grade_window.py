@@ -63,8 +63,10 @@ def main() -> None:
             if reasons is not None and posted.get(agent) != list(reasons):
                 raise SystemExit(f"{agent} -> {grade}: posted reasons {posted.get(agent)} != {later}'s {reasons}")
             early[f"{agent}:{grade}"] = step
-            notes.append(f"{agent} -> {grade}: the change expected in {later} landed in {step} (real-time clock); "
-                         f"posted reasons {posted.get(agent)} match {later}'s expectation")
+            notes.append(
+                f"{agent} -> {grade}: the change expected in {later} landed in {step} (real-time clock); "
+                f"posted reasons {posted.get(agent)} match {later}'s expectation"
+            )
             break
         else:
             raise SystemExit(f"{agent} -> {grade} is expected in no later step; nothing changed")
