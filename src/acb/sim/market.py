@@ -356,11 +356,24 @@ def drive_slots(
     do_settle: bool = True,
     wait_late: bool = True,
 ) -> list[dict[str, Any]]:
-    """Open every slot, ask for delivery, wait (warp on Anvil) for late ones, settle; returns a summary."""
+    """Open every slot, ask for delivery, wait (warp on Anvil) for late ones, settle; returns a summary.
+
+    On Anvil all slots are opened first and then delivered (blocks are instant). On a public network
+    each order is opened, delivered and settled before the next is quoted: opening all of them first
+    takes minutes of real blocks, which would push every honest delivery past its deliveryDeadline
+    (issuedAt + delivery_s) and record it as LATE."""
     from acb.chain.clock import advance_to
 
-    tickets = [open_slot(sim, b, mandate_id, s) for s in slots]
-    status = {t["label"]: _step(sim, b, t, do_settle=do_settle) for t in tickets}
+    tickets: list[dict[str, Any]] = []
+    status: dict[str, str] = {}
+    if sim.is_anvil:
+        tickets = [open_slot(sim, b, mandate_id, s) for s in slots]
+        status = {t["label"]: _step(sim, b, t, do_settle=do_settle) for t in tickets}
+    else:
+        for s in slots:
+            t = open_slot(sim, b, mandate_id, s)
+            tickets.append(t)
+            status[t["label"]] = _step(sim, b, t, do_settle=do_settle)
     late = [t for t in tickets if status[t["label"]] == "pending" and sim.order_mode(t["orderId"]) == "late"]
     if late and wait_late:
         ready = max(int(sim.ready_at(t["orderId"]) or 0) for t in late)
