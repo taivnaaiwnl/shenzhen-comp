@@ -221,3 +221,23 @@ def test_fee_fallbacks_without_max_priority_fee(chain_id, expected):
 def test_padded_gas():
     assert padded_gas(100_000) == 135_000
     assert padded_gas(21_000) == 36_250
+
+
+def test_resync_all_forgets_managers_of_a_node_that_went_away():
+    import socket
+    import time
+
+    from acb.chain import tx
+    from acb.chain.tx import NonceManager
+
+    with socket.socket() as s:  # a port nothing listens on: the node of a chain a test stopped
+        s.bind(("127.0.0.1", 0))
+        port = s.getsockname()[1]
+    w3 = Web3(Web3.HTTPProvider(f"http://127.0.0.1:{port}"))
+    manager = NonceManager.for_address(w3, "0x" + "ab" * 20)
+    key = (f"http://127.0.0.1:{port}", "0x" + "ab" * 20)
+    assert tx._MANAGERS.get(key) is manager
+    started = time.monotonic()
+    resync_all()
+    assert tx._MANAGERS.get(key) is None and manager.peek() is None
+    assert time.monotonic() - started < 10  # one probe, not the provider's retries and backoff

@@ -211,16 +211,49 @@ class NonceManager:
             self._next = used + 1
 
 
+PROBE_TIMEOUT_S = 2.0
+
+
+def _endpoint_alive(w3: Any) -> bool:
+    """One quick ``eth_chainId`` to an HTTP endpoint, without the provider's retries and backoff."""
+    uri = getattr(getattr(w3, "provider", None), "endpoint_uri", None)
+    if not uri or not str(uri).startswith("http"):
+        return True  # not an HTTP provider: resync itself decides
+    try:
+        requests.post(
+            str(uri), json={"jsonrpc": "2.0", "id": 1, "method": "eth_chainId", "params": []}, timeout=PROBE_TIMEOUT_S
+        )
+        return True
+    except requests.RequestException:
+        return False
+
+
 def resync_all() -> int:
-    """Resync every live :class:`NonceManager` of this process (call after ``evm_revert``). Returns the count."""
+    """Resync every :class:`NonceManager` of this process (call after ``evm_revert``). Returns the count resynced.
+
+    Each endpoint is probed once first: the managers of a node that has gone away (an Anvil chain a test
+    stopped) are forgotten, so a long-lived process never waits on the RPC retries of a dead port again.
+    """
     with _MANAGERS_LOCK:
-        managers = list(_MANAGERS.values())
-    for manager in managers:
+        items = list(_MANAGERS.items())
+    alive: dict[str, bool] = {}
+    count = 0
+    for key, manager in items:
+        endpoint = key[0]
+        if endpoint not in alive:
+            alive[endpoint] = _endpoint_alive(manager.w3)
+        if not alive[endpoint]:
+            manager.invalidate()
+            with _MANAGERS_LOCK:
+                if _MANAGERS.get(key) is manager:
+                    del _MANAGERS[key]
+            continue
         try:
             manager.resync()
+            count += 1
         except Exception:  # noqa: BLE001 - a node that went away: resync lazily later
             manager.invalidate()
-    return len(managers)
+    return count
 
 
 # ---------------------------------------------------------------------------
