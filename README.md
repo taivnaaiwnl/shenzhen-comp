@@ -18,8 +18,9 @@ This README follows the seven sections of the official source code README templa
 |---|---|
 | Headline transactions of the recorded Base Sepolia run (one per claim, explorer links) | [evidence/base_sepolia/HEADLINE.md](evidence/base_sepolia/HEADLINE.md) |
 | Execution evidence with the measured results (steps passed, attack-suite totals, grades, gas) | [docs/deliverables/out/execution-evidence.md](docs/deliverables/out/execution-evidence.md) |
-| Demo video (up to 5 min, English narration and subtitles) | `InternationalAI-TeamMongolia-DemoVideo.mp4`, submitted with the entry; subtitles in [evidence/base_sepolia/narration.srt](evidence/base_sepolia/narration.srt) |
+| Demo video (4:57, English narration and burned-in subtitles) | [video/InternationalAI-TeamMongolia-DemoVideo.mp4](video/InternationalAI-TeamMongolia-DemoVideo.mp4), subtitles in [video/InternationalAI-TeamMongolia-DemoVideo.srt](video/InternationalAI-TeamMongolia-DemoVideo.srt) |
 | Presentation deck | [deck/InternationalAI-TeamMongolia-Deck.pptx](deck/InternationalAI-TeamMongolia-Deck.pptx) (PDF copy: [deck/InternationalAI-TeamMongolia-Deck.pdf](deck/InternationalAI-TeamMongolia-Deck.pdf)) |
+| Technical document, security self-assessment, execution evidence, model card (PDF) | [docs/deliverables/pdf/](docs/deliverables/pdf/) (rendered from [docs/deliverables/out/](docs/deliverables/out/) by `scripts/export_pdfs.py`) |
 | Contract addresses and roles | [deployments/base_sepolia.json](deployments/base_sepolia.json) |
 
 One command checks every transaction of the run against its saved receipt. It needs only Python, no
