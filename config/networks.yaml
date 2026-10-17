@@ -33,4 +33,6 @@ base_sepolia:
   upgrade_delay_s: 60
   # sized for the funded deployer (about 0.0024 ETH, 20 test USDC) at about 0.006 gwei: 18 keys x 0.00008
   # ETH plus about 0.0002 ETH of deployments; usdc_bps 9500 funds 14.25 + 5.70 = 19.95 USDC
-  funding: {min_eth_service: "30000000000000", min_eth_deployer: "500000000000000", topup_eth: "80000000000000", usdc_bps: "9500"}
+  # min_wallet_usdc: S15 must be a provenance violation (demote), not a drain (freeze): drain is an amount of
+  # at least 50% of the wallet vault's free balance, so the vault needs about its full 15.00 USDC (S0 refuses less)
+  funding: {min_eth_service: "30000000000000", min_eth_deployer: "500000000000000", topup_eth: "80000000000000", usdc_bps: "9500", min_wallet_usdc: "14250000"}

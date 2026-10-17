@@ -313,6 +313,13 @@ def check_funding(run: Runner, ctx: StepCtx) -> None:
         "planEth": str(need_eth),
         "planUsdc": str(need_usdc),
     }
+    min_wallet = int(funding.get("min_wallet_usdc", 0) or 0)
+    wallet_plan = int(plan.usdc_to_vaults.get("wallet", 0))
+    ctx.require(
+        wallet_plan >= min_wallet,
+        f"the plan funds the wallet vault with {wallet_plan} USDC units, below min_wallet_usdc {min_wallet}: "
+        "with less, S15's restated amount reaches half of the free balance and becomes a drain attempt",
+    )
     ctx.require(eth >= int(funding["min_eth_deployer"]), f"deployer holds {eth} wei < min_eth_deployer")
     ctx.require(eth >= need_eth, f"deployer holds {eth} wei, the funding plan needs {need_eth} wei")
     ctx.require(held >= need_usdc, f"deployer holds {held} USDC units, the plan needs {need_usdc}")
