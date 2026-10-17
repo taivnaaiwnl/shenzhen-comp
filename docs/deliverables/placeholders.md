@@ -269,7 +269,8 @@ the codes recorded on it (`rc_`). Each path is the path of the matching `tx_` ro
 | `{{tx_s15_refuse}}` | S15: on-chain refusal of the injected invoice | `evidence/<network>/evidence.json` | `json:transactions[step=S15,function=recordDecision][0].txHash` | `hash` |
 | `{{tx_s16_refuse}}` | S16: on-chain refusal of the drain proposal | `evidence/<network>/evidence.json` | `json:transactions[step=S16,function=recordDecision][0].txHash` | `hash` |
 | `{{tx_s16_report_orion}}` | S16: verified INJECTION_ATTEMPT report on Orion (agent key) | `evidence/<network>/evidence.json` | `json:transactions[step=S16,function=giveFeedback,signedByAgentKey=true][0].txHash` | `hash` |
-| `{{tx_s16_grade_nova}}` | S16: grade change of Nova Labs | `evidence/<network>/evidence.json` | `json:gradeChanges[step=S16,agent=nova][-1].txHash` | `hash` |
+| `{{tx_grade_nova_downgrade}}` | Grade change of Nova Labs to C after its non-delivery | `evidence/<network>/evidence.json` | `json:gradeChanges[agent=nova,to=C][-1].txHash` | `hash` |
+| `{{step_nova_downgrade}}` | Step whose rescore posted Nova's C (S16 as scripted; on a public network the refund timer can fire earlier, then the first rescore after it) | `evidence/<network>/evidence.json` | `json:gradeChanges[agent=nova,to=C][-1].step` | `text` |
 | `{{tx_s17_refuse_frozen}}` | S17: refusal recorded while frozen [2101] | `evidence/<network>/evidence.json` | `json:transactions[step=S17,function=recordDecision][0].txHash` | `hash` |
 | `{{tx_s18_needs_approval}}` | S18: NEEDS_OWNER_APPROVAL recorded on-chain [2200] | `evidence/<network>/evidence.json` | `json:transactions[step=S18,function=recordDecision][0].txHash` | `hash` |
 | `{{tx_s18_delivery_atlas}}` | S18: `recordDelivery` after the approved payment | `evidence/<network>/evidence.json` | `json:transactions[step=S18,function=recordDelivery][0].txHash` | `hash` |
@@ -337,7 +338,7 @@ the codes recorded on it (`rc_`). Each path is the path of the matching `tx_` ro
 | `{{grade_wallet_s10}}` | Grade posted for the wallet agent in S10 | `evidence/<network>/evidence.json` | `json:gradeChanges[step=S10,agent=wallet][-1].to` | `text` |
 | `{{grade_ghost_s11}}` | Grade posted for Ghost Feeds in S11 | `evidence/<network>/evidence.json` | `json:gradeChanges[step=S11,agent=ghost][-1].to` | `text` |
 | `{{grade_orion_s16}}` | Grade posted for Orion API in S16 | `evidence/<network>/evidence.json` | `json:gradeChanges[step=S16,agent=orion][-1].to` | `text` |
-| `{{grade_nova_s16}}` | Grade posted for Nova Labs in S16 | `evidence/<network>/evidence.json` | `json:gradeChanges[step=S16,agent=nova][-1].to` | `text` |
+| `{{grade_nova_downgrade}}` | Grade posted for Nova Labs after its non-delivery | `evidence/<network>/evidence.json` | `json:gradeChanges[agent=nova,to=C][-1].to` | `text` |
 | `{{score_atlas_s4}}` | Atlas score at the end of the S4 bootstrap | `evidence/<network>/evidence.json` | `json:gradeChanges[step=S4,agent=atlas][-1].score` | `int` |
 | `{{score_slowpoke_s4}}` | Slowpoke score at the end of S4 | `evidence/<network>/evidence.json` | `json:gradeChanges[step=S4,agent=slowpoke][-1].score` | `int` |
 | `{{score_ghost_s4}}` | Ghost score at the end of S4 | `evidence/<network>/evidence.json` | `json:gradeChanges[step=S4,agent=ghost][-1].score` | `int` |
@@ -347,8 +348,8 @@ the codes recorded on it (`rc_`). Each path is the path of the matching `tx_` ro
 | `{{reasons_ghost_s11}}` | Reason codes of Ghost's S11 grade | `evidence/<network>/evidence.json` | `json:gradeChanges[step=S11,agent=ghost][-1].reasons` | `list(int)` |
 | `{{score_orion_s16}}` | Orion score after the verified injection report (S16) | `evidence/<network>/evidence.json` | `json:gradeChanges[step=S16,agent=orion][-1].score` | `int` |
 | `{{reasons_orion_s16}}` | Reason codes of Orion's S16 grade | `evidence/<network>/evidence.json` | `json:gradeChanges[step=S16,agent=orion][-1].reasons` | `list(int)` |
-| `{{score_nova_s16}}` | Nova score after the S14 non-delivery (graded in S16) | `evidence/<network>/evidence.json` | `json:gradeChanges[step=S16,agent=nova][-1].score` | `int` |
-| `{{reasons_nova_s16}}` | Reason codes of Nova's S16 grade | `evidence/<network>/evidence.json` | `json:gradeChanges[step=S16,agent=nova][-1].reasons` | `list(int)` |
+| `{{score_nova_downgrade}}` | Nova score after the non-delivery of its S9 escrow | `evidence/<network>/evidence.json` | `json:gradeChanges[agent=nova,to=C][-1].score` | `int` |
+| `{{reasons_nova_downgrade}}` | Reason codes of Nova's downgrade | `evidence/<network>/evidence.json` | `json:gradeChanges[agent=nova,to=C][-1].reasons` | `list(int)` |
 | `{{grade_changes_total}}` | Grade changes posted in the run | `evidence/<network>/evidence.json` | `count:gradeChanges` | `int` |
 | `{{grade_changes_recompute_match}}` | Grade changes whose recompute gave MATCH | `evidence/<network>/evidence.json` | `count:gradeChanges[recompute=MATCH]` | `int` |
 | `{{recompute_ghost_s11}}` | S21 recompute result for Ghost's S11 posting | `evidence/<network>/evidence.json` | `json:recompute[agent=ghost][0].result` | `text` |
