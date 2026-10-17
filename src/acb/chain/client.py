@@ -79,7 +79,14 @@ _READ_BLOCK_PARAM = {
     "eth_getStorageAt": 2,
     "eth_getTransactionCount": 1,
 }
-_LAG_WORDS = ("header not found", "unknown block", "block not found", "missing trie node", "historical state")
+_LAG_WORDS = (
+    "header not found",
+    "unknown block",
+    "block not found",
+    "missing trie node",
+    "historical state",
+    "beyond current head",
+)
 
 
 def _is_lag_error(error: Any) -> bool:
@@ -95,8 +102,11 @@ class ReadYourWrites(Web3Middleware):
     a contract deployed one block earlier, an old balance, an old mandate). For state reads at "latest"
     this middleware asks instead for an explicit block: the highest of the newest block any local process
     has seen in a receipt (``acb.chain.tx.highest_receipt_block``) and the last ``eth_blockNumber``
-    (cached for one second). A node that does not have that block yet answers "header not found"; the
-    read is retried for up to ``WAIT_S``. Reads at an explicit block or at "pending" are left alone.
+    (cached for one second). ``eth_blockNumber`` itself never answers below that mark or below a number it
+    answered before, so a caller that reads "the latest block" once and then reads at that number (the
+    signer's policy view) also sees its own writes. A node that does not have the block yet answers
+    "header not found" (or ``null`` for ``eth_getBlockByNumber``); the read is retried for up to
+    ``WAIT_S``. Reads at "pending", "earliest", "safe" or "finalized" are left alone.
     Installed by :func:`make_web3` on public networks only.
     """
 
@@ -106,6 +116,7 @@ class ReadYourWrites(Web3Middleware):
     def __init__(self, w3: Any) -> None:
         super().__init__(w3)
         self._cache: tuple[float, int] = (0.0, -1)
+        self._answered = -1
 
     def _latest(self, make_request: Callable[..., Any]) -> int:
         now = time.monotonic()
@@ -118,34 +129,69 @@ class ReadYourWrites(Web3Middleware):
         self._cache = (now, value)
         return value
 
+    def _mark(self) -> int:
+        from acb.chain.tx import highest_receipt_block
+
+        chain_id = getattr(self._w3, _CHAIN_ATTR, None)
+        return highest_receipt_block(int(chain_id)) if chain_id else -1
+
+    def _block_number(self, make_request: Callable[..., Any], params: Any) -> Any:
+        response = make_request("eth_blockNumber", params)
+        result = response.get("result") if isinstance(response, dict) else None
+        if not result:
+            return response
+        self._answered = max(int(result, 16), self._mark(), self._answered)
+        return {**response, "result": hex(self._answered)}
+
+    def _until_caught_up(self, make_request: Callable[..., Any], method: str, params: list) -> Any:
+        deadline = time.monotonic() + self.WAIT_S
+        while True:
+            response = make_request(method, params)
+            error = response.get("error") if isinstance(response, dict) else None
+            behind = (
+                _is_lag_error(error) if error else method == "eth_getBlockByNumber" and response.get("result") is None
+            )
+            if not behind or time.monotonic() >= deadline:
+                return response
+            time.sleep(0.5)
+
     def wrap_make_request(self, make_request: Callable[..., Any]) -> Callable[..., Any]:
         def middleware(method: str, params: Any) -> Any:
+            if method == "eth_blockNumber":
+                return self._block_number(make_request, params)
+            if method == "eth_getLogs":
+                return self._until_caught_up(make_request, method, list(params or []))
+            if method == "eth_getBlockByNumber":
+                params = list(params or [])
+                if params and _is_number(params[0]):
+                    return self._until_caught_up(make_request, method, params)
+                return make_request(method, params)
             pos = _READ_BLOCK_PARAM.get(method)
             if pos is None:
                 return make_request(method, params)
             params = list(params or [])
             block = params[pos] if len(params) > pos else "latest"
+            if _is_number(block):
+                return self._until_caught_up(make_request, method, params)
             if block not in ("latest", None):
                 return make_request(method, params)
-            from acb.chain.tx import highest_receipt_block
-
-            chain_id = getattr(self._w3, _CHAIN_ATTR, None)
-            mark = highest_receipt_block(int(chain_id)) if chain_id else -1
+            mark = self._mark()
             if mark < 0:
                 return make_request(method, params)
             target = max(mark, self._latest(make_request))
             while len(params) <= pos:
                 params.append("latest")
             params[pos] = hex(target)
-            deadline = time.monotonic() + self.WAIT_S
-            while True:
-                response = make_request(method, params)
-                error = response.get("error") if isinstance(response, dict) else None
-                if not error or not _is_lag_error(error) or time.monotonic() >= deadline:
-                    return response
-                time.sleep(0.5)
+            return self._until_caught_up(make_request, method, params)
 
         return middleware
+
+
+def _is_number(block: Any) -> bool:
+    """True for an explicit block number (an int or a ``0x`` hex quantity), not a tag or a block hash."""
+    if isinstance(block, int) and not isinstance(block, bool):
+        return True
+    return isinstance(block, str) and block.startswith("0x") and len(block) <= 18
 
 
 def make_web3(net: NetworkProfile, purpose: str = "rpc", *, timeout: float = DEFAULT_TIMEOUT_S) -> Web3:

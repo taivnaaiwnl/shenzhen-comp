@@ -137,6 +137,36 @@ def test_escrow_without_a_claim_is_refunded_after_the_deadline_and_reported(tmp_
     assert env.signer.kinds().count("REPORT") == 1
 
 
+def test_a_report_the_signer_did_not_execute_is_filed_again_a_bounded_number_of_times(tmp_path, monkeypatch):
+    from acb.agent import runtime
+
+    monkeypatch.setattr(runtime, "REPORT_RETRY_S", 0.0)
+    env, mid = setup(tmp_path)
+    env.provider.mode["nova"] = "never"
+    [res] = buy(env, mid, "nova", "fx-sample", 1)
+    env.chain.warp(160)
+    env.signer.status_for["REPORT"] = "rejected"  # e.g. the signer read a node behind the refund
+    env.agent.runtime.tick()
+    assert env.signer.kinds() == ["ESCROW", "REFUND", "REPORT"]
+    env.agent.runtime.tick()
+    assert env.signer.kinds().count("REPORT") == 2
+    env.signer.status_for.clear()
+    env.agent.runtime.tick()
+    assert env.signer.kinds().count("REPORT") == 3
+    assert env.signer.last("REPORT").report.order_id == res["orderId"]
+    env.agent.runtime.tick()
+    assert env.signer.kinds().count("REPORT") == 3  # filed: no more retries
+    # a report that keeps failing is retried REPORT_RETRIES times, then left alone
+    env2, mid2 = setup(tmp_path / "b")
+    env2.provider.mode["atlas"] = "never"
+    buy(env2, mid2, "atlas", "fx-live-15m", 1)
+    env2.chain.warp(151)
+    env2.signer.status_for["REPORT"] = "rejected"
+    for _ in range(6):
+        env2.agent.runtime.tick()
+    assert env2.signer.kinds().count("REPORT") == 1 + runtime.REPORT_RETRIES
+
+
 def test_direct_pay_without_delivery_records_failed_and_reports(tmp_path):
     env, mid = setup(tmp_path)
     env.provider.mode["atlas"] = "never"
