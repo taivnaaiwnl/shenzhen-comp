@@ -93,12 +93,13 @@ def test_default_funding_plan(monkeypatch):
     base = NetworkProfile.load("base_sepolia", {"BASE_SEPOLIA_RPC_URL": "http://127.0.0.1:1"})
     monkeypatch.delenv(FUNDING_USDC_BPS_ENV, raising=False)
     plan = default_funding_plan(base)
-    # config/networks.yaml scales Base Sepolia to the funded deployer: usdc_bps 9500, topup 0.00004 ETH
+    # config/networks.yaml scales Base Sepolia to the funded deployer: usdc_bps 9500, topup 0.00008 ETH
+    # (the bureau sends about 76 transactions and Beacon about 47 in one recorded run)
     assert plan.usdc_to_vaults == {"wallet": 14_250_000, "beacon": 5_700_000}
     assert sum(plan.usdc_to_vaults.values()) <= 20_000_000
     assert set(plan.eth) >= {"owner", "admin", "agent_signer", "bureau", "autonomy", "beacon_owner", "atlas"}
-    assert "deployer" not in plan.eth and all(v == 40_000_000_000_000 for v in plan.eth.values())
-    assert sum(plan.eth.values()) <= 800_000_000_000_000  # leaves room for the deployments in 0.0012 ETH
+    assert "deployer" not in plan.eth and all(v == 80_000_000_000_000 for v in plan.eth.values())
+    assert sum(plan.eth.values()) <= 1_600_000_000_000_000  # leaves room for the deployments in 0.0024 ETH
     monkeypatch.setenv(FUNDING_USDC_BPS_ENV, "9000")
     scaled = default_funding_plan(base)
     assert scaled.usdc_to_vaults == {"wallet": 13_500_000, "beacon": 5_400_000}
