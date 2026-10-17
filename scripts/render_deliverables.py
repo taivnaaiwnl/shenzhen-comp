@@ -274,11 +274,11 @@ def _numbers(value: Any) -> list[int]:
     return [_int(v) for v in value]
 
 
-def _median(values: list[int]) -> int | float:
+def _median(values: list[int]) -> int:
+    """The lower median: with an even count, the smaller middle value (gas, prices: a value that occurred)."""
     if not values:
         raise Unresolved("median of an empty list")
-    m = statistics.median(values)
-    return int(m) if float(m).is_integer() else m
+    return int(statistics.median_low(values))
 
 
 def _count(value: Any) -> int:
