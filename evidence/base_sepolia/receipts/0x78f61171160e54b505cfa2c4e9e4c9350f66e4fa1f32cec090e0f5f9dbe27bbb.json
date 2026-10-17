@@ -1,0 +1,85 @@
+{
+  "blockTimestamp": 1792226832,
+  "receipt": {
+    "blobGasUsed": "0xae38",
+    "blockHash": "0xfc049d2cd12cf5ab9828b64ff30890ee495f9c5f357ec47f38e7b745bed46f6f",
+    "blockNumber": "0x2dfeb98",
+    "contractAddress": null,
+    "cumulativeGasUsed": "0x9bb5c4",
+    "daFootprintGasScalar": "0x1be",
+    "effectiveGasPrice": "0x5b8d80",
+    "from": "0x015cdcbb4391ab315663e5e4564cf071779469e0",
+    "gasUsed": "0x17076",
+    "l1BaseFeeScalar": "0x44d",
+    "l1BlobBaseFee": "0x6",
+    "l1BlobBaseFeeScalar": "0xa118b",
+    "l1Fee": "0x23a",
+    "l1GasPrice": "0x63",
+    "l1GasUsed": "0x640",
+    "logs": [
+      {
+        "address": "0x036cbd53842c5426634e7929541ec2318f3dcf7e",
+        "blockHash": "0xfc049d2cd12cf5ab9828b64ff30890ee495f9c5f357ec47f38e7b745bed46f6f",
+        "blockNumber": "0x2dfeb98",
+        "blockTimestamp": "0x6ad33610",
+        "data": "0x00000000000000000000000000000000000000000000000000000000000186a0",
+        "logIndex": "0x7a",
+        "removed": false,
+        "topics": [
+          "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+          "0x000000000000000000000000de6b53b66d34daefaa3ce526468b4b58f5db9ff1",
+          "0x000000000000000000000000837c65c2fcf7762453dbbf08e17b56d4306f3a66"
+        ],
+        "transactionHash": "0x78f61171160e54b505cfa2c4e9e4c9350f66e4fa1f32cec090e0f5f9dbe27bbb",
+        "transactionIndex": "0x11"
+      },
+      {
+        "address": "0xde6b53b66d34daefaa3ce526468b4b58f5db9ff1",
+        "blockHash": "0xfc049d2cd12cf5ab9828b64ff30890ee495f9c5f357ec47f38e7b745bed46f6f",
+        "blockNumber": "0x2dfeb98",
+        "blockTimestamp": "0x6ad33610",
+        "data": "0x00000000000000000000000000000000000000000000000000000000000186a0000000000000000000000000000000000000000000000000000000000000000235330ca9eb2b4fa9d537972b7287226754192342faf89abeab01503c8ba9d36c",
+        "logIndex": "0x7b",
+        "removed": false,
+        "topics": [
+          "0x1503142a11d68df925f8caac318850f25fb527a5f2631f5da4514a17c304f0dd",
+          "0xac35c35124adb1e74d716ee7f343c0db16de9ab50473a5c271afda8c5284c339",
+          "0x000000000000000000000000000000000000000000000000000000000000264a",
+          "0x000000000000000000000000015cdcbb4391ab315663e5e4564cf071779469e0"
+        ],
+        "transactionHash": "0x78f61171160e54b505cfa2c4e9e4c9350f66e4fa1f32cec090e0f5f9dbe27bbb",
+        "transactionIndex": "0x11"
+      }
+    ],
+    "logsBloom": "0x00000004040000000000000800000000000000000200000000c00000000200000000000000000000000000000000002000000040000000000000000000000100000000004000000000000408000000000000001000000000000000000000000800001000000000000000000000000000002000000000000000008010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010400000000000000000000000000000000000000000000002000000000000400000000000000000000000000000000000000000000000000000004000000000000020000000000000020000000000020000000000",
+    "status": "0x1",
+    "to": "0xde6b53b66d34daefaa3ce526468b4b58f5db9ff1",
+    "transactionHash": "0x78f61171160e54b505cfa2c4e9e4c9350f66e4fa1f32cec090e0f5f9dbe27bbb",
+    "transactionIndex": "0x11",
+    "type": "0x2"
+  },
+  "transaction": {
+    "accessList": [],
+    "blockHash": "0xfc049d2cd12cf5ab9828b64ff30890ee495f9c5f357ec47f38e7b745bed46f6f",
+    "blockNumber": "0x2dfeb98",
+    "blockTimestamp": "0x6ad33610",
+    "chainId": "0x14a34",
+    "from": "0x015cdcbb4391ab315663e5e4564cf071779469e0",
+    "gas": "0x20c17",
+    "gasPrice": "0x5b8d80",
+    "hash": "0x78f61171160e54b505cfa2c4e9e4c9350f66e4fa1f32cec090e0f5f9dbe27bbb",
+    "input": "0x67d42a8bac35c35124adb1e74d716ee7f343c0db16de9ab50473a5c271afda8c5284c339",
+    "maxFeePerGas": "0xa7d8c0",
+    "maxPriorityFeePerGas": "0xf4240",
+    "nonce": "0xa5",
+    "r": "0x3a041d5eb31521845e766f9a7ceb1e64723df4d32c1638d8f663e49daf2fde36",
+    "s": "0x15f48313a4184606f928f1c23ca6f66d4cd57999b30cbb002041cd744af75e7d",
+    "to": "0xde6b53b66d34daefaa3ce526468b4b58f5db9ff1",
+    "transactionIndex": "0x11",
+    "type": "0x2",
+    "v": "0x1",
+    "value": "0x0",
+    "yParity": "0x1"
+  },
+  "txHash": "0x78f61171160e54b505cfa2c4e9e4c9350f66e4fa1f32cec090e0f5f9dbe27bbb"
+}

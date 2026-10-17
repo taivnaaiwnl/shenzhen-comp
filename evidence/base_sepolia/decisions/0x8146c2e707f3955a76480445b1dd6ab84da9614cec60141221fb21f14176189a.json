@@ -1,0 +1,140 @@
+{
+  "schema": "acb-decision-record/1",
+  "seq": 23,
+  "ts": "2026-10-17T09:18:52Z",
+  "orderId": "0xeee94820c15fdbf41db3ad6d62ff0c658e58cb01d04af55afa5ff32d3f805aa7",
+  "payee": {
+    "agentId": "9803",
+    "name": "Ghost Feeds",
+    "grade": "D"
+  },
+  "amount": "400000",
+  "reasonCodes": [
+    2100
+  ],
+  "request": {
+    "requestId": "f5c7a335-d18b-4427-a43f-26651d9ff23b",
+    "kind": "RECORD_DECISION",
+    "status": "refused",
+    "detail": "",
+    "proposalHash": "0x76893d590a99e7669d58255b8bb99f6bd864de2e3737255fcdab35659f811908",
+    "invoiceHash": "0xc52dbd564603dd7eb7fbdef745a5e2b7500bbeabbf341dcbb43487b25937693b",
+    "mandateId": "0x018ca7d23a68e90d50ef7fef330f20da7c092b4ae57b0b1dd565e125009c3887",
+    "agentDecision": {
+      "outcome": "REFUSE",
+      "reasons": [
+        2100
+      ]
+    },
+    "signerDecision": {
+      "outcome": "REFUSE",
+      "reasons": [
+        2100
+      ],
+      "decisionHash": "0x8146c2e707f3955a76480445b1dd6ab84da9614cec60141221fb21f14176189a"
+    },
+    "violation": null,
+    "checks": [
+      {
+        "name": "SCHEMA",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "FROZEN",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "CHAIN_TOKEN",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "INVOICE_AUTH",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "DUPLICATE",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "MANDATE_AUTH",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "PAYEE_IN_MANDATE",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "PROVENANCE_PAYEE",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "PROVENANCE_AMOUNT",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "INJECTION",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "DENYLIST",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "RESERVE",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "GRADE",
+        "passed": true,
+        "code": 2100
+      },
+      {
+        "name": "EXPOSURE",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "TIER_LIMITS",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "MANDATE_BUDGET",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "SPIKE",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "LLM_MERGE",
+        "passed": true,
+        "code": null
+      }
+    ],
+    "tx": [
+      {
+        "hash": "0xae242fbeae9eee131a34fd7ee6e26af55503bfb5a581116649435a13dd0d12a0",
+        "status": 1,
+        "nonce": 27,
+        "gasUsed": 99642,
+        "function": "recordDecision"
+      }
+    ],
+    "durationMs": 38702
+  }
+}

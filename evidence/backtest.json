@@ -1,0 +1,234 @@
+{
+  "expectations": {
+    "dustRingNeverAorB": true,
+    "smearScoreDeltaZero": true,
+    "washRingNeverAorB": true
+  },
+  "metrics": {
+    "aucBps": 9758,
+    "badCount": 88,
+    "bestGradeByType": {
+      "anchor": "A",
+      "bust_out": "A",
+      "buyer": "A",
+      "defaulter": "A",
+      "dust_subject": "C",
+      "dust_sybil": "NEW",
+      "hijacked": "A",
+      "honest_fast": "A",
+      "honest_slow": "A",
+      "smear_sybil": "NEW",
+      "spammer": "B",
+      "wash": "NEW"
+    },
+    "defaultersNeverD": 3,
+    "defaultersReachedD": 19,
+    "falseAdverseBps": 0,
+    "finalGradesByType": {
+      "anchor": {
+        "A": 3
+      },
+      "bust_out": {
+        "D": 15
+      },
+      "buyer": {
+        "A": 30
+      },
+      "defaulter": {
+        "A": 2,
+        "B": 2,
+        "C": 1,
+        "D": 19
+      },
+      "dust_subject": {
+        "C": 4
+      },
+      "dust_sybil": {
+        "C": 20
+      },
+      "hijacked": {
+        "D": 15
+      },
+      "honest_fast": {
+        "A": 111
+      },
+      "honest_slow": {
+        "A": 23,
+        "B": 7
+      },
+      "smear_sybil": {
+        "NEW": 18
+      },
+      "spammer": {
+        "B": 2,
+        "D": 13
+      },
+      "wash": {
+        "D": 15
+      }
+    },
+    "goodCount": 141,
+    "ksBps": 8863,
+    "medianRoundsToD": 1,
+    "migration": {
+      "A": {
+        "A": 532,
+        "B": 11,
+        "C": 4,
+        "D": 14,
+        "NEW": 0,
+        "NONE": 0
+      },
+      "B": {
+        "A": 23,
+        "B": 28,
+        "C": 2,
+        "D": 9,
+        "NEW": 0,
+        "NONE": 0
+      },
+      "C": {
+        "A": 96,
+        "B": 16,
+        "C": 155,
+        "D": 28,
+        "NEW": 0,
+        "NONE": 0
+      },
+      "D": {
+        "A": 1,
+        "B": 0,
+        "C": 2,
+        "D": 188,
+        "NEW": 0,
+        "NONE": 0
+      },
+      "NEW": {
+        "A": 70,
+        "B": 15,
+        "C": 74,
+        "D": 28,
+        "NEW": 204,
+        "NONE": 0
+      },
+      "NONE": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 0,
+        "NEW": 0,
+        "NONE": 0
+      }
+    },
+    "psiX10000": [
+      8599,
+      10242,
+      793,
+      127,
+      120
+    ],
+    "smearCases": 36,
+    "smearGradeChanges": 0,
+    "smearMaxAbsDelta": 0
+  },
+  "model": {
+    "configHash": "0xd00078e5f1cd42196e46394f13a78523908273a9192fbef50689ac9c819adceb",
+    "id": "acb-sc-1.0.0",
+    "profile": "demo"
+  },
+  "params": {
+    "agents": 300,
+    "anchors": 3,
+    "rounds": 6,
+    "seed": 2026
+  },
+  "population": {
+    "anchor": 3,
+    "bust_out": 15,
+    "buyer": 30,
+    "defaulter": 24,
+    "dust_subject": 4,
+    "dust_sybil": 20,
+    "hijacked": 15,
+    "honest_fast": 111,
+    "honest_slow": 30,
+    "smear_sybil": 18,
+    "spammer": 15,
+    "wash": 15
+  },
+  "rounds": [
+    {
+      "falseAdverseBps": 3274,
+      "grades": {
+        "A": 8,
+        "B": 3,
+        "C": 83,
+        "D": 1,
+        "NEW": 205,
+        "NONE": 0
+      },
+      "round": 1
+    },
+    {
+      "falseAdverseBps": 4269,
+      "grades": {
+        "A": 45,
+        "B": 14,
+        "C": 119,
+        "D": 26,
+        "NEW": 96,
+        "NONE": 0
+      },
+      "round": 2
+    },
+    {
+      "falseAdverseBps": 175,
+      "grades": {
+        "A": 164,
+        "B": 18,
+        "C": 33,
+        "D": 39,
+        "NEW": 46,
+        "NONE": 0
+      },
+      "round": 3
+    },
+    {
+      "falseAdverseBps": 0,
+      "grades": {
+        "A": 175,
+        "B": 12,
+        "C": 30,
+        "D": 58,
+        "NEW": 25,
+        "NONE": 0
+      },
+      "round": 4
+    },
+    {
+      "falseAdverseBps": 0,
+      "grades": {
+        "A": 169,
+        "B": 15,
+        "C": 30,
+        "D": 67,
+        "NEW": 19,
+        "NONE": 0
+      },
+      "round": 5
+    },
+    {
+      "falseAdverseBps": 0,
+      "grades": {
+        "A": 169,
+        "B": 11,
+        "C": 25,
+        "D": 77,
+        "NEW": 18,
+        "NONE": 0
+      },
+      "round": 6
+    }
+  ],
+  "schema": "acb-backtest/1"
+}

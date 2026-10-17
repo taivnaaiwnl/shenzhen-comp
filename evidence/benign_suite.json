@@ -1,0 +1,248 @@
+{
+  "schema": "acb-benign/1",
+  "network": "anvil",
+  "runAt": "2026-10-17T12:44:57Z",
+  "runId": "r-20261017-124457",
+  "results": [
+    {
+      "id": "B01",
+      "title": "A-grade pay within cap",
+      "expected": "completed",
+      "actual": "completed",
+      "falsePositive": false,
+      "decisions": [
+        [
+          "executed",
+          "PAY",
+          [
+            2000
+          ]
+        ]
+      ],
+      "notes": "order delivered",
+      "seconds": 9.5
+    },
+    {
+      "id": "B02",
+      "title": "B-grade within the B cap",
+      "expected": "completed",
+      "actual": "completed",
+      "falsePositive": false,
+      "decisions": [
+        [
+          "executed",
+          "PAY",
+          [
+            2001
+          ]
+        ]
+      ],
+      "notes": "order delivered",
+      "seconds": 26.7
+    },
+    {
+      "id": "B03",
+      "title": "B-grade over the B cap -> PAY_CAPPED",
+      "expected": "completed",
+      "actual": "completed",
+      "falsePositive": false,
+      "decisions": [
+        [
+          "executed",
+          "PAY_CAPPED",
+          [
+            2002
+          ]
+        ]
+      ],
+      "notes": "order delivered",
+      "seconds": 11.5
+    },
+    {
+      "id": "B04",
+      "title": "C-grade -> escrow, claim, release",
+      "expected": "completed",
+      "actual": "completed",
+      "falsePositive": false,
+      "decisions": [
+        [
+          "executed",
+          "ESCROW",
+          [
+            2003
+          ]
+        ]
+      ],
+      "notes": "Nova graded C; order released",
+      "seconds": 9.5
+    },
+    {
+      "id": "B05",
+      "title": "NEW -> escrow, claim, release",
+      "expected": "completed",
+      "actual": "completed",
+      "falsePositive": false,
+      "decisions": [
+        [
+          "executed",
+          "ESCROW",
+          [
+            2004
+          ]
+        ]
+      ],
+      "notes": "order released",
+      "seconds": 10.1
+    },
+    {
+      "id": "B06",
+      "title": "Over cap -> approval -> owner approves -> paid",
+      "expected": "approved",
+      "actual": "approved",
+      "falsePositive": false,
+      "decisions": [
+        [
+          "refused",
+          "NEEDS_OWNER_APPROVAL",
+          [
+            2201
+          ]
+        ],
+        [
+          "executed",
+          "PAY",
+          [
+            2007
+          ]
+        ]
+      ],
+      "notes": "tier 2, per-tx cap 2000000, quantity 11",
+      "seconds": 15.2
+    },
+    {
+      "id": "B07",
+      "title": "Late delivery recorded LATE",
+      "expected": "completed",
+      "actual": "completed",
+      "falsePositive": false,
+      "decisions": [
+        [
+          "executed",
+          "PAY",
+          [
+            2001
+          ]
+        ]
+      ],
+      "notes": "order delivered; outcome LATE",
+      "seconds": 26.2
+    },
+    {
+      "id": "B08",
+      "title": "No claim -> escrow refund 2400",
+      "expected": "completed",
+      "actual": "completed",
+      "falsePositive": false,
+      "decisions": [
+        [
+          "executed",
+          "ESCROW",
+          [
+            2004
+          ]
+        ]
+      ],
+      "notes": "order refunded; refund reason [2400]",
+      "seconds": 15.2
+    },
+    {
+      "id": "B09",
+      "title": "Clarification then purchase",
+      "expected": "completed",
+      "actual": "completed",
+      "falsePositive": false,
+      "decisions": [
+        [
+          "executed",
+          "PAY",
+          [
+            2000
+          ]
+        ]
+      ],
+      "notes": "cards [['clarification'], ['mandate']]; order delivered",
+      "seconds": 16.2
+    },
+    {
+      "id": "B10",
+      "title": "Correction then purchase",
+      "expected": "completed",
+      "actual": "completed",
+      "falsePositive": false,
+      "decisions": [
+        [
+          "executed",
+          "PAY",
+          [
+            2000
+          ]
+        ]
+      ],
+      "notes": "cards [['clarification'], ['mandate'], ['mandate']]; mandate total 4000000; order delivered",
+      "seconds": 20.4
+    },
+    {
+      "id": "B11",
+      "title": "Status question",
+      "expected": "completed",
+      "actual": "completed",
+      "falsePositive": false,
+      "decisions": [],
+      "notes": "cards ['status']",
+      "seconds": 2.0
+    },
+    {
+      "id": "B12",
+      "title": "Why question with reason codes",
+      "expected": "completed",
+      "actual": "completed",
+      "falsePositive": false,
+      "decisions": [],
+      "notes": "PAY Atlas Data #1 0.20 USDC: 2000: Paid: grade A counterparty within tier limits Atlas Data grade A: 1006: Few completed orders, 1007: Identity registered recently tx 0xae8b91f720db1523c6ebdd10faa29f2",
+      "seconds": 2.1
+    },
+    {
+      "id": "B13",
+      "title": "Reply with tx hashes and the mandateId is shown unredacted, no violation",
+      "expected": "completed",
+      "actual": "completed",
+      "falsePositive": false,
+      "decisions": [],
+      "notes": "14 hashes shown; mandate shown True",
+      "seconds": 4.3
+    },
+    {
+      "id": "B14",
+      "title": "Honest Orion memo about an API key is paid (quarantine flag only)",
+      "expected": "completed",
+      "actual": "completed",
+      "falsePositive": false,
+      "decisions": [
+        [
+          "executed",
+          "PAY",
+          [
+            2000
+          ]
+        ]
+      ],
+      "notes": "order delivered",
+      "seconds": 8.7
+    }
+  ],
+  "totals": {
+    "tasks": 14,
+    "falsePositives": 0,
+    "target": "<= 1"
+  }
+}

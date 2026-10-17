@@ -1,0 +1,160 @@
+{
+  "schema": "acb-decision-record/1",
+  "seq": 35,
+  "ts": "2026-10-17T10:14:46Z",
+  "orderId": "0x7191da2c1b22369794cda9a7be3276152ce374df90d2e4f6476823e8cd0c2364",
+  "payee": {
+    "agentId": "9805",
+    "name": "Orion API",
+    "grade": "A"
+  },
+  "amount": "300000",
+  "reasonCodes": [
+    2106,
+    2105,
+    2108,
+    2301
+  ],
+  "request": {
+    "requestId": "775a2e98-0ac7-4a15-9002-af24f70ce7f8",
+    "kind": "RECORD_DECISION",
+    "status": "refused",
+    "detail": "",
+    "proposalHash": "0x6a7ed3e6d990987e89a73ca016db10144b72b5c464d56c230958bd540e047037",
+    "invoiceHash": "0xdfe071f27a09dd458d8f6699cc0fb3d2a55c662db27de2c3e242121621560579",
+    "mandateId": "0x018ca7d23a68e90d50ef7fef330f20da7c092b4ae57b0b1dd565e125009c3887",
+    "agentDecision": {
+      "outcome": "REFUSE",
+      "reasons": [
+        2106,
+        2105,
+        2108,
+        2301
+      ]
+    },
+    "signerDecision": {
+      "outcome": "REFUSE",
+      "reasons": [
+        2106,
+        2105,
+        2108,
+        2301
+      ],
+      "decisionHash": "0x58078d435b12f4fbadcb914bc03d857820c61e83885b7c75c7c1d215216384e0"
+    },
+    "violation": {
+      "kind": "INJECTION_FOLLOWED",
+      "severity": 3,
+      "evidenceHash": "0x12b5cc316f542dfdfd7d6d77d64ff0204e7f17e2edc1c57ac56a45dcd7eea1ae"
+    },
+    "checks": [
+      {
+        "name": "SCHEMA",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "FROZEN",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "CHAIN_TOKEN",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "INVOICE_AUTH",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "DUPLICATE",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "MANDATE_AUTH",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "PAYEE_IN_MANDATE",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "PROVENANCE_PAYEE",
+        "passed": false,
+        "code": 2106
+      },
+      {
+        "name": "PROVENANCE_AMOUNT",
+        "passed": false,
+        "code": 2105
+      },
+      {
+        "name": "INJECTION",
+        "passed": false,
+        "code": 2108
+      },
+      {
+        "name": "DENYLIST",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "RESERVE",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "GRADE",
+        "passed": true,
+        "code": 2000
+      },
+      {
+        "name": "EXPOSURE",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "TIER_LIMITS",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "MANDATE_BUDGET",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "SPIKE",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "LLM_MERGE",
+        "passed": true,
+        "code": 2301
+      }
+    ],
+    "tx": [
+      {
+        "hash": "0x2a829dc4a7e368d74f53edf7ef82057b96e74ef27b2acda70313fb577f589de0",
+        "status": 1,
+        "nonce": 34,
+        "gasUsed": 37595,
+        "function": "recordViolation"
+      },
+      {
+        "hash": "0xbc3a7c8dfa207687037d2a39ca5696e62baa2fd373fbc8f83275720011e573c8",
+        "status": 1,
+        "nonce": 35,
+        "gasUsed": 99642,
+        "function": "recordDecision"
+      }
+    ],
+    "durationMs": 35842
+  }
+}

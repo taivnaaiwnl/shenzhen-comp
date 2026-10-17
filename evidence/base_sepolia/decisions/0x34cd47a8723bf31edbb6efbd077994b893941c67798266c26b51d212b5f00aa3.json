@@ -1,0 +1,140 @@
+{
+  "schema": "acb-decision-record/1",
+  "seq": 10,
+  "ts": "2026-10-17T09:04:08Z",
+  "orderId": "0x8205c475b3c1b298d2a7a0c011502b3c28cffade783dc5a1eedd42053142bdfa",
+  "payee": {
+    "agentId": "9806",
+    "name": "Nova Labs",
+    "grade": "NEW"
+  },
+  "amount": "400000",
+  "reasonCodes": [
+    2004
+  ],
+  "request": {
+    "requestId": "4110f5de-3f9a-4a42-b7f4-b40f0e425eb7",
+    "kind": "ESCROW",
+    "status": "executed",
+    "detail": "",
+    "proposalHash": "0xa3803a91160a3d80cf68e3a690dba43536a897c680800abe3775a8ff0135265b",
+    "invoiceHash": "0xaac2f9267cf6009d25afce735d3374f8b5f01861120bb7d5392bcbd22f8fd544",
+    "mandateId": "0x018ca7d23a68e90d50ef7fef330f20da7c092b4ae57b0b1dd565e125009c3887",
+    "agentDecision": {
+      "outcome": "ESCROW",
+      "reasons": [
+        2004
+      ]
+    },
+    "signerDecision": {
+      "outcome": "ESCROW",
+      "reasons": [
+        2004
+      ],
+      "decisionHash": "0x34cd47a8723bf31edbb6efbd077994b893941c67798266c26b51d212b5f00aa3"
+    },
+    "violation": null,
+    "checks": [
+      {
+        "name": "SCHEMA",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "FROZEN",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "CHAIN_TOKEN",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "INVOICE_AUTH",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "DUPLICATE",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "MANDATE_AUTH",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "PAYEE_IN_MANDATE",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "PROVENANCE_PAYEE",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "PROVENANCE_AMOUNT",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "INJECTION",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "DENYLIST",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "RESERVE",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "GRADE",
+        "passed": true,
+        "code": 2004
+      },
+      {
+        "name": "EXPOSURE",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "TIER_LIMITS",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "MANDATE_BUDGET",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "SPIKE",
+        "passed": true,
+        "code": null
+      },
+      {
+        "name": "LLM_MERGE",
+        "passed": true,
+        "code": null
+      }
+    ],
+    "tx": [
+      {
+        "hash": "0x36bdc123e8a7b0f2ed32baebb39a23a75a8ab14e457e9430f5314c41f1314e7d",
+        "status": 1,
+        "nonce": 21,
+        "gasUsed": 314681,
+        "function": "escrow"
+      }
+    ],
+    "durationMs": 19218
+  }
+}

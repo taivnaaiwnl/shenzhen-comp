@@ -1,0 +1,195 @@
+{
+  "schema": "acb-deployments/1",
+  "network": "base_sepolia",
+  "chainId": 84532,
+  "deployedAt": "2026-10-17T08:35:05Z",
+  "gitCommit": "2e716da796a200e379b66d69869133625cf5a718",
+  "startBlock": 48228906,
+  "roles": {
+    "deployer": "0xb63b71793d03246adb7fc17f126d56f05215a069",
+    "owner": "0xbf35e6b05ae5804b5739be12d8c984c88bd3291b",
+    "admin": "0x3308123b0404bc6088d7b239f46e85886656dd1c",
+    "agentSigner": "0x773171271e8cfe901289fa7957b4d4e6768465d0",
+    "agentSignerNext": "0x4fa005c70f4a53a6fbc91187570a4fd7409b3ea5",
+    "bureau": "0x170dc25a14b84d01856b6adfca9cb40d9c4b1e71",
+    "autonomy": "0x55b299d38a7fa2b1dbf851bd837c347a8a8bb976"
+  },
+  "contracts": {
+    "IdentityRegistry": {
+      "address": "0x8004a818bfb912233c491871b3d84c89a494bd9e",
+      "official": true,
+      "implementation": "0x7274e874ca62410a93bd8bf61c69d8045e399c02",
+      "version": "2.0.0"
+    },
+    "ReputationRegistry": {
+      "address": "0x8004b663056a597dffe9eccc1965a193b7388713",
+      "official": true,
+      "implementation": "0x16e0fa7f7c56b9a767e34b192b51f921be31da34",
+      "version": "2.0.0"
+    },
+    "USDC": {
+      "address": "0x036cbd53842c5426634e7929541ec2318f3dcf7e",
+      "decimals": 6,
+      "mock": false
+    },
+    "AgentCreditBureau": {
+      "address": "0xd88f1f951bace92b331d2a94eaf2075352594374",
+      "txHash": "0xc78e765e73e0b04bfdbd6ab23229d248c1bf76a1cf9305cc351bd3ddd7e0bdb0",
+      "block": 48228909,
+      "upgradeDelay": 60
+    }
+  },
+  "vaultCodeHash": "0xacc71e76aa7a8dfe27201dbe4e8494701206795c13882359a10830d44bfd5856",
+  "anchors": [
+    "9807"
+  ],
+  "agents": {
+    "wallet": {
+      "agentId": "9800",
+      "name": "Research Wallet",
+      "identityOwner": "0xbf35e6b05ae5804b5739be12d8c984c88bd3291b",
+      "wallet": null,
+      "registerTx": "0xab230bdb832ea6601091cf5fcb26d0f80519a0877142158d7aa7060e8622b348",
+      "category": "research",
+      "skus": {}
+    },
+    "atlas": {
+      "agentId": "9801",
+      "name": "Atlas Data",
+      "identityOwner": "0x4a68fcadaf0b0a4b3254aff81dd2f5b779dae786",
+      "wallet": "0x4a68fcadaf0b0a4b3254aff81dd2f5b779dae786",
+      "registerTx": "0x3ac3ba5ffbaa1ff490bce30974c9b8ad7cd3728bc66c4a6b9e1c1098419a7391",
+      "category": "fx-data",
+      "skus": {
+        "fx-live-15m": "200000"
+      }
+    },
+    "slowpoke": {
+      "agentId": "9802",
+      "name": "Slowpoke Analytics",
+      "identityOwner": "0x837c65c2fcf7762453dbbf08e17b56d4306f3a66",
+      "wallet": "0x837c65c2fcf7762453dbbf08e17b56d4306f3a66",
+      "registerTx": "0x14d3363fad89c0b98cb030743bfb1559f5f77bf30abd4e339cb3aa3c982350f7",
+      "category": "fx-data",
+      "skus": {
+        "fx-history-day": "200000",
+        "fx-history-day-promo": "100000"
+      }
+    },
+    "ghost": {
+      "agentId": "9803",
+      "name": "Ghost Feeds",
+      "identityOwner": "0x15d402017e5c82dee56159adf582db98ca1072f5",
+      "wallet": "0x15d402017e5c82dee56159adf582db98ca1072f5",
+      "registerTx": "0x27f7c1f161b6209447a8d4436f33cb4fc0f509b1850c819124dc024f6d6653d5",
+      "category": "fx-data",
+      "skus": {
+        "fx-backup-15m": "200000"
+      }
+    },
+    "blaster": {
+      "agentId": "9804",
+      "name": "Blaster Ads",
+      "identityOwner": "0xd76227fc0a65f83be4936e7aa0b97ac18997582f",
+      "wallet": "0xd76227fc0a65f83be4936e7aa0b97ac18997582f",
+      "registerTx": "0x3a24102ceb407d22c10a403fa5d67bb8d406ed04808802f2dab3996897dd99c3",
+      "category": "ads",
+      "skus": {
+        "ad-slot": "500000"
+      }
+    },
+    "orion": {
+      "agentId": "9805",
+      "name": "Orion API",
+      "identityOwner": "0x9b58c199150dfae6fb180245e761abcd5ca6e65e",
+      "wallet": "0x9b58c199150dfae6fb180245e761abcd5ca6e65e",
+      "registerTx": "0xcbb0d7f57181aa76c49aa84469dc490c99d7ee00d213bd36aa7b075e9f0b1600",
+      "category": "api-calls",
+      "skus": {
+        "api-bundle-1k": "200000",
+        "api-priority-1k": "300000"
+      }
+    },
+    "nova": {
+      "agentId": "9806",
+      "name": "Nova Labs",
+      "identityOwner": "0x13672943ab1d6bc45cc81740167e6c684ae34ee3",
+      "wallet": "0x13672943ab1d6bc45cc81740167e6c684ae34ee3",
+      "registerTx": "0xf87bb192ab02b7b576aff52d7e9a2f410d8dfd220a32dfa64fb98e1fb900e22f",
+      "category": "sample-data",
+      "skus": {
+        "fx-sample": "400000"
+      }
+    },
+    "beacon": {
+      "agentId": "9807",
+      "name": "Beacon Research",
+      "identityOwner": "0x015cdcbb4391ab315663e5e4564cf071779469e0",
+      "wallet": "0x015cdcbb4391ab315663e5e4564cf071779469e0",
+      "registerTx": "0x0a925a5b2bcf3e84738be2ce464f421f0abe0f9474ff331e48e8a5101ca72a33",
+      "category": "research",
+      "skus": {}
+    },
+    "echo1": {
+      "agentId": "9808",
+      "name": "Echo-1",
+      "identityOwner": "0x8f85500693531621e4b95f27f63470025e1e9060",
+      "wallet": "0x8f85500693531621e4b95f27f63470025e1e9060",
+      "registerTx": "0x33b9b3317dfb642b0d8b35519146de2aff7ffa615b5b840ad17ad88960be0714",
+      "category": "research",
+      "skus": {}
+    },
+    "echo2": {
+      "agentId": "9809",
+      "name": "Echo-2",
+      "identityOwner": "0xe6b377acc62ea2bc2ffd10b518a3f563754b7ec8",
+      "wallet": "0xe6b377acc62ea2bc2ffd10b518a3f563754b7ec8",
+      "registerTx": "0xfa501094895af02ad70704acd297875f49676e03d2231b322751f8949e2220de",
+      "category": "research",
+      "skus": {}
+    },
+    "echo3": {
+      "agentId": "9810",
+      "name": "Echo-3",
+      "identityOwner": "0xd548e8067668d1a2adb030f42370b0a8b2d00993",
+      "wallet": "0xd548e8067668d1a2adb030f42370b0a8b2d00993",
+      "registerTx": "0x349f4892fa9118700b366f8c96e6f4f70c38921b6d79723bbc830904c25c92da",
+      "category": "research",
+      "skus": {}
+    },
+    "attacker": {
+      "agentId": "9811",
+      "name": "Treasury Helper",
+      "identityOwner": "0xb7d1c318888f0f5fc4abf2e23c5879cd87927884",
+      "wallet": "0xb7d1c318888f0f5fc4abf2e23c5879cd87927884",
+      "registerTx": "0x1acabb752386c206e2637afd0c939e20bc5762a532bea92931fb3b067d7b3099",
+      "category": "research",
+      "skus": {}
+    }
+  },
+  "vaults": {
+    "wallet": {
+      "address": "0x16c7a9f608bf6d02788749a1134aed0eeddc12ad",
+      "agentId": "9800",
+      "owner": "0xbf35e6b05ae5804b5739be12d8c984c88bd3291b",
+      "agent": "0x773171271e8cfe901289fa7957b4d4e6768465d0",
+      "autonomy": "0x55b299d38a7fa2b1dbf851bd837c347a8a8bb976",
+      "profile": "wallet",
+      "deployTx": "0x2a5d39efe3e0e5ec11a733da1b90f410e7e5ab59f164563b0d37b59e145d93e3",
+      "registerVaultTx": "0xff6a88305344c49494795def26a9600882fea7b3cf4007891e8bd20ab62b00c7"
+    },
+    "beacon": {
+      "address": "0xde6b53b66d34daefaa3ce526468b4b58f5db9ff1",
+      "agentId": "9807",
+      "owner": "0x5acfdfc80e20e11e92ba43477322d139234f07a8",
+      "agent": "0x015cdcbb4391ab315663e5e4564cf071779469e0",
+      "autonomy": "0x55b299d38a7fa2b1dbf851bd837c347a8a8bb976",
+      "profile": "market",
+      "deployTx": "0xda7b5a2840d635eee85f9baed6e484f2e3b480d06281b64f23a99e3c6c2f4644",
+      "registerVaultTx": "0x74744981c06d1c32b23a42a6c6549575f7aa40a14ae940cb9bf620cc9968c24c"
+    }
+  },
+  "abi": {
+    "sha": "0x0ade7da1ee72a56b9d18bfe9917125a14f0813cb3de60f8236cf45b95c47fa37"
+  }
+}
