@@ -69,6 +69,8 @@ ROLE_LABELS = {
 }
 AGENT_KEY_LABELS = frozenset({"agent-signer", "agent-signer-next"})
 TIER_FROZEN = 255
+INITIAL_TIER = 1
+"""The wallet's tier before its vault exists (config/tiers.yaml initial_tier); ``VaultInitialized`` confirms it."""
 
 
 def iso(ts: int) -> str:
@@ -149,7 +151,7 @@ class Recorder:
     expect_revert: set[str] = field(default_factory=set)
     revert_errors: dict[str, str] = field(default_factory=dict)
     notes: dict[str, list[str]] = field(default_factory=dict)
-    wallet_tier: int = 1
+    wallet_tier: int = INITIAL_TIER
     min_interval: float = 0.0
     """Seconds between RPC calls (0 on Anvil; the runner sets 0.125 on a public RPC)."""
     _functions: dict[str, str] = field(default_factory=dict)
@@ -351,6 +353,9 @@ class Recorder:
         for lg in decoded:
             if lg["event"] == "TierChanged" and lg["address"] == wallet_vault:
                 self.wallet_tier = int(lg["args"]["toTier"])
+            elif lg["event"] == "VaultInitialized" and lg["address"] == wallet_vault:
+                # a re-scan on resume starts from the vault's current tier: its deployment sets the real one
+                self.wallet_tier = int(lg["args"]["initialTier"])
         expected_status = 0 if h in self.expect_revert else 1
         revert = self.revert_errors.get(h)
         if status == 0 and revert is None:

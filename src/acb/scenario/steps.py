@@ -777,12 +777,20 @@ def s19(run: Runner, ctx: StepCtx) -> None:
 
 
 def s20(run: Runner, ctx: StepCtx) -> None:
-    from acb.scenario.appeals import resolve_appeal, review_appeal
+    from acb.scenario.appeals import open_appeals, resolve_appeal, review_appeal
 
     env = run.env
     ensure_services(run)
-    filed = env.sim("ghost_appeal", step="S20")
-    appeal_id = int((filed.get("result") or {}).get("appealId") or 0)
+    # a resumed S20 reviews the appeal its first attempt filed (it is in this step's blocks) instead of a second one
+    pending = open_appeals(
+        env.w3, env.dep, run.agent_id("ghost"), int(run.state.get("scanStart") or env.dep.start_block)
+    )
+    if pending:
+        appeal_id = pending[0]
+        ctx.note(f"appeal {appeal_id} was filed before this step was resumed: it is reviewed, no second appeal")
+    else:
+        filed = env.sim("ghost_appeal", step="S20")
+        appeal_id = int((filed.get("result") or {}).get("appealId") or 0)
     ctx.require(appeal_id > 0, "no appeal id")
     review = review_appeal(
         env.w3,

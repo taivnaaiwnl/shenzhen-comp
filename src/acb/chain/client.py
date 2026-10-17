@@ -70,8 +70,10 @@ _RANGE_ERROR_WORDS = (
 _CHAIN_ATTR = "_acb_chain_id"
 ANVIL_CHAIN_ID = 31337
 
-# state reads whose block parameter ("latest") ReadYourWrites pins; value = index of the block parameter
+# reads whose block parameter ("latest") ReadYourWrites pins; value = index of the block parameter.
+# eth_getBlockByNumber("latest") is the head that log queries to "latest" resolve to (get_logs_chunked)
 _READ_BLOCK_PARAM = {
+    "eth_getBlockByNumber": 0,
     "eth_call": 1,
     "eth_estimateGas": 1,
     "eth_getCode": 1,
@@ -79,19 +81,16 @@ _READ_BLOCK_PARAM = {
     "eth_getStorageAt": 2,
     "eth_getTransactionCount": 1,
 }
-_LAG_WORDS = (
-    "header not found",
-    "unknown block",
-    "block not found",
-    "missing trie node",
-    "historical state",
-    "beyond current head",
-)
+# a node that has not reached the block yet; a newer block is never pruned, so these are worth waiting for
+_AHEAD_WORDS = ("header not found", "unknown block", "block not found", "beyond current head")
+# a pinned "latest" read can also hit a node whose state for the block is not ready; at an explicit old block
+# the same words mean pruned history (no archive), which waiting does not fix
+_LAG_WORDS = (*_AHEAD_WORDS, "missing trie node", "historical state")
 
 
-def _is_lag_error(error: Any) -> bool:
+def _is_lag_error(error: Any, words: tuple[str, ...] = _LAG_WORDS) -> bool:
     message = str(error.get("message", "") if isinstance(error, dict) else error).lower()
-    return any(w in message for w in _LAG_WORDS)
+    return any(w in message for w in words)
 
 
 class ReadYourWrites(Web3Middleware):
@@ -99,8 +98,9 @@ class ReadYourWrites(Web3Middleware):
 
     ``sepolia.base.org`` is served by several nodes that can lag each other by a block or two, so a read
     sent right after a receipt may reach a node that has not seen that block (it then reports no code at
-    a contract deployed one block earlier, an old balance, an old mandate). For state reads at "latest"
-    this middleware asks instead for an explicit block: the highest of the newest block any local process
+    a contract deployed one block earlier, an old balance, an old mandate, a head block that ends a log
+    query before our own event). For state and block reads at "latest" this middleware asks instead for an
+    explicit block: the highest of the newest block any local process
     has seen in a receipt (``acb.chain.tx.highest_receipt_block``) and the last ``eth_blockNumber``
     (cached for one second). ``eth_blockNumber`` itself never answers below that mark or below a number it
     answered before, so a caller that reads "the latest block" once and then reads at that number (the
@@ -143,13 +143,17 @@ class ReadYourWrites(Web3Middleware):
         self._answered = max(int(result, 16), self._mark(), self._answered)
         return {**response, "result": hex(self._answered)}
 
-    def _until_caught_up(self, make_request: Callable[..., Any], method: str, params: list) -> Any:
+    def _until_caught_up(
+        self, make_request: Callable[..., Any], method: str, params: list, words: tuple[str, ...] = _AHEAD_WORDS
+    ) -> Any:
         deadline = time.monotonic() + self.WAIT_S
         while True:
             response = make_request(method, params)
             error = response.get("error") if isinstance(response, dict) else None
             behind = (
-                _is_lag_error(error) if error else method == "eth_getBlockByNumber" and response.get("result") is None
+                _is_lag_error(error, words)
+                if error
+                else method == "eth_getBlockByNumber" and response.get("result") is None
             )
             if not behind or time.monotonic() >= deadline:
                 return response
@@ -161,11 +165,6 @@ class ReadYourWrites(Web3Middleware):
                 return self._block_number(make_request, params)
             if method == "eth_getLogs":
                 return self._until_caught_up(make_request, method, list(params or []))
-            if method == "eth_getBlockByNumber":
-                params = list(params or [])
-                if params and _is_number(params[0]):
-                    return self._until_caught_up(make_request, method, params)
-                return make_request(method, params)
             pos = _READ_BLOCK_PARAM.get(method)
             if pos is None:
                 return make_request(method, params)
@@ -182,7 +181,7 @@ class ReadYourWrites(Web3Middleware):
             while len(params) <= pos:
                 params.append("latest")
             params[pos] = hex(target)
-            return self._until_caught_up(make_request, method, params)
+            return self._until_caught_up(make_request, method, params, _LAG_WORDS)
 
         return middleware
 

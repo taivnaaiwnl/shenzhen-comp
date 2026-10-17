@@ -15,6 +15,7 @@ from typing import Any
 
 from acb import config
 from acb.scenario.env import EnvError
+from acb.scenario.recorder import INITIAL_TIER
 from acb.scenario.runner import STEP_IDS, Runner, step_index
 
 
@@ -84,6 +85,7 @@ def rebuild_records(runner: Runner, first: int) -> None:
     rec = runner.ensure_recorder()
     rec.scanned_to = int(runner.state.get("scanStart") or 0)
     rec.bind_deployment(runner.env.dep, runner.env.keys)
+    rec.wallet_tier = INITIAL_TIER  # bind_deployment read today's tier; the re-scan starts before the vault existed
     saved = runner.state.get("recorder") or {}
     for h, err in (saved.get("expectRevert") or {}).items():
         rec.mark_expected_revert(h, err)
