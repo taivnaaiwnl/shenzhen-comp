@@ -22,11 +22,13 @@ from __future__ import annotations
 
 import os
 import threading
+import time
 import weakref
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+import requests
 from eth_account.signers.local import LocalAccount
 from web3 import Web3
 from web3.exceptions import TimeExhausted
@@ -445,7 +447,7 @@ class TxSender:
                     tx["to"] = Web3.to_checksum_address(to)
                 signed = self.account.sign_transaction(tx)
                 try:
-                    sent = self.w3.eth.send_raw_transaction(signed.raw_transaction)
+                    sent = self._send_raw(signed.raw_transaction)
                 except Exception as exc:  # noqa: BLE001
                     text = _message(exc)
                     if any(w in text for w in _ALREADY_KNOWN):
@@ -458,6 +460,26 @@ class TxSender:
                     raise TxSendError(f"node refused the transaction: {exc}") from None
                 self.nonces.advance(nonce)
                 return to_hex(sent), nonce
+        raise TxSendError("unreachable")  # pragma: no cover
+
+    SEND_RETRIES = 3
+
+    def _send_raw(self, raw: bytes) -> Any:
+        """``eth_sendRawTransaction`` that survives a dropped connection.
+
+        A public RPC can close an idle keep-alive connection, and the next request on it fails with a
+        connection error before the node sees it. Sending the same signed transaction again is always
+        safe: it has one nonce and one hash, so it can be mined at most once (a node that already has it
+        answers "already known", which the caller treats as sent)."""
+        delay = 0.5
+        for attempt in range(self.SEND_RETRIES + 1):
+            try:
+                return self.w3.eth.send_raw_transaction(raw)
+            except (requests.ConnectionError, requests.Timeout):
+                if attempt == self.SEND_RETRIES:
+                    raise
+                time.sleep(delay)
+                delay *= 2
         raise TxSendError("unreachable")  # pragma: no cover
 
     def _replay_revert(self, call: dict[str, Any], gas: int, block: int, gas_used: int) -> str:

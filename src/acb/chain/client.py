@@ -15,9 +15,33 @@ import time
 from collections.abc import Callable, Iterable, Mapping
 from typing import Any
 
+import requests
 from web3 import Web3
 from web3.exceptions import Web3RPCError
 from web3.middleware import Web3Middleware
+from web3.providers.rpc.utils import REQUEST_RETRY_ALLOWLIST, ExceptionRetryConfiguration
+
+READ_METHODS = (
+    "eth_blockNumber",
+    "eth_call",
+    "eth_chainId",
+    "eth_estimateGas",
+    "eth_feeHistory",
+    "eth_gasPrice",
+    "eth_getBalance",
+    "eth_getBlockByHash",
+    "eth_getBlockByNumber",
+    "eth_getCode",
+    "eth_getLogs",
+    "eth_getStorageAt",
+    "eth_getTransactionByHash",
+    "eth_getTransactionCount",
+    "eth_getTransactionReceipt",
+    "eth_maxPriorityFeePerGas",
+)
+"""Side-effect-free calls retried on connection errors and HTTP 429/5xx (a public RPC drops idle
+keep-alive connections). ``eth_sendRawTransaction`` is not here: TxSender resends the same signed
+transaction itself, which is safe because one signed transaction can be mined only once."""
 
 from acb.types import NetworkProfile
 
@@ -133,7 +157,18 @@ def make_web3(net: NetworkProfile, purpose: str = "rpc", *, timeout: float = DEF
     url = net.log_rpc_url if purpose == "logs" else net.rpc_url
     if not url:
         raise ValueError(f"no RPC URL configured for {net.name} ({purpose})")
-    w3 = Web3(Web3.HTTPProvider(url, request_kwargs={"timeout": timeout}))
+    w3 = Web3(
+        Web3.HTTPProvider(
+            url,
+            request_kwargs={"timeout": timeout},
+            exception_retry_configuration=ExceptionRetryConfiguration(
+                errors=(requests.ConnectionError, requests.HTTPError, requests.Timeout),
+                retries=5,
+                backoff_factor=0.5,
+                method_allowlist=[*REQUEST_RETRY_ALLOWLIST, *READ_METHODS],
+            ),
+        )
+    )
     setattr(w3, _CHUNK_ATTR, int(net.logs_chunk_blocks))
     setattr(w3, _NETWORK_ATTR, net.name)
     setattr(w3, _CHAIN_ATTR, int(net.chain_id))
