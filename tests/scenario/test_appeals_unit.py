@@ -143,3 +143,20 @@ def test_without_a_posting_the_vault_refunds_are_the_adverse_evidence(fake_chain
     result = fake_chain({D2: 449}, with_post=False)
     assert result["review"]["adverseEvidence"]["source"] == "vault events"
     assert result["upheld"]
+
+
+def test_open_appeals_are_the_unresolved_ones_of_the_appellant(monkeypatch):
+    from acb.chain import contracts
+
+    filed = [
+        {"args": {"appealId": i, "agentId": agent}, "blockNumber": 500 + i, "transactionHash": f"0xf{i}"}
+        for i, agent in ((1, GHOST), (2, 7), (3, GHOST))
+    ]
+    resolved = [{"args": {"appealId": 1}, "blockNumber": 600, "transactionHash": "0xr1"}]
+    events = {"AppealFiled": filed, "AppealResolved": resolved}
+    monkeypatch.setattr(contracts, "AcbContract", _Contract)
+    monkeypatch.setattr(appeals, "_logs", lambda _c, event, _from, **_f: events[event])
+    dep = SimpleNamespace(contracts={"AgentCreditBureau": SimpleNamespace(address=ACB)})
+    assert appeals.open_appeals(None, dep, GHOST, 0) == [3]
+    events["AppealResolved"] = [*resolved, {"args": {"appealId": 3}, "blockNumber": 601, "transactionHash": "0xr3"}]
+    assert appeals.open_appeals(None, dep, GHOST, 0) == []

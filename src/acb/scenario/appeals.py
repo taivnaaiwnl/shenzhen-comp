@@ -55,6 +55,19 @@ def _logs(contract: Any, event: str, from_block: int, **filters: Any) -> list[di
     return out
 
 
+def open_appeals(w3: Any, dep: Any, agent_id: int, from_block: int) -> list[int]:
+    """Ids of the appeals of ``agent_id`` filed at or after ``from_block`` and not resolved yet, oldest first."""
+    from acb.chain.contracts import AcbContract
+
+    acb = AcbContract(w3, dep.contracts["AgentCreditBureau"].address)
+    resolved = {int(lg["args"]["appealId"]) for lg in _logs(acb, "AppealResolved", from_block)}
+    return [
+        int(lg["args"]["appealId"])
+        for lg in _logs(acb, "AppealFiled", from_block)
+        if int(lg["args"]["agentId"]) == int(agent_id) and int(lg["args"]["appealId"]) not in resolved
+    ]
+
+
 def load_appeal(w3: Any, dep: Any, appeal_id: int, payload_dirs: list[Path]) -> tuple[dict, dict]:
     """The ``AppealFiled`` event of ``appeal_id`` and its payload (hash-checked)."""
     from acb.chain.contracts import AcbContract
@@ -256,6 +269,7 @@ __all__ = [
     "adverse_orders",
     "latest_bundle",
     "load_appeal",
+    "open_appeals",
     "resolve_appeal",
     "review_appeal",
 ]

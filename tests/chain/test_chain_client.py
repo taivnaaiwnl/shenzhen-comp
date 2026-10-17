@@ -250,5 +250,22 @@ def test_reads_at_an_explicit_block_wait_for_a_lagging_node(monkeypatch):
     assert [c[0] for c in rpc.calls] == ["eth_call"] * 3  # two "header not found", then the fast node
     rpc.slow_left = 1
     assert request("eth_getBlockByNumber", [hex(105), False])["result"] == {"number": hex(105)}
+    rpc.slow_left = 2  # the head a log query to "latest" resolves to includes our own block
+    assert request("eth_getBlockByNumber", ["latest", False])["result"] == {"number": hex(105)}
     rpc.slow_left = 1
     assert request("eth_call", [{"to": CONTRACT}, "pending"])["result"] == "0x01"  # tags other than latest pass
+
+
+def test_a_pruned_old_block_fails_fast_instead_of_waiting(monkeypatch):
+    _read_your_writes(monkeypatch, mark=105)  # the receipt mark and no sleeping
+    calls = []
+
+    def pruned(method, params):
+        calls.append(method)
+        return {"jsonrpc": "2.0", "id": 1, "error": {"code": -32000, "message": "missing trie node abc"}}
+
+    from acb.chain import client
+
+    request = client.ReadYourWrites(type("W3", (), {"_acb_chain_id": 84532})()).wrap_make_request(pruned)
+    assert "missing trie node" in request("eth_call", [{"to": CONTRACT}, hex(7)])["error"]["message"]
+    assert calls == ["eth_call"]  # no archive: waiting would not bring the state back
