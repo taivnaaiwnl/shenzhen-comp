@@ -114,7 +114,7 @@ owner lines of the recorded run (`config/scenario.yaml`, `dialogue`):
 
 The agent's actual replies and cards are recorded in
 [evidence/base_sepolia/dialogue/S5.json](evidence/base_sepolia/dialogue/S5.json), with a
-[screenshot of the owner console](evidence/base_sepolia/screenshots/owner-console-s5.png); the dialogue
+[Blockscout page of the mandate's registration](evidence/base_sepolia/screenshots/s05-register-mandate-blockscout.png); the dialogue
 evaluation with a real LLM (ambiguous requests, corrections, requests in Chinese, hostile requests) is
 reported in the [technical document](docs/deliverables/out/technical-document.md). If the LLM is unreachable, the agent
 switches to a rule-based parser and the console shows "AI offline: rule-based mode" (reason 2300); the
