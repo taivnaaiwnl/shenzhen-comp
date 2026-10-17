@@ -46,7 +46,11 @@ def resume_run(runner: Runner, from_step: str) -> None:
         raise EnvError("state.json has no RPC URL")
     _stop_services(state)
     runner.state.update(
-        {k: v for k, v in state.items() if k in ("startedAt", "steps", "facts", "scanStart", "recorder", "narration")}
+        {
+            k: v
+            for k, v in state.items()
+            if k in ("startedAt", "steps", "facts", "scanStart", "recorder", "narration", "earlyGradeChanges")
+        }
     )
     runner.facts = runner.state.setdefault("facts", {})
     for sid in STEP_IDS[first:]:
