@@ -168,7 +168,9 @@ def crop(
     return crop_parts([(image, page_w, r, highlights) for r in rects], max_scale)
 
 
-def crop_parts(parts: list[tuple[Path, float, tuple[float, float, float, float], list[tuple[Any, ...]]]], max_scale=2.2):
+def crop_parts(
+    parts: list[tuple[Path, float, tuple[float, float, float, float], list[tuple[Any, ...]]]], max_scale=2.2
+):
     """Regions of one or more captures (image, page width, region, highlights), stacked and scaled together.
 
     A highlight is ``(x, y, w, h)`` or ``(x, y, w, h, "mark")`` (a lighter box for words in a text)."""
@@ -330,10 +332,14 @@ def proposal_card(
     """What the model proposed next to the signed invoice, and the signer's decision."""
 
     def table(rows: list[tuple[str, str]]) -> str:
-        return "<table>" + "".join(
-            f'<tr><td class="k">{esc(k)}</td><td{" class=big" if k == "Amount" else ""}>{esc(v)}</td></tr>'
-            for k, v in rows
-        ) + "</table>"
+        return (
+            "<table>"
+            + "".join(
+                f'<tr><td class="k">{esc(k)}</td><td{" class=big" if k == "Amount" else ""}>{esc(v)}</td></tr>'
+                for k, v in rows
+            )
+            + "</table>"
+        )
 
     lis = "".join(f"<li>{esc(r)}</li>" for r in reasons)
     return (

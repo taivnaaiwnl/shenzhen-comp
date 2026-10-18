@@ -19,15 +19,15 @@
     <label for="rpc">RPC URL</label>
     <input id="rpc" type="url" value="https://sepolia.base.org" autocomplete="off">
     <label for="acb">AgentCreditBureau address</label>
-    <input id="acb" type="text" maxlength="42" placeholder="0x..." autocomplete="off">
+    <input id="acb" type="text" maxlength="42" placeholder="0x..." value="0xd88f1f951bace92b331d2a94eaf2075352594374" autocomplete="off">
     <label for="identity">ERC-8004 Identity registry (for names)</label>
     <input id="identity" type="text" maxlength="42" value="0x8004A818BFB912233c491871b3d84c89A494BD9e" autocomplete="off">
     <label for="ids">Agent ids (comma separated)</label>
-    <input id="ids" type="text" placeholder="e.g. 1234, 1235" autocomplete="off">
+    <input id="ids" type="text" placeholder="e.g. 1234, 1235" value="9800, 9801, 9802, 9803, 9805, 9806" autocomplete="off">
     <label for="network">Network name (for the recompute command)</label>
     <input id="network" type="text" value="base_sepolia" autocomplete="off">
-    <label for="scan">Blocks to scan for the posting transaction</label>
-    <input id="scan" type="number" min="0" max="200000" value="20000">
+    <label for="scan">Blocks to search for the posting transaction (around its time on Base Sepolia)</label>
+    <input id="scan" type="number" min="0" max="200000" value="2000">
     <button id="go" type="submit">Look up</button>
   </form>
   <p id="status" class="status" role="status"></p>

@@ -46,4 +46,10 @@ markers = [
 
 [tool.ruff]
 line-length = 120
+# vendored Foundry library (forge-std): not our code
+extend-exclude = ["contracts/lib"]
 target-version = "py312"
+
+[tool.ruff.format]
+# Markdown (docs, the design spec) keeps its code blocks as written
+exclude = ["*.md"]

@@ -245,7 +245,7 @@ class Capturer(threading.Thread):
                         break
                     time.sleep(SETTLE_S)
                     self._settle(pages["A"])
-                    entry ={"kind": "end", "step": sid, "ok": ok, "t": time.time(), "captured": True}
+                    entry = {"kind": "end", "step": sid, "ok": ok, "t": time.time(), "captured": True}
                     entry.update(self._shot(pages["A"], f"{sid}_end_A", "A", quality=88))
                     entry.update(self._shot(pages["B"], f"{sid}_end_B", "B", quality=88))
                     self.manifest.append(entry)

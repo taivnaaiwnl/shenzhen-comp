@@ -9,7 +9,7 @@ formula is a new model id and a new module, a change to the configuration is a n
 | Implementation | `src/acb/bureau/models/sc_1_0_0.py`, function `score(inputs, cfg, facts) -> Bundle` (pure, integer arithmetic) |
 | Configuration | `config/scorecard.yaml`; `configHash = chash({"scorecard": <file>, "anchors": <deployment anchors>})`; archived as `config/scorecard/archive/<configHash>.json` |
 | Detector used for verified reports | `acb-inj-1.0.0` (`src/acb/injection.py`), named in the configuration as `detector_id` |
-| Owner | Team Mongolia (bureau package WP4); independent validation by the engineer who did not write the scorecard |
+| Owner | Team Mongolia (bureau package WP4); independent validation by the team member who did not write the scorecard is planned and not yet recorded |
 | Type | Expert-judgement (judgemental) additive scorecard; points are not log-odds calibrated |
 | Status | Demo profile active for the FinTechathon 2026 run (Base Sepolia testnet); production profile defined, not used |
 

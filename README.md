@@ -134,9 +134,12 @@ policy engine and the signer never need the LLM.
   demotion and freeze in the same transaction as the violation, owner-only unfreeze with key rotation.
 - **Contract-enforced grade masks**: the vault reads the payee's grade at payment time and reverts a
   payment the payee's grade does not allow, whatever the agent proposed.
-- **Verified sources**: after deployment our contract sources are verified on Blockscout (section 6.1);
-  the Blockscout address links in the [execution evidence](docs/deliverables/out/execution-evidence.md)
-  open them.
+- **Verified sources**: our three contracts are source-verified on Blockscout, so explorer pages show
+  function and event names:
+  [AgentCreditBureau](https://base-sepolia.blockscout.com/address/0xd88f1f951bace92b331d2a94eaf2075352594374?tab=contract),
+  [wallet TierVault](https://base-sepolia.blockscout.com/address/0x16c7a9f608bf6d02788749a1134aed0eeddc12ad?tab=contract),
+  [Beacon TierVault](https://base-sepolia.blockscout.com/address/0xde6b53b66d34daefaa3ce526468b4b58f5db9ff1?tab=contract)
+  (section 6.1).
 - A static, read-only **grade lookup page** (`site/bureau.html`) that reads the bureau contract on Base
   Sepolia (testnet) from the browser.
 
@@ -556,18 +559,17 @@ contracts we use are pinned in `config/networks.yaml`:
 Step S0 of every run aborts if the registries' implementation addresses or version differ from the
 pinned values.
 
-Source verification on Blockscout (by hand, after deployment):
+Source verification on Blockscout (done for the recorded deployment; Foundry reads each contract's
+constructor arguments from its deploy transaction):
 
 ```bash
-forge verify-contract --chain 84532 --verifier blockscout \
-  --verifier-url https://base-sepolia.blockscout.com/api/ \
-  <acb address> contracts/src/AgentCreditBureau.sol:AgentCreditBureau \
-  --constructor-args $(cast abi-encode "constructor(address,address,address,bytes32,uint64)" \
-    <admin> <identity registry> <usdc> <vault code hash> <upgrade delay>)
+forge verify-contract <acb address> contracts/src/AgentCreditBureau.sol:AgentCreditBureau \
+  --chain-id 84532 --verifier blockscout --verifier-url https://base-sepolia.blockscout.com/api/ \
+  --rpc-url https://sepolia.base.org --guess-constructor-args --watch
+forge verify-contract <vault address> contracts/src/TierVault.sol:TierVault \
+  --chain-id 84532 --verifier blockscout --verifier-url https://base-sepolia.blockscout.com/api/ \
+  --rpc-url https://sepolia.base.org --guess-constructor-args --watch
 ```
-
-`TierVault` takes one `VaultInit` struct; its encoded constructor arguments are the tail of its deploy
-transaction's input.
 
 ### 6.2 How to verify the transaction hashes
 
@@ -585,9 +587,11 @@ transaction's input.
    compares it with the evidence hash in the on-chain `GradePosted` event. It prints `verified X / Y` and
    exits 0 only if everything passed. `--receipts-only` checks the saved receipts without a network.
 2. **On an explorer:** every row of `evidence/base_sepolia/HEADLINE.md` (the curated judge-facing
-   transactions, each marked when signed by the wallet agent's own key) and of `evidence.csv` links to
-   Basescan (`https://sepolia.basescan.org/tx/<hash>`) and Blockscout
-   (`https://base-sepolia.blockscout.com/tx/<hash>`).
+   transactions, each marked when signed by the wallet agent's own key) links to Basescan
+   (`https://sepolia.basescan.org/tx/<hash>`); every row of `evidence.csv` and every transaction in the
+   [execution evidence](docs/deliverables/out/execution-evidence.md) links to both Basescan and Blockscout
+   (`https://base-sepolia.blockscout.com/tx/<hash>`). Basescan may show a bot check to automated clients;
+   Blockscout does not.
 3. **Recompute a grade from public data.** Recompute needs a standard Base Sepolia RPC (logs and block
    headers) and the published invoice and report files whose hashes are on-chain. By default it fetches
    those files from the repository's raw GitHub URL,
@@ -632,11 +636,12 @@ transaction's input.
 |   |-- base_sepolia/     the recorded testnet run: HEADLINE.md, evidence.json, evidence.csv, receipts/,
 |   |                     bundles/, invoices/, decisions/, reports/, dialogue/, narration.srt, run.txt,
 |   |                     screenshots/
-|   |-- anvil/            a local Anvil rehearsal (not the Topic F evidence)
 |   `-- attack_suite.json, benign_suite.json, backtest.json, dialogue_eval.json
-|-- scripts/              verify_evidence.py (stdlib only), render_deliverables.py, export_abi.py,
-|                         gas_estimate.py
+|-- scripts/              verify_evidence.py (stdlib only), render_deliverables.py, export_pdfs.py,
+|                         capture_explorer_shots.py, export_abi.py, gas_estimate.py,
+|                         recover_vault_usdc.py, recheck_grade_window.py
 |-- site/                 read-only grade lookup page (static)
+|-- video/                the demo video (.mp4, .srt) and its pipeline (make_video.py, pipeline/)
 |-- src/acb/
 |   |-- cli.py, launcher.py, config.py, keys.py, types.py, canonical.py, reason_codes.py,
 |   |   injection.py, logbus.py      foundations: CLI, process isolation, keys, hashing, detector, events

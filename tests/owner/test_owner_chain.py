@@ -310,10 +310,10 @@ def test_approve_flow_on_anvil(chain_console, fresh_deployed):
 def test_unrated_payee_is_approved_as_escrow(chain_console, fresh_deployed):
     invoice = make_invoice(chain_console, "atlas", quantity=1)
     oid = record_needs_approval(chain_console, invoice)
+    before = chain_console.chain.now()  # the card's clock is read after this, so its deadline is at least this + 300
     card = chain_console.prepare_approval(oid, invoice)
-    now = chain_console.chain.now()
     assert card["values"]["asEscrow"] is True
-    assert card["values"]["escrowDeadline"] >= now + 300
+    assert card["values"]["escrowDeadline"] >= before + 300
     result = chain_console.approve(oid, card["prepareId"])
     approval = chain_console.chain.vault.get_approval(oid)
     assert (

@@ -1,5 +1,5 @@
 /* Read-only grade lookup (spec 11.4): reads AgentCreditBureau over JSON-RPC in the browser.
- * It only uses eth_call, eth_blockNumber and eth_getLogs; it never signs or sends anything.
+ * It only uses eth_call, eth_blockNumber, eth_getBlockByNumber and eth_getLogs; it never signs or sends anything.
  * Every value read from the chain (names, URIs) is shown with textContent only. */
 (function () {
   "use strict";
@@ -30,6 +30,8 @@
     1104: "Grade set by a documented manual override"
   };
   var EXPLORERS = {base_sepolia: "https://sepolia.basescan.org/tx/"};
+  // seconds per block: on these networks the posting block is found from the record's postedAt time
+  var BLOCK_SECONDS = {base_sepolia: 2};
 
   function $(id) { return document.getElementById(id); }
 
@@ -98,11 +100,20 @@
     } catch (e) { return null; }
   }
 
-  function findPosting(url, acb, id, scan) {
+  // The latest GradePosted log of the agent. With a known block time it searches `scan` blocks around the
+  // block the record's postedAt time points to (so an old posting is found however far the chain has grown);
+  // otherwise it searches `scan` blocks back from the latest block.
+  function findPosting(url, acb, id, scan, postedAt, network) {
     var topic = "0x" + word(id);
-    return rpc(url, "eth_blockNumber", []).then(function (latestHex) {
-      var latest = Number(BigInt(latestHex));
-      var stop = Math.max(0, latest - scan);
+    return rpc(url, "eth_getBlockByNumber", ["latest", false]).then(function (head) {
+      var latest = Number(BigInt(head.number));
+      var top = latest, stop = Math.max(0, latest - scan);
+      var spb = BLOCK_SECONDS[network];
+      if (spb && postedAt > 0) {
+        var est = latest - Math.floor((Number(BigInt(head.timestamp)) - postedAt) / spb);
+        top = Math.min(latest, est + Math.ceil(scan / 2));
+        stop = Math.max(0, est - Math.ceil(scan / 2));
+      }
       function step(to) {
         if (to < stop) { return null; }
         var from = Math.max(stop, to - LOG_CHUNK + 1);
@@ -112,7 +123,7 @@
           return step(from - 1);
         });
       }
-      return step(latest);
+      return step(top);
     });
   }
 
@@ -153,7 +164,7 @@
       ev.appendChild(el("div", "mono", "evidence " + "0x" + w[10]));
       tr.appendChild(ev);
       if (grade === "NONE" || scan <= 0) { return tr; }
-      return findPosting(url, acb, id, scan).then(function (log) {
+      return findPosting(url, acb, id, scan, postedAt, network).then(function (log) {
         if (!log) { ev.appendChild(el("div", "muted", "posting not found in the scanned blocks")); return tr; }
         var explorer = EXPLORERS[network];
         if (explorer && /^0x[0-9a-f]{64}$/.test(log.transactionHash)) {

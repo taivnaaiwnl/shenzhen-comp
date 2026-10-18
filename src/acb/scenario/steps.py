@@ -493,8 +493,18 @@ def s5(run: Runner, ctx: StepCtx) -> None:
             ctx.note(f"turns to mandate {turns} (target <= {run.cfg['max_dialogue_turns']})")
     else:
         ctx.require(turns is not None and int(turns) <= int(run.cfg["max_dialogue_turns"]), f"turns to mandate {turns}")
+    # "values": the card P1 rebuilt from the chain and the owner key registered (what the receipt shows);
+    # "chatCard": the card in the chat, whose stable fields were checked equal above
     transcript.append(
-        {"confirm": {"draftId": draft_id, "values": values, "txHash": result["txHash"], "agent": agent_answer}}
+        {
+            "confirm": {
+                "draftId": draft_id,
+                "values": fresh["values"],
+                "chatCard": values,
+                "txHash": result["txHash"],
+                "agent": agent_answer,
+            }
+        }
     )
     write_json(
         run.env.out_dir / "dialogue" / "S5.json",

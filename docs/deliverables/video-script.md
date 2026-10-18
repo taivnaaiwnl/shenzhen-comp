@@ -14,28 +14,28 @@
 Shots are numbered 01-16 ("shot 07"). Steps are S0-S21 of `config/scenario.yaml`. Invoice
 validation checks V01-V09 (spec 6.2) are a different thing and do not appear here.
 
-## 0. Official guide fields (paste into `demo-video-guide-en.docx`)
+## 0. Official guide fields (as rendered; filled in `docs/deliverables/demo-video-guide/`)
 
 | Field | Entry |
 |---|---|
 | Team | Team Mongolia, National University of Mongolia: Taivanbat Bayarsaikhan (team leader, Computer Science), Tuguldur Munkhbat (Software Engineering) |
 | Track | International AI Track, Topic F: Agent Wallet - Autonomous On-chain Wallet |
-| Date | The upload date; planned 2026-10-19 (deadline 2026-10-20 23:59 UTC+8) |
+| Date | 20 October 2026 (deadline 23:59 UTC+8) |
 
 **01 Recommended Structure**
 
 | Guide row | Our video |
 |---|---|
 | Project and team introduction | 0:00-0:31, shots 01-03: title and team; the problem (AI wallets pay unknown agents and can be talked into paying; the Freysa incident, Nov 2024); our narrow claim (grades only from settlement outcomes anyone can verify); the owner console |
-| End-to-end demonstration of the core scenario | 0:31-2:33, shots 04-09, all from the recorded Base Sepolia run: owner chat with clarification and correction; mandate M1 registered on-chain; a normal payment; a payment capped by grade; escrow for an unrated provider and a refund; earned promotion; a defaulter's grade collapse, refusal and stolen-key revert, each shown on the block explorer |
-| Safety mechanisms, innovation and results | 2:33-4:57, shots 10-16: a hijacked invoice (a real LLM in a local rehearsal, then a scripted worst-case LLM); demotion; circuit breaker; owner reset with key rotation and maker-checker approval; the LLM taken down (rule-based fallback) and a request for the private key; attack-suite and false-positive totals; offline verification; ERC-8004 identities |
+| End-to-end demonstration of the core scenario | 0:31-2:33, shots 04-09: owner chat with clarification and correction; mandate M1 registered on-chain; a normal payment; a payment capped by grade; escrow for an unrated provider and a refund; earned promotion; a defaulter's grade collapse, refusal and stolen-key revert. Every hash and explorer page is from the recorded Base Sepolia run; the console views come from a local run of the same scenario and are labelled so on screen |
+| Safety mechanisms, innovation and results | 2:33-4:57, shots 10-16: a hijacked invoice (the injection detector's flags, the agent's masking and the policy's refusal; no model shown), then a scripted worst-case LLM; demotion; circuit breaker; owner reset with key rotation and maker-checker approval; the attack-suite results for the LLM taken down (A32, rule-based fallback) and a request for the private key (A10); attack-suite and false-positive totals; offline verification; ERC-8004 identities |
 
 **02 Video Quality**
 
 | Guide row | Our video |
 |---|---|
 | Use 16:9 landscape and preferably 1080p | 1920x1080, 16:9, 30 fps, H.264 |
-| Make interface text, narration and English subtitles clearly legible | Console crops scaled so its 18 px base font reads at 30 px or more; terminal pages at 22 px or more; one English text-to-speech voice at 112-150 words per minute (section 6); English subtitles burned in at 44 px or more, white on a dark box |
+| Make interface text, narration and English subtitles clearly legible | Console crops scaled so its 18 px base font reads at 30 px or more; terminal pages at 22 px or more; one English AI voice (ElevenLabs, voice Matilda) at 112-150 words per minute (section 6); English subtitles burned in at 44 px or more, white on a dark box |
 
 **03 Final Check**
 

@@ -14,7 +14,7 @@ Modes, chosen from the capture and ``--network`` (the evidence network):
 Steps: (1) values through the placeholder registry; (2) the cues of ``video-narration.srt`` rendered, with
 the script's fallback wordings where a precondition does not hold (F1, F2, P2) and its shorter wordings only
 when a clip does not fit; (3) every frame composed as HTML and rendered to PNG by Playwright; (4) one
-OpenAI text-to-speech clip per cue, placed at the cue start; (5) ffmpeg (imageio-ffmpeg) burns the
+text-to-speech clip per cue (ElevenLabs, see tts.py), placed at the cue start; (5) ffmpeg (imageio-ffmpeg) burns the
 subtitles in and encodes H.264/AAC 1920x1080 30 fps, with the rendered .srt written next to the video;
 (6) checks.
 Work files go to ``video/work/build-<run_id>/``; the edit list and the report sit next to them.
@@ -41,6 +41,8 @@ WORK = VIDEO / "work"
 SRT_SRC = REPO / "docs" / "deliverables" / "video-narration.srt"
 OUT_NAME = "InternationalAI-TeamMongolia-DemoVideo.mp4"
 TOTAL = 297.0  # 4:57, the script's cut point
+
+from datetime import UTC
 
 import pages as P
 import tts
@@ -153,7 +155,7 @@ def crop_decisions(boxes: dict[str, Any], who: str, max_rows: int = 1):
     return (x, y, w, h), [_rect(r["box"]) for r in rows]
 
 
-def grade_parts(cap: "Capture", e: dict[str, Any], name: str, head: bool = True):
+def grade_parts(cap: Capture, e: dict[str, Any], name: str, head: bool = True):
     """(page, region, highlights) parts for the grades panel: its title and header (from the top slice) and
     the row of ``name``, taken from the first page-B slice that shows that row whole."""
     top = "B#panel-grades"
@@ -437,9 +439,51 @@ def sub_text(c: Cue) -> str:
 
 # words a line should not end on (a break after them splits a phrase)
 _GLUE = {
-    "a", "an", "the", "to", "of", "in", "on", "at", "by", "for", "with", "from", "into", "its", "our", "his", "her",
-    "their", "and", "or", "but", "so", "that", "this", "is", "are", "was", "be", "it", "as", "tells", "than", "not",
-    "no", "each", "every", "all", "one", "two", "three", "own", "agent", "wallet", "owner's", "signed",
+    "a",
+    "an",
+    "the",
+    "to",
+    "of",
+    "in",
+    "on",
+    "at",
+    "by",
+    "for",
+    "with",
+    "from",
+    "into",
+    "its",
+    "our",
+    "his",
+    "her",
+    "their",
+    "and",
+    "or",
+    "but",
+    "so",
+    "that",
+    "this",
+    "is",
+    "are",
+    "was",
+    "be",
+    "it",
+    "as",
+    "tells",
+    "than",
+    "not",
+    "no",
+    "each",
+    "every",
+    "all",
+    "one",
+    "two",
+    "three",
+    "own",
+    "agent",
+    "wallet",
+    "owner's",
+    "signed",
 }
 
 
@@ -548,7 +592,9 @@ class Planner:
     def local_band(self) -> list[tuple[str, str]]:
         """The yellow band for pages made from a local run's files (not console captures)."""
         if self.mode == "local":
-            return [("local", f"LOCAL TEST RUN on Anvil (chain 31337), run {self.cap.run_id}. Not the Base Sepolia run.")]
+            return [
+                ("local", f"LOCAL TEST RUN on Anvil (chain 31337), run {self.cap.run_id}. Not the Base Sepolia run.")
+            ]
         return []
 
     def clock(self) -> list[tuple[str, str]]:
@@ -565,8 +611,10 @@ class Planner:
         return [
             (
                 "info",
-                "Times: the decision log shows the run's wall clock (UTC); receipts and the autonomy timeline show "
-                "chain time, which the local Anvil run fast-forwards past escrow deadlines.",
+                (
+                    "Times: the decision log shows the run's wall clock (UTC); receipts and the autonomy timeline "
+                    "show chain time, which the local Anvil run fast-forwards past escrow deadlines."
+                ),
             )
         ]
 
@@ -712,7 +760,12 @@ class Planner:
     # which the pipeline never tries to pass), then Basescan; a page that does not show the transaction falls back
     # to the saved receipt (F3)
     EXPLORERS = (
-        ("base-sepolia.blockscout.com", "https://base-sepolia.blockscout.com/tx/{h}", "?tab=logs", "Transaction details"),
+        (
+            "base-sepolia.blockscout.com",
+            "https://base-sepolia.blockscout.com/tx/{h}",
+            "?tab=logs",
+            "Transaction details",
+        ),
         ("sepolia.basescan.org", "https://sepolia.basescan.org/tx/{h}", "#eventlog", "Transaction Hash"),
     )
     BOT_CHECK = ("Just a moment", "Verify you are human", "security verification")
@@ -776,7 +829,8 @@ class Planner:
                 "team": "Team Mongolia, National University of Mongolia: Taivanbat Bayarsaikhan (team leader, Computer "
                 "Science), Tuguldur Munkhbat (Software Engineering)",
                 "entry": "FinTechathon 2026, International AI Track, Topic F: Agent Wallet",
-                "note": note + " Narration: an AI-generated voice (OpenAI text-to-speech) reading the subtitles.",
+                "note": note
+                + f" Narration: an AI-generated voice ({tts.describe()['provider']} text-to-speech) reading the subtitles.",
             }
         )
         self.add("01", 0, 5, "C5 title", [Frame(P.frame(title, []), 5)])
@@ -816,8 +870,10 @@ class Planner:
             tour_labels.append(
                 (
                     "info",
-                    '"runner (offline)" in the header: the scenario runner\'s log of owner actions, empty until the '
-                    "first owner action in the next step. Every service is online.",
+                    (
+                        '"runner (offline)" in the header: the scenario runner\'s log of owner actions, empty until '
+                        "the first owner action in the next step. Every service is online."
+                    ),
                 )
             )
         elif offline:
@@ -1403,7 +1459,7 @@ class Planner:
                     continue
                 d = ch.get("detail")
                 d = ", ".join(str(i) for i in d) if isinstance(d, list) else ("" if d is None else str(d))
-                fails.append(f"\"{ch.get('check')}\"" + (f" (seen: {d})" if d else ""))
+                fails.append(f'"{ch.get("check")}"' + (f" (seen: {d})" if d else ""))
             lost = int(x.get("fundsLost") or 0) / 1e6
             notes.append(
                 f"{x.get('id')} Failed: {x.get('title')} (class {x.get('class')}, expected {x.get('expected')}). "
@@ -1551,7 +1607,7 @@ class Planner:
         outflow = [
             t
             for t in self.ev.doc["transactions"]
-            if t.get("step") == step and re.search(r"pay|escrow|execute", str(t.get("function", "")), re.I)
+            if t.get("step") == step and re.search(r"pay|escrow|execute", str(t.get("function", "")), re.IGNORECASE)
         ]
         sd = req.get("signerDecision") or {}
         notes = [
@@ -1906,7 +1962,7 @@ def code_mtime(skip: frozenset[str] = frozenset()) -> tuple[float, str]:
 
 def suite_age_problems(paths: dict[str, Path | None], skip: frozenset[str] = frozenset()) -> list[str]:
     """A suite older than the code it tests does not describe the submitted code."""
-    from datetime import datetime, timezone
+    from datetime import datetime
 
     newest, which = code_mtime(skip)
     out = []
@@ -1916,9 +1972,7 @@ def suite_age_problems(paths: dict[str, Path | None], skip: frozenset[str] = fro
             continue
         doc = json.loads(Path(p).read_text(encoding="utf-8"))
         try:
-            ran = (
-                datetime.strptime(str(doc.get("runAt")), "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc).timestamp()
-            )
+            ran = datetime.strptime(str(doc.get("runAt")), "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=UTC).timestamp()
         except ValueError:
             out.append(f"{name}: runAt {doc.get('runAt')!r} unreadable")
             continue
@@ -2120,7 +2174,7 @@ def main() -> int:
         "reviewedCodeChanges": sorted(reviewed),
         "audioNotes": audio_notes,
         "cues": rate,
-        "tts": {"model": tts.MODEL, "voice": tts.VOICE} if audio else None,
+        "tts": tts.describe() if audio else None,
     }
     (work / "editlist.json").write_text(json.dumps(edit, indent=1), encoding="utf-8")
     (work / "report.json").write_text(json.dumps(report, indent=1), encoding="utf-8")

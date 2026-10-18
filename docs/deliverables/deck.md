@@ -58,7 +58,7 @@ in this order.
 Notes (00:10): Six parts: the problem, our idea, how it works, the on-chain demo, security and
 compliance, and the value and road ahead.
 
-Sources: private/templates/presentation-template.pptx (template slide 2, items 01-06).
+Sources: the organiser's official presentation template (template slide 2, items 01-06; not redistributed).
 
 ## Slide 3: AI agents pay each other, and nobody knows who is good for the money
 
@@ -514,7 +514,6 @@ main title) must be replaced with English text or deleted.
 - Slide 9: read the Failed-count line that matches the rendered `{{atk_failed}}`; delete the other
   from the speaker notes in the PPTX. If an attack failed, add one short sentence naming the fix from
   the security self-assessment.
-- Slide 13: confirm that `forge verify-contract` succeeded for AgentCreditBureau and the wallet
-  TierVault on Blockscout. If it did not, delete the "verified on Blockscout" bullet and sentence.
+- Slide 13: the three contracts are source-verified on Blockscout (README 6.1); build with`n  `--blockscout-verified` so the slide keeps that bullet.
 - Slide 10: if the rendered `{{s5_owner_turns}}` is above 3, the runner sent fallback lines; keep the
   sentence that says so.
