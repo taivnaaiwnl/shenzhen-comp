@@ -543,6 +543,8 @@ class Frame:
     dur: float
     note: str = ""
     png: Path | None = None
+    fps: int = 0  # > 0: an animated scene (pages.scene_frame), rendered as dur * fps stills
+    pngs: list[Path] = field(default_factory=list)
 
 
 @dataclass
@@ -822,7 +824,7 @@ class Planner:
             if local
             else r("Every explorer page shown is Base Sepolia, chain {{chain_id}}. Local runs are labelled.")
         )
-        title = P.title_card(
+        title_tl, title_body = P.title_scene(
             {
                 "title": "Agent Credit Bureau",
                 "sub": "A credit bureau for AI agents, and a wallet that earns its autonomy",
@@ -833,34 +835,70 @@ class Planner:
                 + f" Narration: an AI-generated voice ({tts.describe()['provider']} text-to-speech) reading the subtitles.",
             }
         )
-        self.add("01", 0, 5, "C5 title", [Frame(P.frame(title, []), 5)])
+        self.add(
+            "01",
+            0,
+            5,
+            "C5 title, animated",
+            [Frame(P.scene_frame(title_tl, title_body, []), 5, "animated title", fps=30)],
+        )
 
-        # 02 why
-        lines = [
-            "AI wallets now pay other agents they have never met, and an LLM can be talked into paying.",
-            (
-                "Freysa (Nov 2024, Base, about 13.19 ETH, around $47k): the LLM held the transfer decision and was talked "
-                "into it."
-            ),
-            (
-                "Our claim, kept narrow: grades come only from settlement outcomes anyone can verify on-chain; praise and "
-                "unverified accusations carry no weight. A trust score that gates spending is not new, and we do not "
-                "claim it."
-            ),
+        # 02 why it matters: the reported incidents on a timeline, Freysa step by step, then our answer (animated;
+        # facts as in the technical document's incident table, research brief 3.5)
+        incidents = [
+            {
+                "when": "Nov 2024, Base",
+                "who": "Freysa",
+                "amount": "about 13.19 ETH (around $47k)",
+                "what": "The LLM held the transfer decision and was talked into it.",
+                "source": "OECD AI incident record",
+            },
+            {
+                "when": "Feb 2026",
+                "who": "Lobstar Wilde",
+                "amount": "about $450k",
+                "what": "A non-adversarial state loss: no hard caps stopped it.",
+                "source": "the operator's own account",
+            },
+            {
+                "when": "around 4 May 2026",
+                "who": "Grok / Bankrbot",
+                "amount": "about $150-200k",
+                "what": "Morse-code prompt injection; privilege escalation through a gifted NFT.",
+                "source": "OECD AI incident record",
+            },
+            {
+                "when": "20 May 2026",
+                "who": "Bankr breach",
+                "amount": "about $440k+, 14 wallets",
+                "what": "Cause unconfirmed.",
+                "source": "press report",
+            },
         ]
-        inc = ("info", "Incident label from our research brief (section 3.5), source: OECD AI incident record.")
+        heads = [
+            "AI wallets pay agents they have never met, and can be talked into paying.",
+            "Freysa: the model held the transfer decision, and was talked into it.",
+            "Our wallet checks a credit grade first, built only from verifiable settlements.",
+        ]
+        foot = (
+            "Praise and unverified accusations weigh nothing. A trust score that gates spending is not new; "
+            "we do not claim it."
+        )
+        inc = (
+            "info",
+            (
+                "Incidents as reported, amounts approximate (research brief 3.5): OECD AI incident records, the "
+                "operator's own account, a press report."
+            ),
+        )
+        why_tl, why_body = P.why_scene(incidents, heads, foot)
         self.add(
             "02",
             5,
             21,
-            "C5 problem",
-            [
-                Frame(P.frame(P.problem_card(lines, 1, None), []), 6),
-                Frame(P.frame(P.problem_card(lines, 2, None), [inc]), 5),
-                Frame(P.frame(P.problem_card(lines, 3, None), [inc]), 5),
-            ],
+            "C5 problem, animated",
+            [Frame(P.scene_frame(why_tl, why_body, [inc]), 16, "animated why", fps=30)],
         )
-
         # 03 console tour at the end of S4. The runner's feed is the file of owner actions the scenario runner
         # writes; it has no file before the first owner action (S5), so the header shows it offline: say so
         e = cap.end("S4")
@@ -1746,7 +1784,7 @@ def render_frames(segments: list[Segment], work: Path) -> None:
         if d.exists():
             shutil.rmtree(d)
         d.mkdir(parents=True)
-    n = 0
+    n = stills = 0
     with sync_playwright() as pw:
         browser = pw.chromium.launch()
         page = browser.new_page(viewport={"width": 1920, "height": 1080}, device_scale_factor=1)
@@ -1757,10 +1795,26 @@ def render_frames(segments: list[Segment], work: Path) -> None:
                 h.write_text(f.html, encoding="utf-8")
                 page.goto(h.as_uri(), wait_until="load")
                 page.wait_for_function("document.body.dataset.ready === '1'", timeout=15000)
+                if f.fps:
+                    # scrub the scene's CSS animations: one still per video frame, painted before each screenshot
+                    page.evaluate("document.fonts.ready")
+                    f.pngs = []
+                    for k in range(max(1, round(f.dur * f.fps))):
+                        page.evaluate(
+                            "ms => { window.__seek(ms); return new Promise(r => requestAnimationFrame(() => "
+                            "requestAnimationFrame(r))); }",
+                            k * 1000.0 / f.fps,
+                        )
+                        still = png_dir / f"f{n:04d}_{k:04d}.png"
+                        page.screenshot(path=str(still))
+                        f.pngs.append(still)
+                    f.png = f.pngs[-1]
+                    stills += len(f.pngs)
+                    continue
                 f.png = png_dir / f"f{n:04d}.png"
                 page.screenshot(path=str(f.png))
         browser.close()
-    log(f"rendered {n} frames")
+    log(f"rendered {n} frames ({stills} animation stills)")
 
 
 def build_audio(cues: list[Cue], ffmpeg: str, work: Path, strict: bool) -> tuple[Path, list[str]]:
@@ -1832,7 +1886,11 @@ def encode(segments: list[Segment], audio: Path | None, work: Path, ffmpeg: str,
     last = None
     for seg in segments:
         for f in seg.frames:
-            rows.append(f"file '{f.png.as_posix()}'\nduration {f.dur:.4f}")
+            if f.pngs:  # an animated scene: its stills, one video frame each, the last one absorbing rounding
+                step = f.dur / len(f.pngs)
+                rows += [f"file '{p.as_posix()}'\nduration {step:.6f}" for p in f.pngs]
+            else:
+                rows.append(f"file '{f.png.as_posix()}'\nduration {f.dur:.4f}")
             last = f.png
     rows.append(f"file '{last.as_posix()}'")
     lst.write_text("\n".join(rows) + "\n", encoding="utf-8")

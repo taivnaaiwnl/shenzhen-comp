@@ -26,7 +26,7 @@ validation checks V01-V09 (spec 6.2) are a different thing and do not appear her
 
 | Guide row | Our video |
 |---|---|
-| Project and team introduction | 0:00-0:31, shots 01-03: title and team; the problem (AI wallets pay unknown agents and can be talked into paying; the Freysa incident, Nov 2024); our narrow claim (grades only from settlement outcomes anyone can verify); the owner console |
+| Project and team introduction | 0:00-0:31, shots 01-03: animated title and team over a network of agents paying each other; why it matters, animated: a timeline of four reported AI-wallet incidents (Nov 2024 - May 2026), Freysa's case step by step, then our answer (verifiable settlements feed a credit grade that decides pay, escrow or refuse) with our narrow claim; the owner console |
 | End-to-end demonstration of the core scenario | 0:31-2:33, shots 04-09: owner chat with clarification and correction; mandate M1 registered on-chain; a normal payment; a payment capped by grade; escrow for an unrated provider and a refund; earned promotion; a defaulter's grade collapse, refusal and stolen-key revert. Every hash and explorer page is from the recorded Base Sepolia run; the console views come from a local run of the same scenario and are labelled so on screen |
 | Safety mechanisms, innovation and results | 2:33-4:57, shots 10-16: a hijacked invoice (the injection detector's flags, the agent's masking and the policy's refusal; no model shown), then a scripted worst-case LLM; demotion; circuit breaker; owner reset with key rotation and maker-checker approval; the attack-suite results for the LLM taken down (A32, rule-based fallback) and a request for the private key (A10); attack-suite and false-positive totals; offline verification; ERC-8004 identities |
 
