@@ -1,6 +1,6 @@
 # Agent Credit Bureau - headline transactions (base_sepolia)
 
-Run `r-20261017-083443` on chain 84532, 2026-10-17T08:34:43Z to 2026-10-17T12:27:55Z (git 07eb9ef3323c).
+Run `r-20261017-083443` on chain 84532, 2026-10-17T08:34:43Z to 2026-10-17T12:27:55Z (git 15f2cc8b7da6).
 Each row is one judge-facing claim of the recorded run (spec 10.2) and the transaction that proves it.
 "Agent key" marks transactions signed by the wallet agent's own key (the signer process); the others are
 signed by the owner, the bureau, the autonomy operator, a provider or, for the stolen-key rows, by the runner

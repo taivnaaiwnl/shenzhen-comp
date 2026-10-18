@@ -33,12 +33,12 @@
 **Evidence this document is built from.** Every measured number is filled in from the evidence files
 by `scripts/render_deliverables.py`; nothing measured is typed by hand.
 
-- Recorded run: `r-20261017-083443` on `base_sepolia` (chain id 84532), commit `07eb9ef3323c3b7e7c8eeadc619adb6505597810`,
+- Recorded run: `r-20261017-083443` on `base_sepolia` (chain id 84532), evidence exported at commit `15f2cc8b7da63ce252a62a183647dfe347620c95`,
   2026-10-17T08:34:43Z to 2026-10-17T12:27:55Z. 22 of 22 steps passed;
   214 transactions, 0 with an unexpected status.
-- Attack suite: run `r-20261017-122958` on `anvil` at 2026-10-17T12:29:58Z, commit `07eb9ef3323c3b7e7c8eeadc619adb6505597810`
+- Attack suite: run `r-20261018-052202` on `anvil` at 2026-10-18T05:22:02Z, commit `8ef8e40dc42fc62e585a399973fd39f4e8db8ad9`
   (`evidence/attack_suite.json`).
-- Benign suite: run at 2026-10-17T12:44:57Z (`evidence/benign_suite.json`).
+- Benign suite: run at 2026-10-18T05:36:21Z (`evidence/benign_suite.json`).
 - Contracts of the recorded run: AgentCreditBureau [`0xd88f1f...4374`](https://sepolia.basescan.org/address/0xd88f1f951bace92b331d2a94eaf2075352594374), wallet TierVault
   [`0x16c7a9...12ad`](https://sepolia.basescan.org/address/0x16c7a9f608bf6d02788749a1134aed0eeddc12ad), ERC-8004 Identity [`0x8004a8...bd9e`](https://sepolia.basescan.org/address/0x8004a818bfb912233c491871b3d84c89a494bd9e) and Reputation
   [`0x8004b6...8713`](https://sepolia.basescan.org/address/0x8004b663056a597dffe9eccc1965a193b7388713) (official registries), USDC [`0x036cbd...cf7e`](https://sepolia.basescan.org/address/0x036cbd53842c5426634e7929541ec2318f3dcf7e).

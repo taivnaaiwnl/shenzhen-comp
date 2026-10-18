@@ -3,7 +3,7 @@
   "network": "base_sepolia",
   "chainId": 84532,
   "deployedAt": "2026-10-17T08:35:05Z",
-  "gitCommit": "2e716da796a200e379b66d69869133625cf5a718",
+  "gitCommit": "a15e64dae41273965a658b40d8153f19938ad70d",
   "startBlock": 48228906,
   "roles": {
     "deployer": "0xb63b71793d03246adb7fc17f126d56f05215a069",

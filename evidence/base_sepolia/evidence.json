@@ -5,7 +5,7 @@
   "chainId": 84532,
   "startedAt": "2026-10-17T08:34:43Z",
   "finishedAt": "2026-10-17T12:27:55Z",
-  "gitCommit": "07eb9ef3323c3b7e7c8eeadc619adb6505597810",
+  "gitCommit": "15f2cc8b7da63ce252a62a183647dfe347620c95",
   "contracts": {
     "AgentCreditBureau": "0xd88f1f951bace92b331d2a94eaf2075352594374",
     "IdentityRegistry": "0x8004a818bfb912233c491871b3d84c89a494bd9e",

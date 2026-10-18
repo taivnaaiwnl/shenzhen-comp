@@ -79,7 +79,7 @@ deploy overwrites. Only the Base Sepolia render is cited.
 | `{{run_started_at}}` | Start of the run, UTC ISO time | `evidence/<network>/evidence.json` | `json:startedAt` | `text` |
 | `{{run_finished_at}}` | End of the run, UTC ISO time | `evidence/<network>/evidence.json` | `json:finishedAt` | `text` |
 | `{{run_duration}}` | Wall-clock duration of S0-S21 | `evidence/<network>/evidence.json` | `fn:run_duration` | `duration` |
-| `{{git_commit}}` | Git commit the run was made from | `evidence/<network>/evidence.json` | `json:gitCommit` | `text` |
+| `{{git_commit}}` | Git commit at which the run's evidence was exported (execution evidence 01 lists the commits each part of the run used) | `evidence/<network>/evidence.json` | `json:gitCommit` | `text` |
 | `{{steps_total}}` | Steps in the run (S0-S21) | `evidence/<network>/evidence.json` | `count:steps` | `int` |
 | `{{steps_passed}}` | Steps whose assertions all passed | `evidence/<network>/evidence.json` | `count:steps[status=PASSED]` | `int` |
 | `{{steps_table}}` | Table of steps: id, title, status, transactions | `evidence/<network>/evidence.json` | `fn:steps_table` | `table` |

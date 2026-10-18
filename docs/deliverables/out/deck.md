@@ -312,8 +312,8 @@ the main element, the first four rows (the judging's four classes) highlighted. 
 column of the nine defence layers (L1 invoice validation and detector, L2 quarantine and turn-type
 tool sets, L3 action selector with echo-and-verify, L4 policy, L5 signer, L6 vault on-chain, L7 bureau
 rules, L8 owner console, L9 autonomy operator). The two compliance bullets sit in a separate box
-headed "Compliance" under the table. Footer: "Suite run r-20261017-122958 on anvil, commit
-07eb9ef3323c3b7e7c8eeadc619adb6505597810. Stolen-key reverts on Base Sepolia: grade gate [`0x024356...6bc4`](https://sepolia.basescan.org/tx/0x024356fc2a84bd355780bf987d3d311891103d1d3df212dc29a0ab3be1c06bc4),
+headed "Compliance" under the table. Footer: "Suite run r-20261018-052202 on anvil, commit
+8ef8e40dc42fc62e585a399973fd39f4e8db8ad9. Stolen-key reverts on Base Sepolia: grade gate [`0x024356...6bc4`](https://sepolia.basescan.org/tx/0x024356fc2a84bd355780bf987d3d311891103d1d3df212dc29a0ab3be1c06bc4),
 replay [`0xa078d0...c5c6`](https://sepolia.basescan.org/tx/0xa078d02c4b008e24b0214045ae4d50ca4658100148bbd635a01a743b44a1c5c6), frozen [`0x18e325...5e44`](https://sepolia.basescan.org/tx/0x18e325a4d30f4e7a63504030888e902c75c99fa5fedeaf6e08145901b0095e44). Full table in the
 security self-assessment".
 

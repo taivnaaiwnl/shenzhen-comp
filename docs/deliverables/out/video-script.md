@@ -72,7 +72,7 @@ console page.
 | Shot 13 (S18) | `Owner action: sent with the owner key by the scenario runner, using the console's verification code.` |
 | Shot 14 | `LOCAL ATTACK-SUITE REPLAY on Anvil (chain 31337), attacks A32 and A10 only. Not part of the Base Sepolia run. Local transactions have no explorer page.` |
 | Shot 14, from 4:06.5 | `Reply text: the scripted MockLLM rule of config/mock_llm. The protection does not depend on it: the agent process holds no keys and has no tool that reads files or the environment (spec 7.6, 8.6).` |
-| Shot 15 | `Attack suite run r-20261017-122958 on anvil (local chain), not on Base Sepolia.` |
+| Shot 15 | `Attack suite run r-20261018-052202 on anvil (local chain), not on Base Sepolia.` |
 
 The title card (shot 01) says: `Every explorer page shown is Base Sepolia, chain 84532. Local runs
 are labelled.`

@@ -10,7 +10,7 @@
 | Submission date | 20 October 2026 (final version, deadline 23:59 UTC+8) |
 | Project | Agent Credit Bureau (ACB): a credit bureau for AI agents, and a wallet agent that earns its autonomy |
 | Repository | https://github.com/taivnaaiwnl/shenzhen-comp |
-| Network of the recorded run | Base Sepolia (chain id 84532), run `r-20261017-083443`, commit `07eb9ef3323c3b7e7c8eeadc619adb6505597810` |
+| Network of the recorded run | Base Sepolia (chain id 84532), run `r-20261017-083443`, evidence exported at commit `15f2cc8b7da63ce252a62a183647dfe347620c95` (execution evidence 01 lists the commits each part of the run used) |
 
 > **At a glance for reviewers**
 >
@@ -798,7 +798,7 @@ transaction (S19 dropped 5 unsolicited invoices). The run took 3 h 53 min, used
 and bundles: 236 / 236.
 
 **2. Counted attack suite** (63 attacks, `acb attacks run --network anvil --export`, run
-`r-20261017-122958`). Each attack is classified by the harness from what it observed (funds moved outside
+`r-20261018-052202`). Each attack is classified by the harness from what it observed (funds moved outside
 the owner's mandates, secrets in output, tier and grade changes, owner action needed), not copied from
 a table: **Blocked** (goal not achieved, no owner action needed), **Contained** (goal not achieved, the
 circuit breaker froze the wallet; an owner reset is needed), **Bounded** (a partial effect within a
@@ -1034,7 +1034,7 @@ transaction count; the reserve floor is enforced by the vault.
 
 #### Measured results of the attack suite
 
-Run `r-20261017-122958` on `anvil` at 2026-10-17T12:29:58Z (commit `07eb9ef3323c3b7e7c8eeadc619adb6505597810`):
+Run `r-20261018-052202` on `anvil` at 2026-10-18T05:22:02Z (commit `8ef8e40dc42fc62e585a399973fd39f4e8db8ad9`):
 63 attacks, 54 Blocked, 4 Contained, 2 Bounded,
 3 Escalated, **0 Failed** (ids: none), 0 could
 not run. USDC moved outside the owner's intent across the suite: 0.00. The measured

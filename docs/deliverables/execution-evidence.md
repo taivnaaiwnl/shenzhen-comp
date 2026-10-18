@@ -16,7 +16,7 @@ into evidence/base_sepolia/screenshots/ with the file names used there. -->
 | Submission date | 20 October 2026 (deadline 23:59 UTC+8) |
 | Project | Agent Credit Bureau (ACB): a credit bureau for AI agents, and a wallet agent that earns its autonomy |
 | Repository | https://github.com/taivnaaiwnl/shenzhen-comp |
-| Evidence folder | `evidence/base_sepolia/` in the repository (run `{{run_id}}`, commit `{{git_commit}}`) |
+| Evidence folder | `evidence/base_sepolia/` in the repository (run `{{run_id}}`, exported at commit `{{git_commit}}`) |
 
 > **Verify in 60 seconds.** Open three transactions of the recorded run on Base Sepolia:
 >
@@ -114,7 +114,7 @@ registrations say "ACB demo, simulated agent. Not a real service." (spec 16.2).
 | Run id | `{{run_id}}` |
 | Network and chain id | `{{run_network}}`, chain id `{{chain_id}}` |
 | Started / finished (UTC) | {{run_started_at}} / {{run_finished_at}} (duration {{run_duration}}) |
-| Git commit of the run | `{{git_commit}}` (code at https://github.com/taivnaaiwnl/shenzhen-comp/tree/{{git_commit}}) |
+| Code of the run | Started on commit `a15e64d` (deployment and S0-S13). S14 failed once; S14-S19 ran on `a7acc70`, which fixes it. S20 failed once; S20 and S21 ran with the fix later committed as `d5281ca`. S21 was re-run on that code (no transactions) to re-stage the evidence, which was exported at `{{git_commit}}` (code at https://github.com/taivnaaiwnl/shenzhen-comp/tree/{{git_commit}}). See 2.3 |
 | Steps passed | {{steps_passed}} of {{steps_total}} |
 | Blocks covered | {{block_first}} to {{block_last}} ({{block_span}} blocks) |
 | Transactions recorded | {{tx_total}} in `evidence.json`, {{tx_total_csv}} rows in `evidence.csv` |
@@ -254,7 +254,7 @@ the reserve floor is 3.00 USDC and the highest tier the operator can grant is 2 
 Tier 1 and tier 2 allow direct payment only to grade A and B payees, and escrow for A, B, C, NEW and
 unrated payees; grade D is never paid (`config/tiers.yaml`).
 
-#### 2.3 Two things that look odd in the table
+#### 2.3 Things that look odd in the table
 
 - **Row 14 is earlier than rows 7-13.** The agent's deadline watcher runs on the real clock. On Base
   Sepolia the S9 escrow's deadline passed during S10, so the agent refunded it then (on a local chain, with
@@ -262,6 +262,14 @@ unrated payees; grade D is never paid (`config/tiers.yaml`).
   NON_DELIVERY report under S14, the step that asserts them, whenever they were mined (`claim_s14` in
   `src/acb/scenario/steps.py`). The order of blocks is the true order of events; the early refund is also why
   Nova's downgrade was posted by the S11 rescore rather than in S16.
+- **Two steps failed once and were resumed.** S14 first failed because the signer checked the S9 refund on a
+  public-RPC node that had not yet seen it, found no FAILED outcome, and rejected the NON_DELIVERY report; the
+  fix (`a7acc70`) never lets the latest block number fall below our own receipts and lets the agent file a
+  rejected report again, and the run resumed at S14. S20 first failed because the appeal lookup read the
+  newest block from a lagging node and did not find the appeal just filed; the fix (`d5281ca`) applies the same
+  rule to that read, and the resumed S20 reviewed that same appeal rather than filing a second one. The
+  failed attempts sent no extra transactions beyond those in the table, and every step passed after its resume
+  (`run.txt` keeps both attempts).
 - **The wallet keeps a high credit grade while its vault is frozen.** The two measure different things.
   The credit grade (row 7, section 2.7) measures how the wallet settles as a counterparty: it paid,
   escrowed and released as agreed. The agent's own violations act on its autonomy tier through the vault

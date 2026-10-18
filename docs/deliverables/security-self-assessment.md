@@ -32,7 +32,7 @@
 **Evidence this document is built from.** Every measured number is filled in from the evidence files
 by `scripts/render_deliverables.py`; nothing measured is typed by hand.
 
-- Recorded run: `{{run_id}}` on `{{run_network}}` (chain id {{chain_id}}), commit `{{git_commit}}`,
+- Recorded run: `{{run_id}}` on `{{run_network}}` (chain id {{chain_id}}), evidence exported at commit `{{git_commit}}`,
   {{run_started_at}} to {{run_finished_at}}. {{steps_passed}} of {{steps_total}} steps passed;
   {{tx_total}} transactions, {{tx_unexpected_status}} with an unexpected status.
 - Attack suite: run `{{atk_run_id}}` on `{{atk_network}}` at {{atk_run_at}}, commit `{{atk_git_commit}}`

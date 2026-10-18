@@ -9,7 +9,7 @@
 | Submission date | 20 October 2026 (final version, deadline 23:59 UTC+8) |
 | Project | Agent Credit Bureau (ACB): a credit bureau for AI agents, and a wallet agent that earns its autonomy |
 | Repository | https://github.com/taivnaaiwnl/shenzhen-comp |
-| Network of the recorded run | Base Sepolia (chain id 84532), run `{{run_id}}`, commit `{{git_commit}}` |
+| Network of the recorded run | Base Sepolia (chain id 84532), run `{{run_id}}`, evidence exported at commit `{{git_commit}}` (execution evidence 01 lists the commits each part of the run used) |
 
 > **At a glance for reviewers**
 >
