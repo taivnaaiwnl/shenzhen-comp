@@ -74,7 +74,8 @@ plain words:
    rotates the agent key, unfreezes the vault to tier 0 (maker-checker) and approves one payment on the
    approval card the console verified and rendered from the chain.
 7. Unsolicited spam invoices are dropped off-chain. A provider appeals its grade and the bureau rejects the
-   appeal after checking the events. Two grades are recomputed from public data.
+   appeal after checking the events. Every grade change of the run is recomputed from public data (the step
+   asserts Ghost's and Orion's).
 
 The counterparties are simulated agents run by our team (simulator process P6). Their ERC-8004
 registrations say "ACB demo, simulated agent. Not a real service." (spec 16.2).
@@ -92,8 +93,9 @@ registrations say "ACB demo, simulated agent. Not a real service." (spec 16.2).
 
 ### On-chain exploration (bonus)
 
-- Our own contracts (AgentCreditBureau and two TierVaults) are deployed on a public testnet, and every
-  claim in this document is a transaction on it.
+- Our own contracts (AgentCreditBureau and two TierVaults) are deployed on a public testnet and their sources
+  are verified on Blockscout. Every claim about the recorded run is backed by a Base Sepolia transaction,
+  except the off-chain drops listed in 2.6; the attack and benign suites run on a local chain (2.8).
 - We integrate the official ERC-8004 registries on Base Sepolia (Draft standard): every agent has an
   identity there, the bureau mirrors each grade as ERC-8004 feedback (revoke, then post), and verified
   reports are filed as feedback.
@@ -102,8 +104,9 @@ registrations say "ACB demo, simulated agent. Not a real service." (spec 16.2).
 - Refusals and violations are on-chain records, not only log lines (`DecisionRecorded`,
   `ViolationRecorded`, `TierChanged`).
 - Grades are recomputed from public logs and published files (section 3.5).
-- The bureau accepts only vaults whose runtime code hash matches the audited TierVault (`registerVault`
-  checks `EXTCODEHASH`), so a fake vault cannot produce settlement history.
+- The bureau accepts only vaults whose runtime code hash matches the TierVault code published in this
+  repository and pinned at deployment (`registerVault` checks `EXTCODEHASH`), so a fake vault cannot produce
+  settlement history.
 
 ### The run at a glance
 
@@ -130,8 +133,8 @@ registrations say "ACB demo, simulated agent. Not a real service." (spec 16.2).
 ### Limits we state openly
 
 - **Testnet.** Base Sepolia is a public testnet and the USDC is Circle's test token, with no monetary
-  value. Whether testnet hashes count as real on-chain hashes is not yet confirmed by the organisers; we
-  will ask them before submission (spec risk KR-8).
+  value. The rules name no chain; every hash in this document is public and can be checked on Basescan and
+  Blockscout.
 - **Scripted owner.** The scenario runner plays the owner. The owner's chat lines and the S18 approval are
   scripted inputs sent through the owner console API; no person typed them during the run.
 - **Simulated counterparties.** All providers, the anchor buyer and the sybil identities are our own
@@ -254,11 +257,12 @@ unrated payees; grade D is never paid (`config/tiers.yaml`).
 
 #### 2.3 Two things that look odd in the table
 
-- **Row 14 can be earlier than row 11.** The S9 escrow's deadline passes while the agent is paused during
-  the S11 market round. When the agent restarts, its deadline watcher refunds the escrow at once, before
-  the S12 invoice arrives. The runner files that refund and its NON_DELIVERY report under S14, the step
-  that asserts them, whenever they were mined (`claim_s14` in `src/acb/scenario/steps.py`). The order of
-  blocks is the true order of events.
+- **Row 14 is earlier than rows 7-13.** The agent's deadline watcher runs on the real clock. On Base
+  Sepolia the S9 escrow's deadline passed during S10, so the agent refunded it then (on a local chain, with
+  the clock warped, the refund comes after the S11 market round). The runner files that refund and its
+  NON_DELIVERY report under S14, the step that asserts them, whenever they were mined (`claim_s14` in
+  `src/acb/scenario/steps.py`). The order of blocks is the true order of events; the early refund is also why
+  Nova's downgrade was posted by the S11 rescore rather than in S16.
 - **The wallet keeps a high credit grade while its vault is frozen.** The two measure different things.
   The credit grade (row 7, section 2.7) measures how the wallet settles as a counterparty: it paid,
   escrowed and released as agreed. The agent's own violations act on its autonomy tier through the vault
@@ -268,9 +272,9 @@ unrated payees; grade D is never paid (`config/tiers.yaml`).
 #### 2.4 Screenshots
 
 Blockscout's public pages of four recorded transactions, captured after the run with
-`scripts/capture_explorer_shots.py` and committed in `evidence/base_sepolia/screenshots/`. Our contracts are not
-source-verified on Blockscout, so it shows method ids (`0xf15276f0`) instead of names and raw log topics; the
-decoded events of every transaction are in its saved receipt (`evidence/base_sepolia/receipts/`), and
+`scripts/capture_explorer_shots.py` and committed in `evidence/base_sepolia/screenshots/`. Our three contracts
+are source-verified on Blockscout, so its pages show function and event names. The decoded events of every
+transaction are also in its saved receipt (`evidence/base_sepolia/receipts/`), and
 `scripts/verify_evidence.py` checks them against the chain.
 
 ![S5 on Blockscout: the owner's registerMandate transaction](../../../evidence/base_sepolia/screenshots/s05-register-mandate-blockscout.png)
@@ -419,8 +423,9 @@ Other evidence produced off Base Sepolia:
   14 tasks.
 - Scorecard backtest (`evidence/backtest.json`): 300 synthetic agents, 6 rounds, AUC
   0.9758, KS 0.8863.
-- A dialogue evaluation with a real LLM (spec 8.9) runs only when an API key is available (cut C6, spec
-  17.3). If it is run, its results are reported in the technical document, not here.
+- Dialogue evaluation with a real LLM (spec 8.9; `evidence/dialogue_eval.json`, model `gpt-5.4-mini`):
+  33 owner requests, correct mandate rate 100.0%, hostile requests handled
+  safely 100.0%. The full results are in the technical document, 03 D.
 
 ---
 
@@ -547,8 +552,8 @@ python scripts/verify_evidence.py runs/<run id>/export/evidence.json --receipts-
 
 What differs from Base Sepolia: local ERC-8004 Lite registries and MockUSDC instead of the official
 registries and Circle test USDC, Echo sybil vaults exist only on Anvil (spec 17.3), time is warped instead
-of waited, and all hashes, addresses and agent ids are different. The committed dry run in
-`evidence/anvil/` can be verified the same way.
+of waited, and all hashes, addresses and agent ids are different. A local run writes the same evidence
+files (`uv run acb evidence export --network anvil`), which `scripts/verify_evidence.py` checks the same way.
 
 A single step range can be re-run with `--from S6 --to S12 --run-id <run id>` on a run started with
 `--keep`; `uv run acb scenario reset` stops a kept chain.
@@ -672,10 +677,10 @@ Sent by the bureau key: 73. Sent by the owner key: 5. Median gas: `pay`
 | `bundles/<agentId>-<asOfBlock>.json` | Canonical JSON evidence bundle of each grade; its keccak256 is the on-chain `evidenceHash` |
 | `invoices/`, `reports/` | Provider-signed invoices and report files whose hashes are on-chain; the scorecard counts an order only if its invoice is published |
 | `decisions/`, `violations/`, `autonomy/`, `appeals/` | The signer's decision-log entries, violation records, autonomy evaluations and the appeal review |
-| `dialogue/S5.json` | The S5 dialogue: the scripted owner lines, the agent's replies and the confirmation cards the owner console rendered from chain reads |
+| `dialogue/S5.json` | The S5 dialogue: the scripted owner lines, the agent's replies and the mandate card shown in the chat. Its last (`confirm`) entry holds that chat card; the card the console rebuilt from chain reads and the owner key registered (with its own mandate id and validity) is the one in the `registerMandate` receipt, row 1. The runner now records both (`values` and `chatCard`) |
 | `run.txt` | Human log lines of the whole run: `<UTC time> <step> <function or decision> <action> tier=<n> status=<0 or 1> tx=<hash prefix>` |
-| `narration.srt` | One English narration line per step, used as the demo video's subtitles |
-| `screenshots/` | The owner console and explorer screenshots of section 2.4, captured during the run |
+| `narration.srt` | The runner's narration log: one English line per step of the run (the demo video's subtitles are `video/InternationalAI-TeamMongolia-DemoVideo.srt`) |
+| `screenshots/` | The four Blockscout screenshots of section 2.4, captured after the run with `scripts/capture_explorer_shots.py` |
 
 Committed next to the evidence folder: `deployments/base_sepolia.json` (addresses, agent ids, deployment
 transactions), `abi/` (ABIs and the TierVault code hash), `scripts/verify_evidence.py`.

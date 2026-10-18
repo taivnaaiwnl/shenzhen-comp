@@ -276,7 +276,7 @@ Reputation `0x8004B663056A597Dffe9eCcC1965A193B7388713` (`config/networks.yaml`)
 | Scorecard | `acb-sc-1.0.0` (`src/acb/bureau/models/sc_1_0_0.py`, `config/scorecard.yaml`), integer arithmetic only | Model card: `docs/deliverables/model-card.md` |
 | Injection detector | `acb-inj-1.0.0` (`src/acb/injection.py`), deterministic regex rules | Not a security boundary; defence in depth (04) |
 | Chain | Base Sepolia (chain id 84532); Circle test USDC `0x036CbD53842c5426634e7929541eC2318f3dCF7e`; official ERC-8004 Identity and Reputation registries | Public RPC `https://sepolia.base.org` (its `eth_getLogs` is limited to 200 blocks, so every log query is chunked) plus an optional second RPC for indexing |
-| Explorers | Basescan and Blockscout (`config/networks.yaml`) | The contracts will be source-verified on Blockscout by hand after deployment (README). Every receipt is also saved, and `scripts/verify_evidence.py` re-checks hashes without an explorer |
+| Explorers | Basescan and Blockscout (`config/networks.yaml`) | Our three contracts are source-verified on Blockscout, so its pages show function and event names (README 6.1). Every receipt is also saved, and `scripts/verify_evidence.py` re-checks hashes without an explorer |
 | Local chain and toolchain | Foundry 1.8.5 (forge, anvil), solc 0.8.30; Python 3.12-3.13 with uv, web3 7.16, eth-account, pydantic 2, FastAPI, httpx, PyYAML | `uv.lock` is committed |
 | Data sources | Only public on-chain events and files whose hash is on-chain (invoices, reports, evidence bundles), published in the repository under `evidence/` | No scraping and no third-party data. Counterparties are simulated and labelled as such on the public registry |
 
@@ -605,8 +605,9 @@ using the grades of the previous round.
 - *Change control*: a formula change is a new model id and a new module; a configuration change changes
   the config hash; old configurations are archived under `config/scorecard/archive/` so old postings
   stay recomputable.
-- *Independent validation* (procedure): the backtest is run and reviewed by the engineer who did not
-  write the scorecard, and the review is recorded in the model card before the final submission.
+- *Independent validation* (procedure): the backtest is to be reviewed by the team member who did not
+  write the scorecard, with the review recorded in the model card. At submission this review has not been
+  done; the validation evidence so far is the tests and the backtest listed in the model card.
 - *Monitoring triggers* logged after each rescore: more than 20% of agents moving two or more grades in
   one round, an honest anchor counterparty graded C or D, or a population stability index (PSI) between
   rounds above 0.25.
@@ -1103,9 +1104,9 @@ uv run acb evidence export                    # copies the curated run into evid
 ```
 
 The deploy step writes `deployments/base_sepolia.json` (addresses, agent ids, pinned directory,
-anchors, ABI hash) atomically and is idempotent per phase. After deployment the contracts will be
-source-verified on Blockscout by hand with `forge verify-contract --verifier blockscout` (README); the
-links will be added to `HEADLINE.md`. The recorded run's deployment was made at
+anchors, ABI hash) atomically and is idempotent per phase. After deployment the contracts were
+source-verified on Blockscout with `forge verify-contract --verifier blockscout` (commands and links in README
+6.1). The recorded run's deployment was made at
 2026-10-17T08:35:05Z from block 48228906 with ABI hash `0x0ade7da1ee72a56b9d18bfe9917125a14f0813cb3de60f8236cf45b95c47fa37`.
 
 **How judges can verify the run without installing anything.**
@@ -1156,7 +1157,9 @@ planned improvements.
   show the worst case; they do not show that a real model was fooled.
 - **Demo parameters.** The demo profile shortens the age gate (600 s instead of 30 days), the upgrade
   delay (60 s instead of 1 day), the promotion cooldown (60 s instead of 1 day) and the dispute window
-  (120 s instead of 3 days) so the run fits in one session. Both values are in the configuration.
+  (120 s instead of 3 days) so the run fits in one session. The configuration holds both values of the age
+  gate, the cooldown and the dispute window (`config/scorecard.yaml`, `config/tiers.yaml`); for the upgrade
+  delay it holds only the demo value (`config/networks.yaml`), and the production value is in spec 2.6.
 - **Expert-judgement scorecard.** Points are not fitted to real default data; the backtest uses
   synthetic populations.
 - **Centralised bureau.** One poster key grades; mitigated by on-chain upgrade delay, public recompute,

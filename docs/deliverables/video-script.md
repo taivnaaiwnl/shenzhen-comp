@@ -35,13 +35,13 @@ validation checks V01-V09 (spec 6.2) are a different thing and do not appear her
 | Guide row | Our video |
 |---|---|
 | Use 16:9 landscape and preferably 1080p | 1920x1080, 16:9, 30 fps, H.264 |
-| Make interface text, narration and English subtitles clearly legible | Console crops scaled so its 18 px base font reads at 30 px or more; terminal pages at 22 px or more; one English AI voice (ElevenLabs, voice Matilda) at 112-150 words per minute (section 6); English subtitles burned in at 44 px or more, white on a dark box |
+| Make interface text, narration and English subtitles clearly legible | Console crops scaled so its 18 px base font reads at 30 px or more; terminal pages at 22 px or more; one English AI voice (ElevenLabs, voice Matilda) at 112-150 words per minute; English subtitles burned in at 44 px or more, white on a dark box |
 
 **03 Final Check**
 
 | Guide row | Our video |
 |---|---|
-| No copyrighted or sensitive material | No music; no third-party logos other than the block-explorer pages themselves; no keys, tokens, passwords, `.env` or personal data on screen (section 2); counterparties are simulated agents and labelled as such |
+| No copyrighted or sensitive material | No music; no third-party logos other than the block-explorer pages themselves; no keys, tokens, passwords, `.env` or personal data on screen; counterparties are simulated agents and labelled as such |
 | Suggested filename: Track-TeamName-DemoVideo | `InternationalAI-TeamMongolia-DemoVideo.mp4` |
 
 ## 1. What the judges should be able to check in the video
